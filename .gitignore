@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+*.apk
+*.aab
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+*.log
+node_modules/
+build/
+private/

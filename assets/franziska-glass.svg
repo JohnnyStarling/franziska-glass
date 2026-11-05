@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="460" viewBox="0 0 1440 460" role="img" aria-labelledby="title desc">
+  <title id="title">Franziska Glass</title>
+  <desc id="desc">Editorial cover: a new life for Google Glass. Research prototype. Abstract glasses illustration, not a device photograph.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0c151c"/><stop offset="1" stop-color="#162c35"/></linearGradient>
+    <linearGradient id="line"><stop stop-color="#78e5c9"/><stop offset="1" stop-color="#83bce5"/></linearGradient>
+  </defs>
+  <rect width="1440" height="460" rx="20" fill="url(#bg)"/>
+  <g fill="none" stroke="#729baf" opacity="0.10"><path d="M890 0v460M1010 0v460M1130 0v460M1250 0v460M1370 0v460M810 110h630M810 230h630M810 350h630"/></g>
+  <rect x="62" y="60" width="7" height="28" rx="3" fill="#78e5c9"/>
+  <text x="88" y="82" fill="#a3c9d4" font-family="Arial,Helvetica,sans-serif" font-size="19" letter-spacing="4">RESEARCH PROTOTYPE · 2026</text>
+  <text x="60" y="202" fill="#f1f8fa" font-family="Arial,Helvetica,sans-serif" font-size="82" font-weight="700" letter-spacing="-3">Franziska Glass</text>
+  <text x="64" y="267" fill="#b5d2da" font-family="Arial,Helvetica,sans-serif" font-size="32">A new life for Google Glass</text>
+  <text x="64" y="370" fill="#8aaab7" font-family="Arial,Helvetica,sans-serif" font-size="19" letter-spacing="2">GLASS XE24  /  PIXEL 7  /  OPENCLAW</text>
+  <g fill="none" stroke="url(#line)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M920 237q14-48 60-48h113q42 0 48 48l-9 52q-5 24-34 24h-105q-35 0-47-34z"/>
+    <path d="M1140 233h35l26-42h120l-63 95h-42l-20-21h-60M922 237l-34-22-42-70"/>
+    <path d="M1211 192v-31h112l33 18" opacity="0.65"/>
+  </g>
+  <rect x="1197" y="199" width="67" height="34" rx="5" fill="#78e5c9" opacity="0.16"/>
+  <circle cx="1182" cy="222" r="6" fill="#78e5c9"/>
+  <text x="1008" y="373" fill="#8aaab7" font-family="Arial,Helvetica,sans-serif" font-size="15" letter-spacing="3">ONE GLANCE AWAY</text>
+</svg>

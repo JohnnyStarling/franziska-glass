@@ -1,76 +1,82 @@
-<p align="center">
-  <img src="assets/franziska-glass.svg" alt="Franziska Glass — a new life for Google Glass" width="100%">
-</p>
+<p align="center"><img src="assets/franziska-glass.svg" alt="Franziska — personal AI assistant and wearable systems" width="100%"></p>
 
-# Franziska Glass
+# Franziska
 
-**Franziska — a personal AI assistant, brought to Google Glass.**
+**A personal AI assistant with persistent working context, executable tools and a Google Glass interface.**
 
-Google Glass XE24 · Pixel 7 · OpenClaw · Research prototype · November 2026
+Built and developed by **Ivan Shpak**. Based on **OpenClaw**, with a maintained local runtime customization, a dedicated continuity system and native applications for **Google Glass XE24** and **Pixel 7**.
 
-[About Franziska](docs/FRANZISKA.md) · [Project status](docs/STATUS.md) · [Credits](docs/CREDITS.md) · [Russian translation](README.ru.md)
+[The assistant](docs/FRANZISKA.md) · [Architecture](docs/ARCHITECTURE.md) · [OpenClaw engineering](docs/OPENCLAW.md) · [Glass & Pixel](docs/WEARABLE.md) · [In operation](docs/STATUS.md) · [Credits](docs/CREDITS.md)
 
-## Meet Franziska
+---
 
-**Franziska is Ivan Shpak's ongoing personal AI assistant project. Glass is her wearable interface, not the whole project.** The aim is a lasting working relationship with an assistant that can recover previous decisions, help carry projects forward and use connected tools to get practical work done.
+## 01 / The project
 
-Built on OpenClaw and existing AI models, Franziska brings together:
+Franziska is an assistant developed around a continuing working relationship with one person. She carries an explicit identity, retrieves previous decisions, works with project records and uses tools to act on the task at hand. Telegram, the desktop Control UI and Glass are interfaces to this wider system.
 
-- **A consistent personal identity:** an assistant shaped around one person's working style, preferences and ongoing context.
-- **Continuity and memory:** saved notes, project records, conversation archives and retrieval procedures for finding relevant earlier information across sessions and restarts. This is an actively developed system, not a claim of perfect recall.
-- **Reasoning and tools:** research, writing, coding, work with local files and authorized actions in connected software, according to the available tools and access.
-- **Several ways to interact:** Telegram and the OpenClaw Control UI, with voice and glanceable text on Glass extending the same broader assistant system.
+The engineering problem is continuity: carrying the right information from one conversation to another, coordinating a spoken interaction with an agent task, and returning an actual result through a small wearable device. That requires work in the runtime, the memory layer, the transport and the device applications.
 
-Franziska is not a newly trained foundation model. Her identity, accumulated working context, memory procedures and tool integrations form the personal assistant layer; OpenClaw provides the agent infrastructure and configured models provide language and reasoning capabilities.
+OpenClaw provides the foundation. Our work includes changes to its voice and agent-coordination code, the continuity layer around the agent, native Android applications, media transport and an independent navigation integration. The system uses existing AI models; the project is the personal assistant and the machinery that makes those models useful across interfaces.
 
-**The Glass project asks: how can that existing assistant become useful while your hands and attention are elsewhere?** Voice, short text and camera-related workflows are the wearable direction. Navigation is a separate companion feature, not the definition of Franziska.
+## 02 / System structure
 
-[Read the assistant project overview →](docs/FRANZISKA.md)
+<img src="assets/system-architecture.svg" alt="Franziska architecture: interfaces, Pixel bridge, OpenClaw main agent and realtime relay, memory, tools and voice provider" width="100%">
 
-## Why Google Glass?
+| Layer | Responsibility |
+| --- | --- |
+| **Identity and instructions** | The assistant's working style, standing decisions and rules for handling context and tasks. |
+| **Continuity and memory** | Project records, curated long-term context, conversation archives, retrieval and handoffs. |
+| **Main agent** | Reasoning, source inspection, tool execution and ownership of durable work. |
+| **Realtime voice** | Live spoken interaction and streaming audio, coordinated with main-agent consultations. |
+| **Pixel companion** | The bridge between Glass and the Gateway: connectivity, media, service lifecycle and companion UI. |
+| **Glass application** | Microphone and playback, conversation display, status, gestures and camera-related interaction. |
+| **Navigation** | Phone-side OsmAnd routing with Bluetooth guidance on Glass through OsmGlass. |
 
-Google Glass offered a compelling interaction: useful information alongside the world, rather than another screen replacing it. Ivan Shpak's Franziska Glass project explores that idea with a modern personal assistant, custom Glass and Pixel companion apps, and a separate OsmAnd/OsmGlass navigation integration.
+The main agent and durable context remain on the Mac running OpenClaw. The phone is a companion and media bridge; it does not become a second independent assistant. Navigation is a separate phone-to-Glass path and does not require the Mac.
 
-This is an independent research prototype, not a restoration of Google's retired cloud services or a finished commercial product.
+## 03 / From a question to an action
 
-## What exists today
+A voice request that needs the main agent follows a concrete chain:
 
-- **Voice integration:** recorded sessions include real consultations with the main assistant. Sustained audio quality, long-answer delivery and on-head Stop still need acceptance.
-- **Glanceable chat:** a native conversation/status interface is installed on Glass. Optical readability and gestures remain under evaluation.
-- **Photos and gallery:** photo/sync components and a native Pixel gallery are installed; the complete capture-to-use workflow is not yet accepted.
-- **Mobile connectivity:** the protected Glass–Pixel link and authenticated OpenClaw access over cellular data/VPN were demonstrated. This was a connectivity check, not an outdoor voice conversation.
-- **Navigation:** real Glass displayed changing map, turn and distance information over Bluetooth while Pixel was locked, using native route simulation.
+1. **Glass captures the interaction.** The wearable handles input, display and playback.
+2. **Pixel bridges the devices.** The assistant link uses Wi-Fi, including the phone's hotspot, while Pixel reaches the Gateway over the internet.
+3. **The realtime layer handles speech.** It can answer conversationally or consult the main agent when the request needs working context or tools.
+4. **The main agent recovers the relevant context.** Decisions and project state come from the continuity records and conversation, rather than from a new identity on the phone.
+5. **Tools do the work.** The agent inspects sources or performs the authorized action and receives the result.
+6. **The result returns through the voice session.** Task state, cancellation and delivery have to remain coordinated across the agent, provider and wearable.
 
-## Real hardware, simulated route
+This separation matters. A microphone stream, an accepted task, a completed agent result and finished playback are different events. Much of our OpenClaw and Android work concerns those boundaries.
 
-<p align="center">
-  <img src="assets/navigation-left.png" alt="Real Glass screen during native route simulation: left turn in 9 metres" width="48%">
-  <img src="assets/navigation-right.png" alt="Later real Glass screen during the same simulation: right turn in 4 metres" width="48%">
-</p>
+## 04 / What we engineered
 
-Captured on 30 October 2026. These are device framebuffer screenshots, not mockups, optical-through-the-prism photographs or field GPS evidence. Navigation UI: OsmAnd/OsmGlass. Map: © OpenStreetMap contributors. [Credits](docs/CREDITS.md).
+| Area | Project work |
+| --- | --- |
+| **OpenClaw runtime** | Local changes around realtime consultation, task ownership, final-answer delivery, cancellation, reconnect and observability; maintained as a source-level customization. |
+| **Continuity** | Structured memory records, source-grounded recall, project handoffs and retrieval integration around the main agent. |
+| **Wearable audio** | A Glass–Pixel–Gateway path with device-side buffering, audio lifecycle handling and explicit Stop behavior. |
+| **Portable connectivity** | Protected Glass–Pixel communication, hotspot operation, endpoint recovery and Gateway authentication through mobile internet. |
+| **Conversation and media** | Native Glass chat/status, the Pixel companion, gallery and media-transfer components. |
+| **Navigation** | OsmAnd/OsmGlass integration and targeted repairs to route, position, transport and display lifecycles. Navigation has been tested in use. |
+| **Maintenance** | A separate source/patch pipeline that preserves the customization across OpenClaw changes and checks storage compatibility before activation. |
 
-## Two separate paths
+The [OpenClaw engineering chapter](docs/OPENCLAW.md) explains the mechanisms and the boundary between upstream infrastructure and our local work. The [wearable chapter](docs/WEARABLE.md) covers the device path and navigation.
 
-```mermaid
-flowchart LR
-  subgraph A["Personal assistant"]
-    G["Google Glass"] <-->|"Wi-Fi · Pixel hotspot"| P["Pixel 7"]
-    P <-->|"Internet · protected access"| M["Mac · OpenClaw · Franziska"]
-  end
-  subgraph N["Navigation"]
-    O["Pixel · OsmAnd · downloaded maps"] -->|"Bluetooth"| H["Glass · OsmGlass"]
-  end
-```
+## 05 / Memory is part of the architecture
 
-**AI assistant:** Glass ↔ Pixel over Wi-Fi/hotspot ↔ internet ↔ a powered, reachable Mac running OpenClaw. Pixel handles connectivity and media; the existing Mac-hosted agent retains memory, conversation and tools. The assistant is not currently Bluetooth-only or Mac-independent.
+A conversation transcript records what was said. A project record states what matters now. A handoff states what the next run needs. An index makes those sources retrievable. Franziska uses these as distinct layers rather than treating the current model context window as the entire memory system.
 
-**Navigation:** Pixel/OsmAnd → Bluetooth → Glass/OsmGlass. Maps and routing live on the phone; no Mac or OpenClaw is required. Fully disconnected journeys, real GPS field use and rerouting still need validation. Live traffic and public transport timetables are not promised.
+The result is a working process for finding earlier decisions, continuing a task after a session change and correcting stale information. Identity, conversation history and retrieval are related, but they are not interchangeable.
 
-## Next milestones
+[Read the assistant and memory design →](docs/FRANZISKA.md)
 
-Real walks, reliable long conversations, predictable Stop/reconnect, prism readability, thermal and battery observations, and a short live video with clearly stated test conditions.
+## 06 / Glass in use
 
-This showcase contains presentation materials only: no application source, APKs, credentials, personal conversations or raw internal logs. No live video is included yet. Repository access must be set to **Private**; this text does not enforce access control. GitHub Pages is not required.
+Glass makes the assistant available through voice and short visible text. Pixel provides the portable link; the Mac remains the agent host. The navigation system calculates routes on the phone and sends guidance directly to Glass over Bluetooth. Navigation is tested and working in use; it is not dependent on the AI conversation being active.
 
-Independent project, not affiliated with Google. Third-party names belong to their respective owners.
+[Operating configuration](docs/STATUS.md) · [Original device captures](docs/WEARABLE.md#recorded-interface-captures)
+
+---
+
+**Project and integration:** Ivan Shpak. **Foundation:** OpenClaw and configured AI models. **Navigation:** OsmAnd / OsmGlass and OpenStreetMap data.
+
+This repository is the technical presentation of the project. Application source and deployment material are maintained separately. See [credits and provenance](docs/CREDITS.md).

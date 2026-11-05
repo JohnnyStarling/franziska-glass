@@ -1,28 +1,40 @@
-# Credits and materials
+# Franziska / Credits and provenance
 
-## Project
+[Overview](../README.md) · [OpenClaw engineering](OPENCLAW.md) · [Glass & Pixel](WEARABLE.md)
 
-**Ivan Shpak** — creator of Franziska Glass.
+## Project work
 
-Franziska/OpenClaw provides the personal assistant and interaction infrastructure. This is an independent project, not affiliated with Google or the authors of third-party components.
+**Ivan Shpak** — project creator and developer of Franziska's personal assistant system and wearable integration.
 
-## Third-party projects
+The project includes the local OpenClaw customization, continuity protocols and retrieval bridge, native Glass/Pixel companion, media/audio integration and navigation adaptations described in the technical chapters. The OpenClaw patch is maintained locally; it is not represented as an accepted upstream contribution.
 
-- [OpenClaw](https://github.com/openclaw/openclaw) — agent infrastructure.
-- [OsmAnd](https://osmand.net/) — phone-side mapping and routing.
-- [OsmGlass](https://github.com/zakwilson/OsmGlass) — upstream navigation interaction with Glass, with a compatible phone-side [OsmAnd fork](https://github.com/zakwilson/OsmAnd).
-- [© OpenStreetMap contributors](https://www.openstreetmap.org/copyright) — map data shown in the navigation screenshots; [ODbL](https://opendatacommons.org/licenses/odbl/).
+## Foundations
 
-The navigation work integrates and adapts existing projects; it is not a newly developed routing engine.
-
-## Images
-
-| File | Content and provenance |
+| Project or platform | Role |
 | --- | --- |
-| `assets/franziska-glass.svg` | Original editorial artwork for this showcase, 5 November 2026; not a photograph or application screenshot |
-| `assets/navigation-left.png` | Original framebuffer capture from real Glass, 30 October 2026; native route simulation in Monaco, left turn in 9 m |
-| `assets/navigation-right.png` | Later framebuffer capture from the same demonstration; right turn in 4 m |
+| [OpenClaw](https://github.com/openclaw/openclaw) | Agent runtime, tools, session and conversation infrastructure, foundational Talk consultation and realtime machinery. |
+| Configured AI models and voice providers | Language, reasoning and realtime speech inference. These models are used by Franziska; they are not newly trained Franziska foundation models. |
+| [OsmAnd](https://osmand.net/) | Maps, route calculation, position, ETA and navigation on the phone. |
+| [OsmGlass](https://github.com/zakwilson/OsmGlass) | Upstream Glass navigation projection, shared protocol and compatible [OsmAnd fork](https://github.com/zakwilson/OsmAnd). |
+| [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) | Map data in the navigation captures; [ODbL](https://opendatacommons.org/licenses/odbl/). |
+| Android and Google Glass GDK | Device OS, media, services and LiveCard platform. |
+| [Bouncy Castle](https://www.bouncycastle.org/) | Established TLS/cryptographic components integrated for the old-Android transport seam. |
 
-Navigation screenshots are unchanged. They show a test route, not the user's personal location. Their Russian text is part of the original application UI, not the English project description. Third-party UI and map attribution remain with the respective projects and data providers.
+Original routing algorithms, cartography, AI models and platform APIs retain their upstream authorship. Our work is the customization, integration and specific repairs documented here.
 
-Third-party application source, map datasets, APKs and their licenses are not redistributed in this presentation-only showcase. Application distribution readiness is assessed separately.
+## Navigation source origins
+
+- OsmGlass base: `13626781089e6f22862395483430a89db98b6ae4`.
+- Compatible OsmAnd fork base: `fd9b8e0b8ecbe0167b233dc472bca8976aee66bd`.
+
+The deployed navigation release includes local repairs and selected compatible upstream integrations beyond those base revisions. Base HEAD alone is not the full release manifest.
+
+## Visual material
+
+- **`assets/franziska-glass.svg`** — original monochrome editorial cover.
+- **`assets/system-architecture.svg`** — original architecture diagram, showing principal ownership and transport links.
+- **`assets/navigation-left.png` / `assets/navigation-right.png`** — unchanged 30 October 2026 framebuffer captures from real Glass during native route simulation. The Russian text belongs to the captured application UI. Navigation UI: OsmAnd/OsmGlass; map: © OpenStreetMap contributors.
+
+The captures are dated engineering material. The diagrams describe the system; they are not photographs of a running interface.
+
+Application source and packaged binaries are maintained separately from this technical presentation. Independent project, not affiliated with Google. Third-party names belong to their respective owners.

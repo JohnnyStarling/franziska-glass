@@ -1,0 +1,349 @@
+{
+  "build_verified": false,
+  "component": "osmglass",
+  "files": [
+    {
+      "bytes": 389,
+      "mode": "0o644",
+      "path": ".claude/settings.json",
+      "sha256": "8cb367fa59d21bc1fec4438d0da39a8b74569e3eb2cdda9ad828dd96d2ca102d"
+    },
+    {
+      "bytes": 393,
+      "mode": "0o644",
+      "path": ".gitignore",
+      "sha256": "aaa9ef2204a1dc3fd5cda7c9c6353b02f5ec209d18ee364d947b145182b1d9bb"
+    },
+    {
+      "bytes": 2823,
+      "mode": "0o644",
+      "path": "AGENTS.md",
+      "sha256": "dc1fe02e341b3c35687ddc013502c058d7b5c3109fa6fc5dd5c1a8c61149c881"
+    },
+    {
+      "bytes": 2435,
+      "mode": "0o644",
+      "path": "CLAUDE.md",
+      "sha256": "da018968db059cf8ddb65bd4933acf7bababfad81a7581a08468dbe8d28fc190"
+    },
+    {
+      "bytes": 35149,
+      "mode": "0o644",
+      "path": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "bytes": 8624,
+      "mode": "0o644",
+      "path": "PLAN.md",
+      "sha256": "be0bfbaf72965ad5a6a655e7a5b295c4ac455bfe3543a7a0367213e09b38fa1f"
+    },
+    {
+      "bytes": 8177,
+      "mode": "0o644",
+      "path": "README.md",
+      "sha256": "e6322341d7202ce129c3a69ded480aca36753d83b8044968bc4c50e60bd4b2ad"
+    },
+    {
+      "bytes": 202,
+      "mode": "0o644",
+      "path": "build.gradle.kts",
+      "sha256": "5e3bd27d4d3db1862cbce9e34a85e22de4b64739278f828b848b632b4771d7eb"
+    },
+    {
+      "bytes": 21551,
+      "mode": "0o644",
+      "path": "docs/option-c-aidl-design.md",
+      "sha256": "e0e5d029b0b18c63b949aa2a713dd3e87f6db254ec060a3c7196b7b04cbba152"
+    },
+    {
+      "bytes": 1735,
+      "mode": "0o644",
+      "path": "glass-app/build.gradle.kts",
+      "sha256": "2d1f3a5f9db5077942f252de750bded8c7461b89b5e0e70f02ed91d710a71ae7"
+    },
+    {
+      "bytes": 1726,
+      "mode": "0o644",
+      "path": "glass-app/src/main/AndroidManifest.xml",
+      "sha256": "cd0b53d1506087bb1b73cf4317fca55d34d720082d9c7c971992196f9021e774"
+    },
+    {
+      "bytes": 2079,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/LauncherActivity.java",
+      "sha256": "d3d77128052fe327bcba29e7c20e7d938174d113b5b68c032a9c408a93e84823"
+    },
+    {
+      "bytes": 1233,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/MenuActivity.java",
+      "sha256": "b6e8afb87d33bbe817388145101cfda6154acf63cda242e758dabdde7a62b5d5"
+    },
+    {
+      "bytes": 32387,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/NavLiveCardService.java",
+      "sha256": "c6d6f60cd09439d94f0005f58424f5e65df189b1a27c54ebf934ff7bdb995088"
+    },
+    {
+      "bytes": 10661,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/PacketDispatcher.java",
+      "sha256": "a4a618438d02de66e783b0192e0235053a675b76c26000515c8258a80a4fedc0"
+    },
+    {
+      "bytes": 2152,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/SnippetImagePolicy.java",
+      "sha256": "9163c392648f9757acf84a89462a39447c6632706e04eb444f640d48c3569b1f"
+    },
+    {
+      "bytes": 4756,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/TtsSpeaker.java",
+      "sha256": "542b68d5b589d5f06dad58cfc85b0a37e1bb7c27b281f16381b685227addb6c6"
+    },
+    {
+      "bytes": 7118,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/transport/RfcommServerTransport.java",
+      "sha256": "7a4c6a16c885638c6773e1c06049178090e789011361a31bf0aec20d10121195"
+    },
+    {
+      "bytes": 2544,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TransportFactory.java",
+      "sha256": "476aa8547cc8ff0352a2501f31c3a1a99029841317a7b692d8116cec2b67dd80"
+    },
+    {
+      "bytes": 775,
+      "mode": "0o644",
+      "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TrustedPhoneStore.java",
+      "sha256": "135849e47ad77d4324e2ee6d81cf8540d94fdb2332ff0225957eaa64a395b75f"
+    },
+    {
+      "bytes": 1138,
+      "mode": "0o644",
+      "path": "glass-app/src/main/res/layout/activity_menu.xml",
+      "sha256": "3738886e3ea510abffb3f35a5cc5ff12b7202dd5bccd76f1661bea9ce714dfe2"
+    },
+    {
+      "bytes": 7116,
+      "mode": "0o644",
+      "path": "glass-app/src/main/res/layout/livecard_nav.xml",
+      "sha256": "15d2e8f89b37742bf72f2c5970a9ed1e65a0e2594e15c4b2fecb69e107b69efd"
+    },
+    {
+      "bytes": 734,
+      "mode": "0o644",
+      "path": "glass-app/src/main/res/values/strings.xml",
+      "sha256": "b52ba209ce89adb0380236db8685c211dfe730b1a728cc378b45b71cecc01c09"
+    },
+    {
+      "bytes": 95,
+      "mode": "0o644",
+      "path": "glass-app/src/main/res/xml/voice_trigger_start.xml",
+      "sha256": "c54dba3e9e717f86e42bcf4ed55771f8110d86bbf6f99d90e079ab9202c7d8bb"
+    },
+    {
+      "bytes": 207,
+      "mode": "0o644",
+      "path": "gradle.properties",
+      "sha256": "95d4390725077ec0775f1cccaaa4c628b46142e5eb8993e99edf10f9128d5093"
+    },
+    {
+      "bytes": 414,
+      "mode": "0o644",
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "sha256": "e1b104891b779adf349cc3e4f310d3e68dfcfbab55fa75c4e1621615ae588b57"
+    },
+    {
+      "bytes": 8752,
+      "mode": "0o755",
+      "path": "gradlew",
+      "sha256": "734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933"
+    },
+    {
+      "bytes": 2966,
+      "mode": "0o644",
+      "path": "gradlew.bat",
+      "sha256": "57931b17dd228e5c24dac90e815d0bf82477e831a4618dfab4136f5446b42a9f"
+    },
+    {
+      "bytes": 3574,
+      "mode": "0o644",
+      "path": "protocol/HANDOFF.md",
+      "sha256": "fd270b70a5a69a48ab4344685006bb6c7876dd79c823639955f4aa5aeb175f23"
+    },
+    {
+      "bytes": 743,
+      "mode": "0o644",
+      "path": "protocol/build.gradle.kts",
+      "sha256": "66714ef28698acc5c9d6d9f5fab90346ccb834f2c364bbb884cab7db2ada67cb"
+    },
+    {
+      "bytes": 11381,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/Codec.java",
+      "sha256": "47d0bb0a9b5b7307b14a7b571ecb9dce2c258e39c00b31e7bcd96d50dbf96bdd"
+    },
+    {
+      "bytes": 2851,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/FrameReader.java",
+      "sha256": "23da790d74d922c432c1fa5655b5e98f707188b1aebb0375413c30799f671ea1"
+    },
+    {
+      "bytes": 5356,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/FrameWriter.java",
+      "sha256": "7c382be63221ec0b99880a53cc9902537e45ccf8861def869743731e0f3d1452"
+    },
+    {
+      "bytes": 16845,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/Packet.java",
+      "sha256": "a0952d6751b3a687047715938fc113e489e5f96d364362879744c8ee9a87f1de"
+    },
+    {
+      "bytes": 676,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/PacketType.java",
+      "sha256": "afc3727aa69dcdd13e3ef0dc1160c76003de4c57fdc08bca1b686829828f4f16"
+    },
+    {
+      "bytes": 305,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/ProtocolException.java",
+      "sha256": "cfe224de14a97ea09774d1e51fd3ac2fd6d2cd166c06d157a384245d9a97e32f"
+    },
+    {
+      "bytes": 1002,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/TurnKind.java",
+      "sha256": "63a48af8b5aa80c659f79c6fc2eaa33adc8500ef1281c4ebd76a9855c2a81be8"
+    },
+    {
+      "bytes": 4260,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Keepalive.java",
+      "sha256": "cd9f2132c97feaa53a852140a06885ed10b8cdc0d28e075960770efe6b69b481"
+    },
+    {
+      "bytes": 5799,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/transport/TcpTransport.java",
+      "sha256": "d9adfa844a73eca270dd8b0cef98fd8e8cdab6fadeddb534196b4c0b53e7d907"
+    },
+    {
+      "bytes": 795,
+      "mode": "0o644",
+      "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Transport.java",
+      "sha256": "836064d946741c81a8afd3a12df10738619816bf711c438b30a0bac666f33b47"
+    },
+    {
+      "bytes": 9480,
+      "mode": "0o644",
+      "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/CodecTest.java",
+      "sha256": "d6e7ef4e04c74d070ad19039c004073ace345f3dd509cd14d22dc8207ed6f4eb"
+    },
+    {
+      "bytes": 3996,
+      "mode": "0o644",
+      "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/FrameReaderTest.java",
+      "sha256": "574f0d399c2c619a65ac733f5cac5a1addebefdb2c755373e95130d212bbf175"
+    },
+    {
+      "bytes": 7524,
+      "mode": "0o644",
+      "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/SafetyV2Test.java",
+      "sha256": "dff4fc55160ba4a19fb9c6e6d7d8c9b2f2a1856d8dbd965c091f159027ec242c"
+    },
+    {
+      "bytes": 3995,
+      "mode": "0o644",
+      "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/transport/KeepaliveTest.java",
+      "sha256": "33bce125ee23d8f9eed68bda3ef9c00070f52a9f954f92a40f43278a2322ef38"
+    },
+    {
+      "bytes": 3907,
+      "mode": "0o644",
+      "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/transport/PairEmulatorE2eTest.java",
+      "sha256": "73016ac345f8a5451fe14a8ba4a1aaaa993be9d271ee31c08a073cbb3e2a4c55"
+    },
+    {
+      "bytes": 5829,
+      "mode": "0o644",
+      "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/transport/TcpTransportTest.java",
+      "sha256": "f1795a8b8405edc5fb7d22ed564ce5e04a8feb4f46085b1dc9d536ad6cf95c79"
+    },
+    {
+      "bytes": 553,
+      "mode": "0o644",
+      "path": "settings.gradle.kts",
+      "sha256": "620a9875874470c51a5975bc59f9d99a376077d196b9fbdfc4be3db1cf936497"
+    },
+    {
+      "bytes": 2455,
+      "mode": "0o755",
+      "path": "tools/setup-emulator-data.sh",
+      "sha256": "02c0281c5d060ae486363d800fe502c580f6447118804b8a6e5adb20c48a865e"
+    }
+  ],
+  "omitted": [
+    {
+      "path": ".beads/.gitignore",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/README.md",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/config.yaml",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/hooks/post-checkout",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/hooks/post-merge",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/hooks/pre-commit",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/hooks/pre-push",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/hooks/prepare-commit-msg",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/interactions.jsonl",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/issues.jsonl",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": ".beads/metadata.json",
+      "reason": "metadata/cache"
+    },
+    {
+      "path": "glass-app/libs/gdk-stub.jar",
+      "reason": "prebuilt-or-dataset-not-source"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.jar",
+      "reason": "prebuilt-or-dataset-not-source"
+    }
+  ],
+  "source_only": true
+}

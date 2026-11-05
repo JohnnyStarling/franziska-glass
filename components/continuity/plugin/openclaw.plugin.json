@@ -1,0 +1,35 @@
+{
+  "id": "continuity-memory",
+  "name": "Continuity Memory",
+  "description": "Exposes Franziska's continuity recall layer as an OpenClaw memory tool.",
+  "contracts": {
+    "tools": [
+      "continuity_recall"
+    ]
+  },
+  "activation": {
+    "onStartup": true
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspace": {
+        "type": "string"
+      },
+      "maxChars": {
+        "type": "integer",
+        "minimum": 500,
+        "maximum": 12000,
+        "default": 4000
+      },
+      "sessionsPath": {
+        "type": "string",
+        "description": "Optional exported legacy history directory; unset disables raw-history loading."
+      }
+    },
+    "required": [
+      "workspace"
+    ]
+  }
+}

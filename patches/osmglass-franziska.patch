@@ -1,0 +1,2996 @@
+diff --git a/glass-app/build.gradle.kts b/glass-app/build.gradle.kts
+index a821a680c3b651b40e1f1c9e2e33cd9945a5967e..d8c62f2275ee859bf4a8dd4692d2330efbf69e09 100644
+--- a/glass-app/build.gradle.kts
++++ b/glass-app/build.gradle.kts
+@@ -10,8 +10,8 @@ android {
+         applicationId = "com.goodanser.osmglass.glass"
+         minSdk = 19
+         targetSdk = 19
+-        versionCode = 1
+-        versionName = "0.1"
++        versionCode = 2
++        versionName = "0.2-audit-repair"
+         multiDexEnabled = false
+ 
+         val transportKind = (project.findProperty("transportKind") as String?) ?: "tcp"
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/LauncherActivity.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/LauncherActivity.java
+index 5ef6cc0841cdf95c595ef9199c5e44436b589efd..121ad44c0abda29e0ca017f6bd93049564133ffd 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/LauncherActivity.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/LauncherActivity.java
+@@ -1,22 +1,41 @@
+ package com.goodanser.osmglass.glass;
+ 
+ import android.app.Activity;
++import android.app.AlertDialog;
++import android.bluetooth.BluetoothAdapter;
++import android.bluetooth.BluetoothDevice;
+ import android.content.Intent;
+ import android.os.Bundle;
+-
+ import com.goodanser.osmglass.glass.livecard.NavLiveCardService;
++import com.goodanser.osmglass.glass.transport.TrustedPhoneStore;
++import java.util.ArrayList;
++import java.util.Collections;
++import java.util.List;
+ 
+-/**
+- * Cold-launch entry point. Starts the LiveCard service and exits.
+- *
+- * On real Glass the user normally launches via voice trigger ("OK Glass, bike to…"); voice triggers
+- * are deferred to v2. The launcher activity gives us an `am start` handle for the API 19 emulator.
+- */
++/** Every explicit launch lets the owner bind the HUD to one already-bonded phone. */
+ public class LauncherActivity extends Activity {
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        startService(new Intent(this, NavLiveCardService.class));
+-        finish();
++    @Override protected void onCreate(Bundle state) {
++        super.onCreate(state);
++        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
++        final List<BluetoothDevice> peers = new ArrayList<>();
++        if (adapter != null && adapter.isEnabled()) peers.addAll(adapter.getBondedDevices());
++        Collections.sort(peers, (a,b)->a.getAddress().compareTo(b.getAddress()));
++        if (peers.isEmpty()) {
++            new AlertDialog.Builder(this).setTitle(R.string.select_phone)
++                .setMessage(R.string.no_paired_phone).setPositiveButton(android.R.string.ok, (d,w)->finish())
++                .setOnCancelListener(d->finish()).show();
++            return;
++        }
++        String[] labels = new String[peers.size()];
++        for (int i=0;i<peers.size();i++) {
++            BluetoothDevice peer=peers.get(i);
++            labels[i] = (peer.getName()==null ? getString(R.string.unnamed_phone) : peer.getName()) + "\n" + peer.getAddress();
++        }
++        new AlertDialog.Builder(this).setTitle(R.string.select_phone).setItems(labels, (d,w)->{
++            stopService(new Intent(this, NavLiveCardService.class));
++            if (TrustedPhoneStore.preferences(this).edit().putString(TrustedPhoneStore.KEY, peers.get(w).getAddress()).commit())
++                startService(new Intent(this, NavLiveCardService.class));
++            finish();
++        }).setNegativeButton(android.R.string.cancel, (d,w)->finish()).setOnCancelListener(d->finish()).show();
+     }
+ }
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/MenuActivity.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/MenuActivity.java
+index d72057efd971cffa3a141723f1f6191a430f1b05..3b213bab897440f83f6a134f167cc47eadb11db5 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/MenuActivity.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/MenuActivity.java
+@@ -9,10 +9,10 @@ import com.goodanser.osmglass.glass.R;
+ 
+ /**
+  * Translucent menu shown when the user taps the LiveCard. Renders a single haloed
+- * "Stop navigation" label over the live map (see {@code activity_menu.xml}).
++ * "Stop Glass display" label over the live map (see {@code activity_menu.xml}).
+  *
+  * <p>Replaces the framework options menu, whose text was unreadable over dark map tiles and
+- * ignored theme-level text-shadow styling. Tap the touchpad (DPAD_CENTER) to stop navigation;
++ * ignored theme-level text-shadow styling. Tap the touchpad (DPAD_CENTER) to stop the Glass display (not the phone trip);
+  * swipe down (BACK) to dismiss, which finishes the activity by default.
+  */
+ public class MenuActivity extends Activity {
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/NavLiveCardService.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/NavLiveCardService.java
+index a0e688a9ed7d8b3b2bf65edd61a9f281e70b70f4..bdfa9b424023400950b61951dd91785707b75abe 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/NavLiveCardService.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/NavLiveCardService.java
+@@ -17,9 +17,11 @@ import android.os.HandlerThread;
+ import android.os.IBinder;
+ import android.os.Looper;
+ import android.os.PowerManager;
++import android.os.SystemClock;
+ import android.util.Log;
+ import android.view.View;
+ import android.widget.RemoteViews;
++import android.widget.Toast;
+ 
+ import com.google.android.glass.timeline.LiveCard;
+ 
+@@ -51,17 +53,26 @@ public class NavLiveCardService extends Service {
+     private RemoteViews views;
+     private Transport transport;
+     private TtsSpeaker speaker;
++    private PacketDispatcher dispatcher;
++    private volatile boolean destroyed;
++    private volatile long displayGeneration;
++    private final Runnable freshnessTimer = new Runnable() {
++        @Override public void run() {
++            if (destroyed) return;
++            if (dispatcher != null) dispatcher.checkFreshness();
++            if (mainHandler != null) mainHandler.postDelayed(this, 500);
++        }
++    };
+     private PowerManager.WakeLock screenWake;
+     private PowerManager.WakeLock disconnectWake;
+-    /** How long to hold {@link #screenWake} after waking for an approaching turn, in ms; 0 means no
+-     *  timeout (hold until the turn is passed). Pushed from the phone via DisplayConfig
++    /** Bounded 1–60 second hold after an approaching turn (legacy zero normalizes to15s). Pushed from the phone via DisplayConfig
+      *  ({@link PacketDispatcher#setScreenWakeTimeout}); defaults to the protocol's default so the
+      *  screen is bounded even before the first DisplayConfig arrives. Read on the reader thread in
+      *  {@link #onApproachingTurn}, written from the same thread — volatile for visibility. */
+     private volatile long screenWakeMs =
+         Packet.DisplayConfig.DEFAULT_SCREEN_WAKE_SEC * 1000L;
+     private int approachingTurnIndex = -1;
+-    private boolean hasNavContent = false;
++    private volatile boolean hasNavContent = false;
+     private BroadcastReceiver screenOnReceiver;
+     private Handler mainHandler;
+     private final Runnable disconnectAlertRunnable = this::showDisconnectAlert;
+@@ -111,6 +122,9 @@ public class NavLiveCardService extends Service {
+ 
+     /** Immutable snapshot of one display update, queued for the render thread. */
+     private static final class NavFrame {
++        final long generation;
++        // Receiver-monotonic expiry belongs to this exact fix, not to later incoming traffic.
++        final long validUntil;
+         final byte[] png;
+         final String topLeft;
+         final String topRight;
+@@ -120,8 +134,10 @@ public class NavLiveCardService extends Service {
+         final int markerPxY;
+         final int markerBearingDeg100;
+ 
+-        NavFrame(byte[] png, String topLeft, String topRight, String bottomLeft, String bottomRight,
++        NavFrame(long generation, long validUntil, byte[] png, String topLeft, String topRight, String bottomLeft, String bottomRight,
+                  int markerPxX, int markerPxY, int markerBearingDeg100) {
++            this.generation = generation;
++            this.validUntil = validUntil;
+             this.png = png;
+             this.topLeft = topLeft;
+             this.topRight = topRight;
+@@ -165,12 +181,15 @@ public class NavLiveCardService extends Service {
+             liveCard.setAction(PendingIntent.getActivity(this, 0, menu,
+                 PendingIntent.FLAG_UPDATE_CURRENT));
+             liveCard.publish(LiveCard.PublishMode.REVEAL);
++            if (!liveCard.isPublished()) throw new IllegalStateException("LiveCard was not published");
+             Log.i(TAG, "LiveCard published");
+         } catch (Throwable t) {
+-            // Expected on the API 19 emulator (no Glass system UI). Log and keep going so the
+-            // packet pipeline still runs.
+-            Log.w(TAG, "LiveCard publish failed (likely emulator): " + t.getMessage());
++            // Publication failure is not a usable HUD, including on an emulator.
++            Log.e(TAG, "LiveCard unavailable: " + t.getMessage());
+             liveCard = null;
++            Toast.makeText(this, R.string.livecard_unavailable, Toast.LENGTH_LONG).show();
++            stopSelf();
++            return;
+         }
+         // Glass's head-wake gesture (and a touchpad tap) turn the screen on, which fires
+         // ACTION_SCREEN_ON. When that happens during an active route, surface the map LiveCard
+@@ -192,19 +211,31 @@ public class NavLiveCardService extends Service {
+         speaker = new TtsSpeaker(this);
+ 
+         // Start the transport (TCP server in debug, RFCOMM in release).
+-        transport = TransportFactory.create();
+-        transport.setListener(new PacketDispatcher(this));
++        dispatcher = new PacketDispatcher(this);
++        mainHandler.postDelayed(freshnessTimer, 500);
+         try {
++            transport = TransportFactory.create(this);
++            transport.setListener(dispatcher);
+             transport.start();
+             Log.i(TAG, "transport started");
+-        } catch (IOException e) {
++        } catch (Exception e) {
+             Log.w(TAG, "transport.start failed: " + e.getMessage());
++            showStatus("Bluetooth unavailable. Open OsmGlass to select a paired phone.");
+         }
+     }
+ 
+     /** Called by {@code PacketDispatcher} to surface a spoken cue through bone conduction. */
+     public void speak(String utterance, String utteranceId) {
+-        if (speaker != null) speaker.speak(utterance, utteranceId);
++        final long generation=displayGeneration;
++        Handler h=mainHandler;
++        if (h!=null && !destroyed) h.post(()->{
++            if (!destroyed && generation==displayGeneration && speaker!=null) speaker.speak(utterance,utteranceId);
++        });
++    }
++
++    public void stopSpeech() {
++        Handler h=mainHandler;
++        if (h!=null) h.post(()->{ if (speaker!=null) speaker.stop(); });
+     }
+ 
+     /**
+@@ -213,12 +244,15 @@ public class NavLiveCardService extends Service {
+      * fresh nav packets are en route).
+      */
+     public void showStatus(String message) {
+-        if (views == null || renderHandler == null) return;
++        if (destroyed || views == null || renderHandler == null) return;
++        final long generation = ++displayGeneration;
++        hasNavContent = false;
++        stopSpeech();
+         // Drop any not-yet-rendered nav frame so a stale position can't overwrite the status.
+         pendingFrame = null;
+         renderHandler.removeCallbacks(renderPendingRunnable);
+         renderHandler.post(() -> {
+-            if (views == null) return;
++            if (destroyed || generation != displayGeneration || views == null) return;
+             dispTextSize = 22f;
+             dispStatus = message == null ? "" : message;
+             dispTopLeft = "";
+@@ -239,12 +273,13 @@ public class NavLiveCardService extends Service {
+      */
+     public void updateRemoteViews(byte[] pngBytes, String topLeft, String topRight,
+                                   String bottomLeft, String bottomRight,
+-                                  int markerPxX, int markerPxY, int markerBearingDeg100) {
+-        if (views == null || renderHandler == null) return;
++                                  int markerPxX, int markerPxY, int markerBearingDeg100, long validUntil) {
++        if (destroyed || views == null || renderHandler == null) return;
+         // Conflate: replace any not-yet-rendered frame and coalesce to a single queued render so a
+         // burst of buffered Progress packets collapses to the latest position. The reader thread
+         // returns immediately and keeps draining the socket instead of blocking on decode + IPC.
+-        pendingFrame = new NavFrame(pngBytes, topLeft, topRight, bottomLeft, bottomRight,
++        // The immutable frame identity is its presentation revision, including same-route fixes.
++        pendingFrame = new NavFrame(displayGeneration, validUntil, pngBytes, topLeft, topRight, bottomLeft, bottomRight,
+             markerPxX, markerPxY, markerBearingDeg100);
+         renderHandler.removeCallbacks(renderPendingRunnable);
+         renderHandler.post(renderPendingRunnable);
+@@ -254,33 +289,53 @@ public class NavLiveCardService extends Service {
+      *  while this was queued have already been overwritten, so we only ever paint the freshest. */
+     private void renderPendingFrame() {
+         NavFrame f = pendingFrame;
+-        if (f == null || views == null) return;
++        if (!ownsFrame(f) || views == null) return;
+         // A nav frame clears any centered status ("DISCONNECTED"/"Done") and its oversized text size
+         // left by showDisconnectAlert()/showStatus().
+         dispTextSize = 22f;
+         dispStatus = "";
++        snippetBlack = true; // Failed/empty new turn must never inherit an older turn map.
+         if (f.png != null && f.png.length > 0) {
+             Bitmap base = decodeCached(f.png);
+             if (base != null && compositeSnippet(base, f.markerPxX, f.markerPxY, f.markerBearingDeg100)) {
+                 snippetBlack = false;
+             }
+-            hasNavContent = true;
+         }
++        // Decode/composition may have stalled while newer fixes renewed dispatcher freshness.
++        if (!ownsFrame(f)) return;
+         if (f.topLeft != null) {
+             dispTopLeft = f.topLeft;
+-            hasNavContent = true;
+         }
+         if (f.topRight != null) dispTopRight = f.topRight;
+         if (f.bottomLeft != null) dispBottomLeft = f.bottomLeft;
+         if (f.bottomRight != null) dispBottomRight = f.bottomRight;
+-        renderViews();
++        renderViews(f);
++    }
++
++    private boolean ownsFrame(NavFrame frame) {
++        return !destroyed && frame != null && pendingFrame == frame
++            && frame.generation == displayGeneration && SystemClock.elapsedRealtime() < frame.validUntil;
+     }
+ 
+     /** Decode {@code png} to a base bitmap, reusing the last decode when the byte[] is the same
+      *  instance (same cached TurnBundle). Render-thread-only; not synchronized. */
+     private Bitmap decodeCached(byte[] png) {
+         if (png == decodedKey && decodedBase != null) return decodedBase;
+-        Bitmap bm = BitmapFactory.decodeByteArray(png, 0, png.length);
++        Bitmap bm;
++        try {
++            if (!SnippetImagePolicy.accepts(png)) return null;
++            BitmapFactory.Options bounds = new BitmapFactory.Options();
++            bounds.inJustDecodeBounds = true;
++            BitmapFactory.decodeByteArray(png, 0, png.length, bounds);
++            if (bounds.outWidth != 640 || bounds.outHeight != 360) return null;
++            BitmapFactory.Options opts = new BitmapFactory.Options();
++            opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
++            bm = BitmapFactory.decodeByteArray(png, 0, png.length, opts);
++            if (bm != null && (bm.getWidth() != 640 || bm.getHeight() != 360)) { bm.recycle(); return null; }
++        } catch (RuntimeException | OutOfMemoryError e) {
++            Log.w(TAG, "snippet rejected: " + e.getClass().getSimpleName());
++            return null;
++        }
+         if (bm != null) {
+             // Free the previous turn's base before holding the new one. The base is only ever used
+             // as a blit source for the snippet buffer — it is never handed to a RemoteViews — so
+@@ -343,7 +398,7 @@ public class NavLiveCardService extends Service {
+         // base is an opaque, full-size map snippet, so drawing it overwrites the previous frame's
+         // pixels (including the old marker) — no separate clear needed.
+         canvas.drawBitmap(base, 0f, 0f, null);
+-        if (px != Packet.Progress.MARKER_NONE && py != Packet.Progress.MARKER_NONE) {
++        if (px >= 0 && px < base.getWidth() && py >= 0 && py < base.getHeight()) {
+             drawMarker(canvas, px, py, bearingDeg100);
+         }
+         return true;
+@@ -364,6 +419,11 @@ public class NavLiveCardService extends Service {
+      *  action in internal caches and re-parcels them on each setViews, which on the small Glass
+      *  heap grew unbounded until decode OOM'd (glass-nav). Must be called on the render thread. */
+     private void renderViews() {
++        renderViews(null);
++    }
++
++    private void renderViews(NavFrame frame) {
++        if (destroyed || (frame != null && !ownsFrame(frame))) return;
+         RemoteViews v = new RemoteViews(getPackageName(), R.layout.livecard_nav);
+         applyCorner(v, R.id.corner_top_left_dark, R.id.corner_top_left_light, dispTopLeft);
+         applyCorner(v, R.id.corner_top_right_dark, R.id.corner_top_right_light, dispTopRight);
+@@ -377,8 +437,13 @@ public class NavLiveCardService extends Service {
+         } else {
+             v.setImageViewBitmap(R.id.snippet, snippetBuffer);
+         }
++        // Revalidate after preparing RemoteViews and directly before admitting the native IPC.
++        // No decoder/IPC runs under a lifecycle or dispatcher monitor; an already-entered IPC
++        // cannot be withdrawn retroactively by Stop or a newer position.
++        if (destroyed || (frame != null && !ownsFrame(frame))) return;
+         views = v;
+-        if (liveCard != null) {
++        if (frame != null) hasNavContent = true;
++        if (!destroyed && liveCard != null && (frame == null || ownsFrame(frame))) {
+             try {
+                 liveCard.setViews(v);
+             } catch (Throwable t) {
+@@ -398,6 +463,12 @@ public class NavLiveCardService extends Service {
+         // Arrow geometry: an isoceles chevron 48 px tall, 44 px wide. Origin (0,0) sits at the
+         // rider's current map position; the tip points "up" in the local frame, which we then
+         // rotate by the heading so it points in the actual direction of travel.
++        if (bearingDeg100 == Packet.Progress.MARKER_NONE) {
++            Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
++            p.setColor(Color.WHITE); canvas.drawCircle(px, py, 14f, p);
++            p.setColor(Color.rgb(30, 144, 255)); canvas.drawCircle(px, py, 10f, p);
++            return;
++        }
+         Path path = new Path();
+         path.moveTo(0f, -28f);   // tip
+         path.lineTo(22f, 20f);   // right shoulder
+@@ -430,7 +501,8 @@ public class NavLiveCardService extends Service {
+      * is invoked.
+      */
+     public void onTransportDisconnected() {
+-        if (mainHandler == null) return;
++        if (destroyed || mainHandler == null) return;
++        showStatus("Disconnected");
+         mainHandler.removeCallbacks(disconnectAlertRunnable);
+         mainHandler.postDelayed(disconnectAlertRunnable, DISCONNECT_ALERT_DELAY_MS);
+     }
+@@ -445,43 +517,14 @@ public class NavLiveCardService extends Service {
+                 Log.w(TAG, "disconnectWake.release failed: " + t.getMessage());
+             }
+         }
+-        // Serialize the view reset onto the render thread alongside nav frames.
+-        if (renderHandler != null) renderHandler.post(() -> {
+-            if (views == null) return;
+-            dispTextSize = 22f;
+-            dispStatus = "";
+-            renderViews();
+-        });
++
+     }
+ 
+     private void showDisconnectAlert() {
+-        Log.w(TAG, "phone still disconnected after grace period — alerting user");
+-        // Drop any pending nav frame and run the alert paint on the render thread so it can't be
+-        // overwritten by a stale frame that was queued before the disconnect.
+-        pendingFrame = null;
+-        if (renderHandler != null) renderHandler.post(() -> {
+-            if (views == null) return;
+-            renderHandler.removeCallbacks(renderPendingRunnable);
+-            // Oversize the status TextView so DISCONNECTED reads at a glance from the riding
+-            // position; renderPendingFrame resets it back to 22sp on the next nav update.
+-            dispTextSize = 48f;
+-            dispStatus = "DISCONNECTED";
+-            dispTopLeft = "";
+-            dispTopRight = "";
+-            dispBottomLeft = "";
+-            dispBottomRight = "";
+-            snippetBlack = true;
+-            renderViews();
+-            if (liveCard != null) {
+-                try { liveCard.navigate(); } catch (Throwable t) {
+-                    Log.w(TAG, "liveCard.navigate failed: " + t.getMessage());
+-                }
+-            }
+-        });
++        if (destroyed) return;
++        showStatus("DISCONNECTED");
+         if (disconnectWake != null && !disconnectWake.isHeld()) {
+-            try { disconnectWake.acquire(DISCONNECT_WAKE_MS); } catch (Throwable t) {
+-                Log.w(TAG, "disconnectWake.acquire failed: " + t.getMessage());
+-            }
++            try { disconnectWake.acquire(15_000L); } catch (Throwable ignored) { }
+         }
+     }
+ 
+@@ -490,8 +533,15 @@ public class NavLiveCardService extends Service {
+      * turn. Wakes the display and brings the LiveCard to the front of the timeline. Idempotent
+      * for the same {@code turnIndex} so it can be invoked on every PROGRESS packet.
+      */
+-    public void onApproachingTurn(int turnIndex) {
+-        if (approachingTurnIndex == turnIndex) return;
++    public void onApproachingTurn(final int turnIndex) {
++        final long generation=displayGeneration;
++        Handler h=mainHandler;
++        if (destroyed || h==null) return;
++        h.post(()->{ if (!destroyed && generation==displayGeneration) wakeForTurn(turnIndex); });
++    }
++
++    private void wakeForTurn(int turnIndex) {
++        if (destroyed || approachingTurnIndex == turnIndex) return;
+         approachingTurnIndex = turnIndex;
+         Log.i(TAG, "approaching turn #" + turnIndex + " — waking display");
+         if (liveCard != null) {
+@@ -505,8 +555,7 @@ public class NavLiveCardService extends Service {
+             try {
+                 // A configurable timeout (screenWakeMs) bounds how long the display stays bright per
+                 // turn: once it elapses the lock auto-releases and the screen dims on its normal
+-                // timeout, even if the turn isn't passed yet (e.g. the rider stopped within the
+-                // approach radius). 0 means hold indefinitely until onTurnPassed. The per-turn
++                // timeout, even if the turn is not passed yet. The per-turn
+                 // idempotence guard above means this fires at most once per turn approach; a glance-up
+                 // re-surfaces the card via the ACTION_SCREEN_ON receiver.
+                 long wakeMs = screenWakeMs;
+@@ -524,11 +573,11 @@ public class NavLiveCardService extends Service {
+     /**
+      * Called by {@code PacketDispatcher} when a DisplayConfig arrives. Sets how long the display is
+      * held bright after waking for an approaching turn. {@code seconds <= 0}
+-     * ({@link Packet.DisplayConfig#SCREEN_WAKE_NO_TIMEOUT}) restores the unbounded hold-until-passed
+-     * behavior. Takes effect on the next {@link #onApproachingTurn}.
++     * ({@link Packet.DisplayConfig#SCREEN_WAKE_NO_TIMEOUT}) selects the bounded 15s default.
++     * Takes effect on the next {@link #onApproachingTurn}.
+      */
+     public void setScreenWakeTimeout(int seconds) {
+-        screenWakeMs = seconds > 0 ? seconds * 1000L : 0L;
++        screenWakeMs = (seconds <= 0 ? 15 : Math.min(60, seconds)) * 1000L;
+     }
+ 
+     /**
+@@ -537,6 +586,11 @@ public class NavLiveCardService extends Service {
+      * normal timeout. Idempotent.
+      */
+     public void onTurnPassed() {
++        Handler h=mainHandler;
++        if (h!=null) h.post(this::releaseTurnWake);
++    }
++
++    private void releaseTurnWake() {
+         if (approachingTurnIndex == -1) return;
+         Log.i(TAG, "turn #" + approachingTurnIndex + " passed — releasing display");
+         approachingTurnIndex = -1;
+@@ -551,12 +605,19 @@ public class NavLiveCardService extends Service {
+ 
+     @Override
+     public int onStartCommand(Intent intent, int flags, int startId) {
+-        return START_STICKY;
++        return START_NOT_STICKY;
+     }
+ 
+     @Override
+     public void onDestroy() {
+         Log.i(TAG, "onDestroy");
++        destroyed = true; ++displayGeneration; hasNavContent = false;
++        if (dispatcher != null) { dispatcher.shutdown(); dispatcher = null; }
++        if (transport != null) {
++            transport.setListener(null);
++            try { transport.stop(); } catch (Throwable ignored) { }
++            transport = null;
++        }
+         if (screenOnReceiver != null) {
+             try { unregisterReceiver(screenOnReceiver); } catch (Throwable ignored) {}
+             screenOnReceiver = null;
+@@ -570,37 +631,33 @@ public class NavLiveCardService extends Service {
+             disconnectWake = null;
+         }
+         if (mainHandler != null) {
+-            mainHandler.removeCallbacks(disconnectAlertRunnable);
++            mainHandler.removeCallbacksAndMessages(null);
+             mainHandler = null;
+         }
+-        if (renderHandler != null) {
+-            renderHandler.removeCallbacks(renderPendingRunnable);
+-            renderHandler = null;
+-        }
+-        if (renderThread != null) {
+-            renderThread.quit();
+-            renderThread = null;
+-        }
++        // Revocation precedes transport detach and all asynchronous cleanup.
+         pendingFrame = null;
+-        decodedKey = null;
+-        if (decodedBase != null) { decodedBase.recycle(); decodedBase = null; }
+-        if (snippetBuffer != null) { snippetBuffer.recycle(); snippetBuffer = null; }
++        final Handler owner = renderHandler;
++        final HandlerThread ownerThread = renderThread;
++        renderHandler = null; renderThread = null;
++        if (owner != null) {
++            owner.removeCallbacksAndMessages(null);
++            owner.post(() -> {
++                decodedKey = null;
++                if (decodedBase != null) { decodedBase.recycle(); decodedBase = null; }
++                if (snippetBuffer != null) { snippetBuffer.recycle(); snippetBuffer = null; }
++                if (liveCard != null) {
++                    try { if (liveCard.isPublished()) liveCard.unpublish(); } catch (Throwable ignored) { }
++                    liveCard = null;
++                }
++                if (ownerThread != null) ownerThread.quitSafely();
++            });
++        }
+         approachingTurnIndex = -1;
+         hasNavContent = false;
+-        if (transport != null) {
+-            try { transport.stop(); } catch (Throwable ignored) {}
+-            transport = null;
+-        }
+         if (speaker != null) {
+             try { speaker.shutdown(); } catch (Throwable ignored) {}
+             speaker = null;
+         }
+-        if (liveCard != null) {
+-            try {
+-                if (liveCard.isPublished()) liveCard.unpublish();
+-            } catch (Throwable ignored) {}
+-            liveCard = null;
+-        }
+         super.onDestroy();
+     }
+ 
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/PacketDispatcher.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/PacketDispatcher.java
+index 57c4a492ccc9d2dea5378c25298426060273555c..d4648aad8e0acf3d636066cdeea879274d4ce1f1 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/PacketDispatcher.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/PacketDispatcher.java
+@@ -1,210 +1,150 @@
+ package com.goodanser.osmglass.glass.livecard;
+ 
+-import android.util.Log;
+-
++import android.os.SystemClock;
++import com.goodanser.osmglass.protocol.Codec;
+ import com.goodanser.osmglass.protocol.Packet;
++import com.goodanser.osmglass.protocol.TurnKind;
+ import com.goodanser.osmglass.protocol.transport.Transport;
+-
+-import java.util.HashMap;
++import java.util.Iterator;
++import java.util.LinkedHashMap;
+ import java.util.Map;
+ 
+-/**
+- * Receives packets from the {@code Transport} and updates the LiveCard via
+- * {@link NavLiveCardService#updateRemoteViews(byte[], String, String, String, String, int, int, int)}.
+- *
+- * Caches {@link Packet.TurnBundle}s by (routeId, turnIndex). When a {@link Packet.Progress}
+- * arrives, looks up the corresponding cached bundle and pushes its snippet + the four configured
+- * corner fields to the LiveCard.
+- */
++/** Acting boundary: a fresh transport handshake and RouteStart own every HUD mutation. */
+ public final class PacketDispatcher implements Transport.Listener {
+-    private static final String TAG = "PacketDispatcher";
+-
+-    /**
+-     * Approach threshold scales with speed to give roughly a constant ~18 seconds of lead time:
+-     * 30 m floor for walking, ~150 m at 30 km/h cycling, ~500 m at 100 km/h driving.
+-     */
+-    private static final int MIN_APPROACH_M = 30;
+-    private static final double APPROACH_M_PER_KMH = 5.0;
+-    /** Distance at which we speak the "turn now" cue. */
+-    private static final int IMMINENT_THRESHOLD_M = 30;
+-
+-    static int approachThresholdM(int speedKmh) {
+-        return Math.max(MIN_APPROACH_M, (int) Math.round(speedKmh * APPROACH_M_PER_KMH));
+-    }
+-
+-    private static int roundToTen(int m) {
+-        return ((m + 5) / 10) * 10;
+-    }
+-
++    static final int MAX_TURNS = 4096;
++    static final int MAX_CACHED_TURNS = 8;
++    static final int MAX_IMAGE_BYTES = 128 * 1024;
++    static final int MAX_CACHE_BYTES = 1024 * 1024;
++    static final int PROGRESS_TTL_MS = 3000;
++    interface Clock { long now(); }
++    private final Clock clock;
+     private final NavLiveCardService service;
+-    private final Map<Long, Packet.TurnBundle> cache = new HashMap<>();
++    private final Map<Integer, Packet.TurnBundle> cache = new LinkedHashMap<>(16, .75f, true);
++    private int cacheBytes;
++    private boolean connected, hello;
++    private volatile boolean disabled;
+     private long currentRouteId = -1;
++    private int totalTurns;
+     private int activeTurnIndex = -1;
++    private int freshTurnIndex = -1;
+     private int lastApproachSpokenTurn = -1;
+     private int lastImminentSpokenTurn = -1;
+-    /** Whether we've already spoken the "head north on X, then turn left in Y meters" preamble. */
+-    private boolean initialDirectionSpoken = false;
+-    /** Departure instruction for the route, from {@link Packet.RouteStart#startLabel}; the preamble
+-     *  for the initial spoken cue. Empty until a RouteStart arrives or if the phone didn't send one. */
++    private boolean initialDirectionSpoken;
+     private String routeStartLabel = "";
+-    /** Most recently received display configuration from the phone — one field per screen corner. */
++    private boolean muteTts = true; // OsmAnd is the default single voice authority.
++    private long freshUntil;
++    private boolean staleShown;
+     private Packet.DisplayConfig.Field topLeft = Packet.DisplayConfig.Field.TURN_INSTRUCTION;
+     private Packet.DisplayConfig.Field topRight = Packet.DisplayConfig.Field.NONE;
+     private Packet.DisplayConfig.Field bottomLeft = Packet.DisplayConfig.Field.DISTANCE_TO_TURN;
+     private Packet.DisplayConfig.Field bottomRight = Packet.DisplayConfig.Field.NONE;
+-    /** When true, all TTS announcements (approach, imminent, initial direction, turn alerts) are
+-     *  suppressed. Set by {@link Packet.DisplayConfig#muteTts} pushed from the phone. */
+-    private boolean muteTts = false;
+ 
+-    public PacketDispatcher(NavLiveCardService service) {
+-        this.service = service;
++    public PacketDispatcher(NavLiveCardService service) { this(service, SystemClock::elapsedRealtime); }
++    PacketDispatcher(NavLiveCardService service, Clock clock) { this.service = service; this.clock = clock; }
++    static int approachThresholdM(int speedKmh) { return Math.max(30, (int)Math.min(1500L, speedKmh * 5L)); }
++    private static int roundToTen(int m) { return (int)Math.min(Integer.MAX_VALUE, ((m + 5L) / 10) * 10); }
++
++    private void revokeRoute() {
++        currentRouteId = -1; totalTurns = 0; cache.clear(); cacheBytes = 0;
++        freshUntil = 0; freshTurnIndex = -1; staleShown = false; activeTurnIndex = -1;
++        lastApproachSpokenTurn = -1; lastImminentSpokenTurn = -1;
++        initialDirectionSpoken = false; routeStartLabel = "";
++        service.onTurnPassed(); service.stopSpeech();
+     }
+-
+-    @Override public void onConnected() {
+-        Log.i(TAG, "connected");
+-        service.onTransportConnected();
+-        service.showStatus("");
++    @Override public synchronized void onConnected() {
++        if (disabled) return;
++        revokeRoute(); connected = true; hello = false; muteTts = true;
++        service.onTransportConnected(); service.showStatus("Waiting for route…");
+     }
+-
+-    @Override public void onPacket(Packet p) {
++    @Override public synchronized void onDisconnected(Throwable cause) {
++        if (disabled) return;
++        connected = false; hello = false; revokeRoute();
++        service.showStatus("Disconnected"); service.onTransportDisconnected();
++    }
++    public void shutdown() { disabled = true; }
++    private boolean owns(long routeId, int index) {
++        return connected && hello && currentRouteId == routeId && index >= 0 && index < totalTurns;
++    }
++    private boolean fresh() { return freshUntil > clock.now(); }
++    /** Called from the independent main-thread timer; Ping/Pong deliberately do not renew it. */
++    public synchronized void checkFreshness() {
++        if (disabled || currentRouteId == -1 || fresh() || staleShown) return;
++        staleShown = true; activeTurnIndex = -1;
++        service.onTurnPassed(); service.stopSpeech(); service.showStatus("GPS unavailable");
++    }
++    @Override public synchronized void onPacket(Packet p) {
++        if (disabled || !connected) return;
++        if (p instanceof Packet.Hello) {
++            if (hello || ((Packet.Hello)p).protoVersionAccepted != Codec.PROTO_VERSION) {
++                hello = false; revokeRoute(); service.showStatus("Protocol mismatch"); return;
++            }
++            hello = true; return;
++        }
++        if (!hello) return;
+         if (p instanceof Packet.RouteStart) {
+-            Packet.RouteStart rs = (Packet.RouteStart) p;
+-            Log.i(TAG, "ROUTE_START id=" + rs.routeId + " turns=" + rs.totalTurns);
+-            currentRouteId = rs.routeId;
++            Packet.RouteStart rs = (Packet.RouteStart)p;
++            if (rs.totalTurns < 1 || rs.totalTurns > MAX_TURNS) {
++                revokeRoute(); service.showStatus("Route too large"); return;
++            }
++            revokeRoute(); currentRouteId = rs.routeId; totalTurns = rs.totalTurns;
+             routeStartLabel = rs.startLabel;
+-            cache.clear();
+-            lastApproachSpokenTurn = -1;
+-            lastImminentSpokenTurn = -1;
+-            initialDirectionSpoken = false;
++            service.showStatus("Waiting for GPS…");
+         } else if (p instanceof Packet.DisplayConfig) {
+-            Packet.DisplayConfig dc = (Packet.DisplayConfig) p;
+-            Log.i(TAG, "DISPLAY_CONFIG tl=" + dc.topLeft + " tr=" + dc.topRight
+-                + " bl=" + dc.bottomLeft + " br=" + dc.bottomRight + " muteTts=" + dc.muteTts
+-                + " screenWakeSec=" + dc.screenWakeSec);
+-            topLeft = dc.topLeft;
+-            topRight = dc.topRight;
+-            bottomLeft = dc.bottomLeft;
+-            bottomRight = dc.bottomRight;
++            Packet.DisplayConfig dc = (Packet.DisplayConfig)p;
++            topLeft = dc.topLeft; topRight = dc.topRight; bottomLeft = dc.bottomLeft; bottomRight = dc.bottomRight;
+             muteTts = dc.muteTts;
++            if (muteTts) service.stopSpeech();
+             service.setScreenWakeTimeout(dc.screenWakeSec);
+         } else if (p instanceof Packet.TurnBundle) {
+-            Packet.TurnBundle tb = (Packet.TurnBundle) p;
+-            Log.d(TAG, "TURN_BUNDLE #" + tb.turnIndex + " " + tb.kind + " (" + tb.pngBytes.length + "B)");
+-            cache.put(key(tb.routeId, tb.turnIndex), tb);
+-        } else if (p instanceof Packet.Progress) {
+-            Packet.Progress pr = (Packet.Progress) p;
+-            Packet.TurnBundle tb = cache.get(key(pr.routeId, pr.turnIndex));
+-            if (tb == null) {
+-                Log.d(TAG, "PROGRESS without cached TURN_BUNDLE for #" + pr.turnIndex);
+-                return;
+-            }
+-            // First PROGRESS with a cached bundle: speak the one-time route-start cue, keyed to the
+-            // turn the rider is actually approaching (the phone ships it first) rather than the
+-            // already-passed leading turns.
+-            if (!initialDirectionSpoken) {
+-                maybeSpeakInitialDirection(pr, tb);
++            Packet.TurnBundle tb = (Packet.TurnBundle)p;
++            if (!owns(tb.routeId, tb.turnIndex)) return;
++            // Oversized images degrade explicitly to text-only, without retaining the hostile byte array.
++            if (tb.pngBytes.length > MAX_IMAGE_BYTES) tb = new Packet.TurnBundle(tb.routeId,
++                tb.turnIndex, tb.kind, tb.distanceFromStartM, tb.instructionText, new byte[0]);
++            Packet.TurnBundle old = cache.remove(tb.turnIndex);
++            if (old != null) cacheBytes -= old.pngBytes.length;
++            cache.put(tb.turnIndex, tb); cacheBytes += tb.pngBytes.length;
++            Iterator<Packet.TurnBundle> it = cache.values().iterator();
++            while (cache.size() > MAX_CACHED_TURNS || cacheBytes > MAX_CACHE_BYTES) {
++                cacheBytes -= it.next().pngBytes.length; it.remove();
+             }
+-            // If the active turn index advanced, the previous turn has been passed — release the
+-            // display before deciding whether to wake for the new turn.
+-            if (activeTurnIndex != -1 && pr.turnIndex != activeTurnIndex) {
+-                service.onTurnPassed();
+-                activeTurnIndex = -1;
++        } else if (p instanceof Packet.Progress) {
++            Packet.Progress pr = (Packet.Progress)p;
++            if (!owns(pr.routeId, pr.turnIndex)) return;
++            if (pr.fixAgeMs < 0 || pr.fixAgeMs >= Packet.Progress.FRESH_FIX_MAX_AGE_MS) {
++                freshUntil = 0; checkFreshness(); return;
+             }
+-            int approachThresholdM = approachThresholdM(pr.speedKmh);
+-            if (pr.distanceToTurnM <= approachThresholdM) {
++            freshUntil = clock.now() + Math.min(PROGRESS_TTL_MS,
++                Packet.Progress.FRESH_FIX_MAX_AGE_MS - pr.fixAgeMs);
++            staleShown = false; freshTurnIndex = pr.turnIndex;
++            Packet.TurnBundle tb = cache.get(pr.turnIndex);
++            if (tb == null) { service.showStatus("Loading turn…"); return; }
++            if (activeTurnIndex != -1 && activeTurnIndex != pr.turnIndex) service.onTurnPassed();
++            activeTurnIndex = pr.turnIndex;
++            // ARRIVE is a destination preview, never an arrival assertion; only RouteEnd can finish.
++            if (tb.kind != TurnKind.ARRIVE && pr.distanceToTurnM >= 0 && pr.distanceToTurnM <= approachThresholdM(pr.speedKmh)) {
+                 service.onApproachingTurn(pr.turnIndex);
+-                activeTurnIndex = pr.turnIndex;
+-                if (lastApproachSpokenTurn != pr.turnIndex) {
++                if (!muteTts && lastApproachSpokenTurn != pr.turnIndex) {
+                     lastApproachSpokenTurn = pr.turnIndex;
+-                    speak(
+-                        TtsSpeaker.utteranceFor(TtsSpeaker.Cue.APPROACH, tb.kind, tb.instructionText, roundToTen(pr.distanceToTurnM)),
+-                        "approach-" + pr.turnIndex);
++                    service.speak(TtsSpeaker.utteranceFor(TtsSpeaker.Cue.APPROACH, tb.kind,
++                        tb.instructionText, roundToTen(pr.distanceToTurnM)), "approach-" + pr.turnIndex);
+                 }
+             }
+-            if (pr.distanceToTurnM <= IMMINENT_THRESHOLD_M && lastImminentSpokenTurn != pr.turnIndex) {
+-                lastImminentSpokenTurn = pr.turnIndex;
+-                speak(
+-                    TtsSpeaker.utteranceFor(TtsSpeaker.Cue.IMMINENT, tb.kind, tb.instructionText, IMMINENT_THRESHOLD_M),
+-                    "imminent-" + pr.turnIndex);
+-            }
+-            String tl = renderField(topLeft, pr, tb);
+-            String tr = renderField(topRight, pr, tb);
+-            String bl = renderField(bottomLeft, pr, tb);
+-            String br = renderField(bottomRight, pr, tb);
+-            Log.i(TAG, "PROGRESS #" + pr.turnIndex + " tl=" + tl + " tr=" + tr
+-                + " bl=" + bl + " br=" + br
+-                + " marker=" + (pr.markerPxX == Packet.Progress.MARKER_NONE
+-                    ? "none"
+-                    : ("(" + pr.markerPxX + "," + pr.markerPxY + ","
+-                        + (pr.markerBearingDeg100 / 100.0) + "°)")));
+-            service.updateRemoteViews(
+-                tb.pngBytes, tl, tr, bl, br,
+-                pr.markerPxX, pr.markerPxY, pr.markerBearingDeg100);
++            service.updateRemoteViews(tb.pngBytes, renderField(topLeft, pr, tb), renderField(topRight, pr, tb),
++                renderField(bottomLeft, pr, tb), renderField(bottomRight, pr, tb),
++                pr.markerPxX, pr.markerPxY, pr.markerBearingDeg100, freshUntil);
+         } else if (p instanceof Packet.TurnAlert) {
+-            Packet.TurnAlert a = (Packet.TurnAlert) p;
+-            Log.i(TAG, "TURN_ALERT #" + a.turnIndex);
+-            // OsmAnd voice prompt fired on the phone. Wake the display now even if we're still
+-            // outside the distance-based approach threshold so a glance shows the upcoming turn.
+-            service.onApproachingTurn(a.turnIndex);
+-            activeTurnIndex = a.turnIndex;
++            Packet.TurnAlert a = (Packet.TurnAlert)p;
++            if (!owns(a.routeId, a.turnIndex) || !fresh() || a.turnIndex != freshTurnIndex
++                    || !cache.containsKey(a.turnIndex) || cache.get(a.turnIndex).kind == TurnKind.ARRIVE) return;
++            service.onApproachingTurn(a.turnIndex); activeTurnIndex = a.turnIndex;
+         } else if (p instanceof Packet.RouteEnd) {
+-            Packet.RouteEnd re = (Packet.RouteEnd) p;
+-            Log.i(TAG, "ROUTE_END id=" + re.routeId + " " + re.reason);
+-            service.onTurnPassed();
+-            activeTurnIndex = -1;
+-            lastApproachSpokenTurn = -1;
+-            lastImminentSpokenTurn = -1;
+-            String message = (re.reason == Packet.RouteEnd.Reason.OFFROUTE) ? "Rerouting…" : "Done";
+-            service.showStatus(message);
+-            cache.clear();
+-            currentRouteId = -1;
+-        }
+-    }
+-
+-    @Override public void onDisconnected(Throwable cause) {
+-        Log.w(TAG, "disconnected: " + (cause == null ? "clean EOF" : cause.getMessage()));
+-        service.onTurnPassed();
+-        activeTurnIndex = -1;
+-        lastApproachSpokenTurn = -1;
+-        lastImminentSpokenTurn = -1;
+-        service.onTransportDisconnected();
+-    }
+-
+-    /**
+-     * Speak the one-time route-start cue: the departure instruction (from
+-     * {@link Packet.RouteStart#startLabel}) plus the maneuver the rider is approaching. Called from
+-     * the first PROGRESS that resolves a cached bundle, so {@code currentTurn} is the live upcoming
+-     * turn and {@code pr.distanceToTurnM} its live distance — no dependency on the already-passed
+-     * leading turns (which the phone now ships last). Falls back to "Start route" when the phone
+-     * didn't supply a departure label.
+-     */
+-    private void maybeSpeakInitialDirection(Packet.Progress pr, Packet.TurnBundle currentTurn) {
+-        initialDirectionSpoken = true;
+-        // routeStartLabel is the bare departure street name (or empty when the road is unnamed).
+-        boolean haveStreet = routeStartLabel != null && !routeStartLabel.isEmpty();
+-        if (currentTurn.kind == com.goodanser.osmglass.protocol.TurnKind.ARRIVE) {
+-            speak(haveStreet ? "Head on " + routeStartLabel + ", you have arrived" : "You have arrived",
+-                "initial-" + pr.routeId);
+-            return;
+-        }
+-        String maneuver = TtsSpeaker.utteranceFor(
+-            TtsSpeaker.Cue.IMMINENT, currentTurn.kind, currentTurn.instructionText, 0);
+-        // utteranceFor(IMMINENT, ...) returns "<phrase> now"; we want just the phrase.
+-        if (maneuver.endsWith(" now")) maneuver = maneuver.substring(0, maneuver.length() - 4);
+-        int meters = roundToTen(pr.distanceToTurnM);
+-        String utterance = haveStreet
+-            ? "Head on " + routeStartLabel + " for " + meters + " meters, then " + maneuver
+-            : "In " + meters + " meters, " + maneuver;
+-        speak(utterance, "initial-" + pr.routeId);
+-    }
+-
+-    /** Forward an utterance to the service unless the phone has muted Glass-side TTS. */
+-    private void speak(String utterance, String utteranceId) {
+-        if (muteTts) {
+-            Log.d(TAG, "TTS muted — suppressed: " + utteranceId);
+-            return;
++            Packet.RouteEnd re = (Packet.RouteEnd)p;
++            if (currentRouteId == -1 || re.routeId != currentRouteId) return;
++            revokeRoute();
++            service.showStatus(re.reason == Packet.RouteEnd.Reason.ARRIVED ? "Arrived"
++                : re.reason == Packet.RouteEnd.Reason.OFFROUTE ? "Rerouting…" : "Display stopped");
+         }
+-        service.speak(utterance, utteranceId);
+     }
+ 
+     private String renderField(
+@@ -235,12 +175,14 @@ public final class PacketDispatcher implements Transport.Listener {
+      * etaSec and we anchor it to the current clock at render time, so no extra wire field is needed.
+      */
+     private String formatArrivalClock(int etaSec) {
++        if (etaSec < 0) return "—";
+         long arrivalMs = System.currentTimeMillis() + etaSec * 1000L;
+         return android.text.format.DateFormat.getTimeFormat(service)
+             .format(new java.util.Date(arrivalMs));
+     }
+ 
+     private static String formatDuration(int seconds) {
++        if (seconds < 0) return "—";
+         if (seconds < 60) return seconds + "s";
+         int mins = seconds / 60;
+         if (mins < 60) return mins + "m";
+@@ -254,6 +196,7 @@ public final class PacketDispatcher implements Transport.Listener {
+     }
+ 
+     private static String formatDistance(int meters) {
++        if (meters < 0) return "—";
+         if (meters >= 1000) return (meters / 1000) + "." + ((meters % 1000) / 100) + " km";
+         return meters + " m";
+     }
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/TtsSpeaker.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/TtsSpeaker.java
+index b762304cbaee4cc64a6e3c658a17ade88298b19b..e344c3d0e3d410660ebd41fe400bb41b2e8e2657 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/TtsSpeaker.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/TtsSpeaker.java
+@@ -70,6 +70,10 @@ public final class TtsSpeaker {
+         }
+     }
+ 
++    public void stop() {
++        if (tts != null) try { tts.stop(); } catch (Throwable ignored) { }
++    }
++
+     public void shutdown() {
+         if (tts == null) return;
+         try {
+@@ -92,7 +96,8 @@ public final class TtsSpeaker {
+     }
+ 
+     private static String phraseFor(TurnKind kind, String instructionText) {
+-        if (kind == null) return safe(instructionText);
++        if (instructionText != null && !instructionText.isEmpty()) return instructionText;
++        if (kind == null) return "";
+         switch (kind) {
+             case TL:   return "turn left";
+             case TR:   return "turn right";
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/RfcommServerTransport.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/RfcommServerTransport.java
+index 1583630fb6e2f3cfc99799fb3b762fd3a09cd022..da0e2fc890b2bf9e66d5833326dbae838a355262 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/RfcommServerTransport.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/RfcommServerTransport.java
+@@ -1,132 +1,134 @@
+ package com.goodanser.osmglass.glass.transport;
+ 
+ import android.bluetooth.BluetoothAdapter;
++import android.bluetooth.BluetoothDevice;
+ import android.bluetooth.BluetoothServerSocket;
+ import android.bluetooth.BluetoothSocket;
++import android.content.Context;
++import android.content.SharedPreferences;
+ import android.util.Log;
+-
++import com.goodanser.osmglass.protocol.Codec;
+ import com.goodanser.osmglass.protocol.FrameReader;
+ import com.goodanser.osmglass.protocol.FrameWriter;
+ import com.goodanser.osmglass.protocol.Packet;
+ import com.goodanser.osmglass.protocol.transport.Keepalive;
+ import com.goodanser.osmglass.protocol.transport.Transport;
+-
+ import java.io.IOException;
+-import java.lang.reflect.Method;
+ import java.util.UUID;
+ import java.util.concurrent.atomic.AtomicBoolean;
++import java.util.concurrent.atomic.AtomicLong;
+ 
+-/**
+- * Glass-side RFCOMM listener. Accepts a single phone connection at a time. On disconnect, it loops
+- * back to {@code accept()} so the phone can reconnect after a transient outage.
+- *
+- * Hardware-only — Glass emulator BT stack does not surface RFCOMM listeners to a paired host, so
+- * this code path is not exercised by container tests; it compiles and is link-checked against API
+- * 19 only.
+- */
++/** Secure Bluetooth bond + explicit owner-selected identity, with fresh framed sessions. */
+ public final class RfcommServerTransport implements Transport {
+     private static final String TAG = "RfcommServer";
+     public static final UUID GLASS_UUID = UUID.fromString("e8b4c8a0-1f3a-4f7b-9b0d-ee9f2c1a7b00");
+     public static final String SERVICE_NAME = "OsmGlass";
+-    /** Fixed RFCOMM channel used by both sides via the hidden {@code listenUsingInsecureRfcommOn}
+-     * /{@code createInsecureRfcommSocket} reflection APIs. Bypasses SDP, which on Glass XE-C
+-     * sometimes hands the phone a stale or wrong channel and causes "phone connects to a system
+-     * service" problems. RFCOMM has channels 1-30; we use 22 to dodge anything common. */
+-    public static final int RFCOMM_CHANNEL = 22;
+-
+-    private final UUID uuid;
+-    private final AtomicBoolean running = new AtomicBoolean(false);
++    private final SharedPreferences peers;
++    private final AtomicBoolean running = new AtomicBoolean();
++    private final AtomicLong generation = new AtomicLong();
++    private volatile BluetoothServerSocket serverSocket;
++    private volatile BluetoothSocket socket;
++    private volatile FrameWriter writer;
++    private volatile Listener listener;
+     private Thread thread;
+-    private BluetoothServerSocket serverSocket;
+-    private BluetoothSocket socket;
+-    private FrameWriter writer;
+-    private Listener listener;
+-
+-    public RfcommServerTransport() {
+-        this(GLASS_UUID);
+-    }
+-
+-    public RfcommServerTransport(UUID uuid) {
+-        this.uuid = uuid;
+-    }
+-
+-    @Override public void setListener(Listener listener) {
+-        this.listener = listener;
+-    }
+-
++    private final SharedPreferences.OnSharedPreferenceChangeListener trustListener = (p,key) -> {
++        if (TrustedPhoneStore.KEY.equals(key)) close(socket);
++    };
++    public RfcommServerTransport(Context context) { peers = TrustedPhoneStore.preferences(context); }
++    @Override public void setListener(Listener listener) { this.listener = listener; }
+     @Override public synchronized void start() throws IOException {
+-        if (!running.compareAndSet(false, true)) return;
++        if (running.get()) return;
+         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+-        if (adapter == null) throw new IOException("Bluetooth not supported");
+-        if (!adapter.isEnabled()) throw new IOException("Bluetooth disabled");
+-        serverSocket = listenOnFixedChannel(adapter);
+-        Log.i(TAG, "listening on RFCOMM channel " + RFCOMM_CHANNEL);
+-        thread = new Thread(this::run, "RfcommServer");
+-        thread.setDaemon(true);
+-        thread.start();
++        if (adapter == null || !adapter.isEnabled()) throw new IOException("Bluetooth disabled or absent");
++        String selected=peers.getString(TrustedPhoneStore.KEY, "");
++        if (!BluetoothAdapter.checkBluetoothAddress(selected)) throw new IOException("Select a trusted phone first");
++        BluetoothDevice peer=adapter.getRemoteDevice(selected);
++        if (peer.getBondState()!=BluetoothDevice.BOND_BONDED) throw new IOException("Selected phone is no longer paired");
++        // Public secure API only. SDP trouble is an actionable error, never an insecure downgrade.
++        BluetoothServerSocket opened = adapter.listenUsingRfcommWithServiceRecord(SERVICE_NAME, GLASS_UUID);
++        serverSocket=opened; running.set(true); peers.registerOnSharedPreferenceChangeListener(trustListener);
++        final long epoch=generation.incrementAndGet();
++        thread=new Thread(()->run(epoch,opened),"OsmGlassSecureRfcomm"); thread.setDaemon(true); thread.start();
+     }
+-
+-    /**
+-     * Bind to a fixed RFCOMM channel via the hidden {@code listenUsingInsecureRfcommOn(int)}
+-     * BluetoothAdapter API. Falls back to {@code listenUsingInsecureRfcommWithServiceRecord} if
+-     * reflection fails (so the build still works on stripped Android forks where the hidden API
+-     * was removed).
+-     */
+-    private BluetoothServerSocket listenOnFixedChannel(BluetoothAdapter adapter) throws IOException {
+-        try {
+-            Method m = BluetoothAdapter.class.getMethod("listenUsingInsecureRfcommOn", int.class);
+-            return (BluetoothServerSocket) m.invoke(adapter, RFCOMM_CHANNEL);
+-        } catch (Throwable t) {
+-            Log.w(TAG, "listenUsingInsecureRfcommOn(" + RFCOMM_CHANNEL + ") failed via reflection: "
+-                + t.getMessage() + " — falling back to SDP UUID");
+-            return adapter.listenUsingInsecureRfcommWithServiceRecord(SERVICE_NAME, uuid);
++    @Override public void stop() {
++        final BluetoothSocket raw;
++        final BluetoothServerSocket listening;
++        final Thread worker;
++        synchronized (this) {
++            running.set(false); generation.incrementAndGet(); peers.unregisterOnSharedPreferenceChangeListener(trustListener);
++            writer=null;
++            raw=socket; socket=null;
++            listening=serverSocket; serverSocket=null;
++            worker=thread; thread=null;
+         }
++        // Never hold the admission monitor across platform socket closure.
++        close(raw);
++        try { if (listening!=null) listening.close(); } catch (IOException ignored) { }
++        if (worker!=null) worker.interrupt();
+     }
+-
+-    @Override public synchronized void stop() {
+-        if (!running.compareAndSet(true, false)) return;
+-        try { if (serverSocket != null) serverSocket.close(); } catch (IOException ignored) {}
+-        try { if (socket != null) socket.close(); } catch (IOException ignored) {}
+-        if (thread != null) thread.interrupt();
+-    }
+-
+     @Override public void send(Packet p) throws IOException {
+-        FrameWriter w = writer;
+-        if (w == null) throw new IOException("RfcommServer not connected");
+-        w.write(p);
++        FrameWriter owned=writer;
++        if (!running.get() || owned==null) throw new IOException("Not connected");
++        owned.write(p);
+     }
+-
+-    private void run() {
+-        while (running.get()) {
+-            Keepalive keepalive = null;
++    private boolean allowed(BluetoothSocket owned) {
++        BluetoothDevice remote=owned.getRemoteDevice();
++        return TrustedPhoneStore.admits(peers.getString(TrustedPhoneStore.KEY,""), remote.getAddress(),
++            remote.getBondState()==BluetoothDevice.BOND_BONDED);
++    }
++    private boolean active(long epoch) { return running.get() && generation.get()==epoch; }
++    private void run(long epoch,BluetoothServerSocket ownedServer) {
++        while (active(epoch)) {
++            BluetoothSocket owned=null;
++            FrameWriter ownedWriter=null;
++            Keepalive keepalive=null;
++            boolean announced=false;
++            Throwable failure=null;
+             try {
+-                socket = serverSocket.accept();
+-                writer = new FrameWriter(socket.getOutputStream());
+-                FrameReader reader = new FrameReader(socket.getInputStream());
+-                if (listener != null) listener.onConnected();
+-                final BluetoothSocket sessionSocket = socket;
+-                keepalive = new Keepalive(
+-                        /* sendPings = */ false,
+-                        p -> { FrameWriter w = writer; if (w != null) { try { w.write(p); } catch (Throwable ignored) {} } },
+-                        () -> { try { sessionSocket.close(); } catch (Throwable ignored) {} });
++                owned=ownedServer.accept();
++                synchronized (this) {
++                    if (!active(epoch)) break;
++                    socket=owned;
++                }
++                if (!allowed(owned)) { close(owned); continue; }
++                final BluetoothSocket session=owned;
++                ownedWriter=new FrameWriter(session.getOutputStream(), ()->close(session),10000);
++                FrameReader reader=ownedWriter.handshake(session.getInputStream());
++                synchronized (this) {
++                    // A native handshake can finish after Stop, even though its raw socket is closed.
++                    if (!active(epoch) || socket!=session) continue;
++                    writer=ownedWriter;
++                }
++                final FrameWriter sessionWriter=ownedWriter;
++                keepalive=new Keepalive(false, p->{ try { sessionWriter.write(p); } catch (IOException e) { close(session); } }, ()->close(session));
+                 keepalive.start();
+-                while (running.get()) {
+-                    Packet p = reader.readNext();
+-                    if (p == null) break;
++                if (!active(epoch) || !allowed(session)) continue;
++                Listener target=listener;
++                if (target!=null) {
++                    target.onConnected();
++                    if (!active(epoch) || socket!=session) continue;
++                    target.onPacket(new Packet.Hello(Codec.PROTO_VERSION)); announced=true;
++                }
++                while (active(epoch) && socket==session && allowed(session)) {
++                    Packet p=reader.readNext();
++                    if (p==null) break;
++                    if (!active(epoch) || socket!=session || !allowed(session)) break;
+                     if (keepalive.handleInbound(p)) continue;
+-                    if (listener != null) listener.onPacket(p);
++                    target=listener;
++                    if (target!=null) target.onPacket(p);
++                }
++            } catch (Throwable t) { failure=t; if (active(epoch)) Log.w(TAG,"Secure RFCOMM unavailable: "+t.getMessage()); }
++            finally {
++                if (keepalive!=null) keepalive.stop();
++                synchronized (this) {
++                    if (writer==ownedWriter) writer=null;
++                    if (socket==owned) socket=null;
+                 }
+-                if (listener != null) listener.onDisconnected(null);
+-            } catch (Throwable t) {
+-                Log.w(TAG, "RFCOMM session error: " + t.getMessage());
+-                if (listener != null) listener.onDisconnected(t);
+-            } finally {
+-                if (keepalive != null) keepalive.stop();
+-                writer = null;
+-                try { if (socket != null) socket.close(); } catch (IOException ignored) {}
+-                socket = null;
++                close(owned);
++                Listener target=listener;
++                if (announced && active(epoch) && target!=null) target.onDisconnected(failure);
+             }
+         }
+-        try { if (serverSocket != null) serverSocket.close(); } catch (IOException ignored) {}
+     }
++    private static void close(BluetoothSocket s) { try { if (s!=null) s.close(); } catch (IOException ignored) { } }
+ }
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TransportFactory.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TransportFactory.java
+index 9511f987319396c5a9ab09bfab9b7523eeec8a66..7a6fc5ec2588045ee7418b58e51dd0e7a6250ace 100644
+--- a/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TransportFactory.java
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TransportFactory.java
+@@ -1,6 +1,8 @@
+ package com.goodanser.osmglass.glass.transport;
+ 
+ import android.os.Build;
++import android.content.Context;
++import com.goodanser.osmglass.glass.BuildConfig;
+ import android.util.Log;
+ 
+ import com.goodanser.osmglass.protocol.transport.TcpTransport;
+@@ -17,14 +19,15 @@ public final class TransportFactory {
+     private static final String TAG = "TransportFactory";
+     private TransportFactory() {}
+ 
+-    public static Transport create() {
++    public static Transport create(Context context) {
+         String kind = resolveKind();
+         Log.i(TAG, "creating transport: kind=" + kind);
+         switch (kind) {
+             case "rfcomm":
+-                return new RfcommServerTransport();
++                return new RfcommServerTransport(context);
+             case "tcp":
+-                return new TcpTransport(TcpTransport.Role.SERVER, "0.0.0.0", 8765);
++                if (!BuildConfig.DEBUG || !isEmulator()) throw new IllegalStateException("TCP is emulator-debug only");
++                return new TcpTransport(TcpTransport.Role.SERVER, "127.0.0.1", 8765);
+             default:
+                 throw new IllegalStateException("unknown transport kind: " + kind);
+         }
+diff --git a/glass-app/src/main/res/layout/livecard_nav.xml b/glass-app/src/main/res/layout/livecard_nav.xml
+index 560730ff663a4b21206ba7f12061206a0d486bb6..d02a395c8dc2410b817de08e6bce12d7d193b20f 100644
+--- a/glass-app/src/main/res/layout/livecard_nav.xml
++++ b/glass-app/src/main/res/layout/livecard_nav.xml
+@@ -24,11 +24,14 @@
+     <!-- Top-left: dark-map variant (light text / dark halo) over light-map variant. -->
+     <TextView
+         android:id="@+id/corner_top_left_dark"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentLeft="true"
+         android:padding="8dp"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
+         android:textColor="#FFFFFF"
+         android:textSize="28sp"
+         android:textStyle="bold"
+@@ -40,15 +43,18 @@
+ 
+     <TextView
+         android:id="@+id/corner_top_left_light"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentLeft="true"
+         android:padding="8dp"
+-        android:textColor="#000000"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
++        android:textColor="#FFFFFF"
+         android:textSize="28sp"
+         android:textStyle="bold"
+-        android:shadowColor="#FFFFFFFF"
++        android:shadowColor="#FF000000"
+         android:shadowDx="0"
+         android:shadowDy="0"
+         android:shadowRadius="6"
+@@ -58,11 +64,14 @@
+     <!-- Top-right. -->
+     <TextView
+         android:id="@+id/corner_top_right_dark"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentRight="true"
+         android:padding="8dp"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
+         android:textColor="#FFFFFF"
+         android:textSize="28sp"
+         android:textStyle="bold"
+@@ -75,16 +84,19 @@
+ 
+     <TextView
+         android:id="@+id/corner_top_right_light"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentRight="true"
+         android:padding="8dp"
+-        android:textColor="#000000"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
++        android:textColor="#FFFFFF"
+         android:textSize="28sp"
+         android:textStyle="bold"
+         android:gravity="right"
+-        android:shadowColor="#FFFFFFFF"
++        android:shadowColor="#FF000000"
+         android:shadowDx="0"
+         android:shadowDy="0"
+         android:shadowRadius="6"
+@@ -94,11 +106,14 @@
+     <!-- Bottom-left: amber accent, darkened for the light-map variant. -->
+     <TextView
+         android:id="@+id/corner_bottom_left_dark"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentLeft="true"
+         android:padding="8dp"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
+         android:textColor="#FFD580"
+         android:textSize="28sp"
+         android:textStyle="bold"
+@@ -110,15 +125,18 @@
+ 
+     <TextView
+         android:id="@+id/corner_bottom_left_light"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentLeft="true"
+         android:padding="8dp"
+-        android:textColor="#000000"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
++        android:textColor="#FFFFFF"
+         android:textSize="28sp"
+         android:textStyle="bold"
+-        android:shadowColor="#FFFFFFFF"
++        android:shadowColor="#FF000000"
+         android:shadowDx="0"
+         android:shadowDy="0"
+         android:shadowRadius="6"
+@@ -128,11 +146,14 @@
+     <!-- Bottom-right. -->
+     <TextView
+         android:id="@+id/corner_bottom_right_dark"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentRight="true"
+         android:padding="8dp"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
+         android:textColor="#FFD580"
+         android:textSize="28sp"
+         android:textStyle="bold"
+@@ -145,16 +166,19 @@
+ 
+     <TextView
+         android:id="@+id/corner_bottom_right_light"
+-        android:layout_width="wrap_content"
++        android:layout_width="300dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_alignParentRight="true"
+         android:padding="8dp"
+-        android:textColor="#000000"
++        android:maxLines="2"
++        android:ellipsize="end"
++        android:background="#B0000000"
++        android:textColor="#FFFFFF"
+         android:textSize="28sp"
+         android:textStyle="bold"
+         android:gravity="right"
+-        android:shadowColor="#FFFFFFFF"
++        android:shadowColor="#FF000000"
+         android:shadowDx="0"
+         android:shadowDy="0"
+         android:shadowRadius="6"
+diff --git a/glass-app/src/main/res/values/strings.xml b/glass-app/src/main/res/values/strings.xml
+index 2c71a847826637ed1a55500164c9a2750db5fa6b..46adf419a133118fedb8431de6db402801ee145d 100644
+--- a/glass-app/src/main/res/values/strings.xml
++++ b/glass-app/src/main/res/values/strings.xml
+@@ -2,7 +2,11 @@
+ <resources>
+     <string name="app_name">OsmGlass</string>
+     <string name="glass_voice_command_start">start navigation</string>
+-    <string name="menu_stop_nav">Stop navigation</string>
++    <string name="menu_stop_nav">Stop Glass display</string>
+     <string name="status_waiting">Waiting for phone…</string>
+     <string name="status_connected">Connected</string>
++    <string name="select_phone">Select trusted paired phone</string>
++    <string name="no_paired_phone">Turn Bluetooth on and pair your phone in system settings, then open OsmGlass again.</string>
++    <string name="unnamed_phone">Paired device</string>
++    <string name="livecard_unavailable">Navigation display unavailable. Glass LiveCard could not be published.</string>
+ </resources>
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+index 37f853b1c84d2e2dd1c88441fcc755d7f6643668..bb56d7dad7a2769cdbfeb0bdcad7169de5d4157c 100644
+--- a/gradle/wrapper/gradle-wrapper.properties
++++ b/gradle/wrapper/gradle-wrapper.properties
+@@ -5,3 +5,6 @@ networkTimeout=10000
+ validateDistributionUrl=true
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
++
++# Gradle official checksum, retrieved 2026-10-29 from services.gradle.org.
++distributionSha256Sum=20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/Codec.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/Codec.java
+index 566538d2f4945c64b74d554ac4dcd1108412f56f..55cef1cc48d4a0e52d70570a5db2dc60fbf90db2 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/Codec.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/Codec.java
+@@ -1,281 +1,181 @@
+ package com.goodanser.osmglass.protocol;
+ 
+-import java.io.ByteArrayInputStream;
+-import java.io.ByteArrayOutputStream;
+-import java.io.DataInputStream;
+-import java.io.DataOutputStream;
+-import java.io.IOException;
++import java.io.*;
++import java.nio.ByteBuffer;
++import java.nio.charset.CharacterCodingException;
++import java.nio.charset.CodingErrorAction;
+ import java.nio.charset.StandardCharsets;
+ 
+-/**
+- * Encode/decode {@link Packet}s to/from raw byte frames.
+- *
+- * Frame format (big-endian):
+- *   uint8 magic = 0x47, uint8 protoVersion = 0x01, uint8 type, uint32 payloadLen,
+- *   byte[payloadLen] payload
+- *
+- * pstr (UTF-8 string): uint16 lenBytes, bytes...
+- */
++/** Strict v2 codec. Header: magic/version/type/length, connection epoch64, sequence64, recipient epoch64.
++ * Epoch/sequence provide per-connection framing, NOT authentication: use authenticated transport.
++ * Distances/ETA use bounded int32 (0..2^31-1), not a truncated uint16. */
+ public final class Codec {
+-    public static final byte MAGIC = 0x47; // 'G'
+-    public static final byte PROTO_VERSION = 0x01;
+-    public static final int MAX_PAYLOAD_LEN = 2 * 1024 * 1024; // 2 MiB
+-    public static final int FRAME_HEADER_LEN = 1 + 1 + 1 + 4;
+-
++    public static final byte MAGIC = 0x47;
++    public static final byte PROTO_VERSION = 2;
++    public static final int MAX_IMAGE_LEN = 256 * 1024;
++    public static final int MAX_PAYLOAD_LEN = 320 * 1024;
++    public static final int MAX_TEXT_BYTES = 1024;
++    public static final int FRAME_HEADER_LEN = 31;
+     private Codec() {}
+ 
+-    public static byte[] encode(Packet p) {
++    /** Stateless codec fixture; actual connections must use FrameWriter's fresh epoch/sequence. */
++    public static byte[] encode(Packet p) { return encode(p, 0, 0, 0); }
++    static byte[] encode(Packet p, long epoch, long sequence, long recipientEpoch) {
+         try {
+             ByteArrayOutputStream payload = new ByteArrayOutputStream();
+             DataOutputStream out = new DataOutputStream(payload);
+             writePayload(out, p);
+             out.flush();
+-            byte[] payloadBytes = payload.toByteArray();
+-            if (payloadBytes.length > MAX_PAYLOAD_LEN) {
+-                throw new IllegalArgumentException("payload too large: " + payloadBytes.length);
+-            }
+-            ByteArrayOutputStream frame = new ByteArrayOutputStream(FRAME_HEADER_LEN + payloadBytes.length);
+-            DataOutputStream fout = new DataOutputStream(frame);
+-            fout.writeByte(MAGIC);
+-            fout.writeByte(PROTO_VERSION);
+-            fout.writeByte(p.type().code);
+-            fout.writeInt(payloadBytes.length);
+-            fout.write(payloadBytes);
++            byte[] bytes = payload.toByteArray();
++            if (bytes.length > MAX_PAYLOAD_LEN) throw new IllegalArgumentException("payload too large");
++            ByteArrayOutputStream frame = new ByteArrayOutputStream(FRAME_HEADER_LEN + bytes.length);
++            DataOutputStream f = new DataOutputStream(frame);
++            f.writeByte(MAGIC); f.writeByte(PROTO_VERSION); f.writeByte(p.type().code);
++            f.writeInt(bytes.length); f.writeLong(epoch); f.writeLong(sequence); f.writeLong(recipientEpoch); f.write(bytes);
+             return frame.toByteArray();
+-        } catch (IOException e) {
+-            throw new RuntimeException("encode failed for " + p, e);
+-        }
++        } catch (IOException e) { throw new IllegalArgumentException("encode failed", e); }
+     }
+ 
+     public static Packet decode(byte[] frame) throws ProtocolException {
+-        if (frame.length < FRAME_HEADER_LEN) {
+-            throw new ProtocolException("frame too short: " + frame.length);
+-        }
++        if (frame.length < FRAME_HEADER_LEN) throw new ProtocolException("frame too short");
+         try {
+             DataInputStream in = new DataInputStream(new ByteArrayInputStream(frame));
+-            byte magic = in.readByte();
+-            if (magic != MAGIC) throw new ProtocolException(String.format("bad magic 0x%02x", magic & 0xff));
+-            byte ver = in.readByte();
+-            if (ver != PROTO_VERSION) throw new ProtocolException("unsupported protoVersion " + (ver & 0xff));
+-            byte typeCode = in.readByte();
+-            int payloadLen = in.readInt();
+-            if (payloadLen < 0 || payloadLen > MAX_PAYLOAD_LEN) {
+-                throw new ProtocolException("invalid payloadLen " + payloadLen);
+-            }
+-            if (frame.length - FRAME_HEADER_LEN != payloadLen) {
+-                throw new ProtocolException("frame length mismatch: header says "
+-                    + payloadLen + " payload bytes, frame has " + (frame.length - FRAME_HEADER_LEN));
+-            }
+-            PacketType type = PacketType.fromCode(typeCode);
+-            return readPayload(in, type);
++            if (in.readByte() != MAGIC) throw new ProtocolException("bad magic");
++            int version = in.readUnsignedByte();
++            if (version != PROTO_VERSION) throw new ProtocolException("unsupported protoVersion " + version);
++            PacketType type = PacketType.fromCode(in.readByte());
++            int len = in.readInt();
++            if (len < 0 || len > MAX_PAYLOAD_LEN || frame.length - FRAME_HEADER_LEN != len)
++                throw new ProtocolException("invalid payloadLen or frame length mismatch");
++            in.readLong(); in.readLong(); in.readLong();
++            byte[] bytes = new byte[len]; in.readFully(bytes);
++            return decodePayload(type, bytes);
+         } catch (IOException e) {
+             if (e instanceof ProtocolException) throw (ProtocolException) e;
+-            throw new ProtocolException("decode failed: " + e.getMessage(), e);
++            throw new ProtocolException("decode failed", e);
+         }
+     }
+ 
+-    /** Decode a payload buffer when the frame header has already been consumed. */
+     public static Packet decodePayload(PacketType type, byte[] payload) throws ProtocolException {
++        if (payload.length > MAX_PAYLOAD_LEN) throw new ProtocolException("payload too large");
+         try {
+-            return readPayload(new DataInputStream(new ByteArrayInputStream(payload)), type);
+-        } catch (IOException e) {
++            DataInputStream in = new DataInputStream(new ByteArrayInputStream(payload));
++            Packet packet = readPayload(in, type);
++            if (in.available() != 0) throw new ProtocolException("unexpected trailing payload bytes");
++            // Apply exactly the same semantic rules on encoder and decoder.
++            writePayload(new DataOutputStream(new ByteArrayOutputStream()), packet);
++            return packet;
++        } catch (IOException | IllegalArgumentException e) {
+             if (e instanceof ProtocolException) throw (ProtocolException) e;
+-            throw new ProtocolException("decode payload failed: " + e.getMessage(), e);
++            throw new ProtocolException("invalid " + type + " payload: " + e.getMessage(), e);
+         }
+     }
+ 
+     private static void writePayload(DataOutputStream out, Packet p) throws IOException {
+         switch (p.type()) {
+-            case HELLO: {
+-                Packet.Hello h = (Packet.Hello) p;
+-                out.writeShort(h.protoVersionAccepted & 0xffff);
+-                break;
+-            }
++            case HELLO:
++                int version = ((Packet.Hello) p).protoVersionAccepted;
++                if (version != PROTO_VERSION) throw new IllegalArgumentException("Hello requires v2");
++                out.writeShort(version); break;
+             case ROUTE_START: {
+                 Packet.RouteStart r = (Packet.RouteStart) p;
+-                out.writeInt((int) (r.routeId & 0xffffffffL));
+-                out.writeShort(r.totalTurns & 0xffff);
+-                writePstr(out, r.destinationLabel);
+-                // startLabel is an additive extension; older receivers stop after destinationLabel
+-                // and decode startLabel as "" (see readPayload's available-check).
+-                writePstr(out, r.startLabel);
+-                break;
++                route(out, r.routeId); u16(out, r.totalTurns);
++                pstr(out, r.destinationLabel); pstr(out, r.startLabel); break;
+             }
+             case TURN_BUNDLE: {
+                 Packet.TurnBundle t = (Packet.TurnBundle) p;
+-                out.writeInt((int) (t.routeId & 0xffffffffL));
+-                out.writeShort(t.turnIndex & 0xffff);
+-                out.writeByte(t.kind.ordinal() & 0xff);
+-                out.writeShort(t.distanceFromStartM & 0xffff);
+-                writePstr(out, t.instructionText);
+-                out.writeInt(t.pngBytes.length);
+-                out.write(t.pngBytes);
+-                break;
++                route(out, t.routeId); u16(out, t.turnIndex); out.writeByte(t.kind.ordinal());
++                nonnegative(out, t.distanceFromStartM); pstr(out, t.instructionText);
++                if (t.pngBytes.length > MAX_IMAGE_LEN) throw new IllegalArgumentException("image too large");
++                out.writeInt(t.pngBytes.length); out.write(t.pngBytes); break;
+             }
+             case PROGRESS: {
+-                Packet.Progress pr = (Packet.Progress) p;
+-                out.writeInt((int) (pr.routeId & 0xffffffffL));
+-                out.writeShort(pr.turnIndex & 0xffff);
+-                out.writeShort(pr.distanceToTurnM & 0xffff);
+-                out.writeShort(pr.bearingDelta100);
+-                out.writeShort(pr.speedKmh & 0xffff);
+-                out.writeShort(pr.remainingDistanceM & 0xffff);
+-                out.writeShort(pr.etaSec & 0xffff);
+-                // Marker fields are an additive extension. We always emit them; older receivers
+-                // ignore the trailing bytes (see readPayload's available-check).
+-                out.writeShort(encodeMarker(pr.markerPxX));
+-                out.writeShort(encodeMarker(pr.markerPxY));
+-                out.writeShort(encodeMarker(pr.markerBearingDeg100));
+-                break;
++                Packet.Progress q = (Packet.Progress) p;
++                route(out, q.routeId); u16(out, q.turnIndex); metric(out, q.distanceToTurnM);
++                if (q.bearingDelta100 < -18000 || q.bearingDelta100 > 18000)
++                    throw new IllegalArgumentException("bearing delta out of range");
++                out.writeShort(q.bearingDelta100); u16(out, q.speedKmh);
++                metric(out, q.remainingDistanceM); metric(out, q.etaSec);
++                if ((q.markerPxX == -1) != (q.markerPxY == -1)) throw new IllegalArgumentException("partial marker");
++                marker(out, q.markerPxX, 639); marker(out, q.markerPxY, 359);
++                marker(out, q.markerBearingDeg100, 35999); nonnegative(out, q.fixAgeMs); break;
+             }
+             case DISPLAY_CONFIG: {
+                 Packet.DisplayConfig d = (Packet.DisplayConfig) p;
+-                out.writeByte(d.topLeft.ordinal() & 0xff);
+-                out.writeByte(d.topRight.ordinal() & 0xff);
+-                out.writeByte(d.bottomLeft.ordinal() & 0xff);
+-                out.writeByte(d.bottomRight.ordinal() & 0xff);
+-                out.writeByte(d.muteTts ? 1 : 0);
+-                // screenWakeSec is an additive extension after muteTts. Older receivers stop after
+-                // the muteTts byte and decode screenWakeSec as DEFAULT_SCREEN_WAKE_SEC.
+-                out.writeShort(d.screenWakeSec & 0xffff);
+-                break;
++                out.writeByte(d.topLeft.ordinal()); out.writeByte(d.topRight.ordinal());
++                out.writeByte(d.bottomLeft.ordinal()); out.writeByte(d.bottomRight.ordinal());
++                out.writeByte(d.muteTts ? 1 : 0); u16(out, d.screenWakeSec); break;
+             }
+             case TURN_ALERT: {
+-                Packet.TurnAlert a = (Packet.TurnAlert) p;
+-                out.writeInt((int) (a.routeId & 0xffffffffL));
+-                out.writeShort(a.turnIndex & 0xffff);
+-                break;
++                Packet.TurnAlert a = (Packet.TurnAlert) p; route(out, a.routeId); u16(out, a.turnIndex); break;
+             }
+             case ROUTE_END: {
+-                Packet.RouteEnd r = (Packet.RouteEnd) p;
+-                out.writeInt((int) (r.routeId & 0xffffffffL));
+-                out.writeByte(r.reason.ordinal() & 0xff);
+-                break;
+-            }
+-            case PING: {
+-                Packet.Ping ping = (Packet.Ping) p;
+-                out.writeInt((int) (ping.timestampMs & 0xffffffffL));
+-                break;
+-            }
+-            case PONG: {
+-                Packet.Pong pong = (Packet.Pong) p;
+-                out.writeInt((int) (pong.echoTimestampMs & 0xffffffffL));
+-                break;
++                Packet.RouteEnd r = (Packet.RouteEnd) p; route(out, r.routeId); out.writeByte(r.reason.ordinal()); break;
+             }
+-            default:
+-                throw new IllegalArgumentException("unhandled packet type " + p.type());
++            case PING: route(out, ((Packet.Ping) p).timestampMs); break;
++            case PONG: route(out, ((Packet.Pong) p).echoTimestampMs); break;
++            default: throw new IllegalArgumentException("unhandled packet type");
+         }
+     }
+ 
+     private static Packet readPayload(DataInputStream in, PacketType type) throws IOException {
+         switch (type) {
+-            case HELLO:
+-                return new Packet.Hello(in.readUnsignedShort());
+-            case ROUTE_START: {
+-                long routeId = in.readInt() & 0xffffffffL;
+-                int totalTurns = in.readUnsignedShort();
+-                String label = readPstr(in);
+-                // startLabel is appended; older payloads stop after destinationLabel (a pstr needs
+-                // at least its 2-byte length prefix) and decode startLabel as "".
+-                String startLabel = in.available() >= 2 ? readPstr(in) : "";
+-                return new Packet.RouteStart(routeId, totalTurns, label, startLabel);
+-            }
++            case HELLO: return new Packet.Hello(in.readUnsignedShort());
++            case ROUTE_START: return new Packet.RouteStart(uint(in), in.readUnsignedShort(), pstr(in), pstr(in));
+             case TURN_BUNDLE: {
+-                long routeId = in.readInt() & 0xffffffffL;
+-                int turnIndex = in.readUnsignedShort();
+-                int kindOrd = in.readUnsignedByte();
+-                int distFromStart = in.readUnsignedShort();
+-                String text = readPstr(in);
+-                int pngLen = in.readInt();
+-                if (pngLen < 0 || pngLen > MAX_PAYLOAD_LEN) {
+-                    throw new ProtocolException("invalid pngLen " + pngLen);
+-                }
+-                byte[] png = new byte[pngLen];
+-                in.readFully(png);
+-                return new Packet.TurnBundle(routeId, turnIndex, TurnKind.fromOrdinal(kindOrd),
+-                    distFromStart, text, png);
+-            }
+-            case PROGRESS: {
+-                long routeId = in.readInt() & 0xffffffffL;
+-                int turnIndex = in.readUnsignedShort();
+-                int distToTurn = in.readUnsignedShort();
+-                short bearing100 = in.readShort();
+-                int speedKmh = in.readUnsignedShort();
+-                int remainingM = in.readUnsignedShort();
+-                int etaSec = in.readUnsignedShort();
+-                // Marker fields are appended; older payloads (16 bytes) decode as no-marker.
+-                int markerPxX = Packet.Progress.MARKER_NONE;
+-                int markerPxY = Packet.Progress.MARKER_NONE;
+-                int markerBearing = Packet.Progress.MARKER_NONE;
+-                if (in.available() >= 6) {
+-                    markerPxX = decodeMarker(in.readUnsignedShort());
+-                    markerPxY = decodeMarker(in.readUnsignedShort());
+-                    markerBearing = decodeMarker(in.readUnsignedShort());
+-                }
+-                return new Packet.Progress(routeId, turnIndex, distToTurn, bearing100, speedKmh,
+-                    remainingM, etaSec, markerPxX, markerPxY, markerBearing);
+-            }
++                long id = uint(in); int index = in.readUnsignedShort(); TurnKind kind = TurnKind.fromOrdinal(in.readUnsignedByte());
++                int distance = in.readInt(); String text = pstr(in); int len = in.readInt();
++                if (len < 0 || len > MAX_IMAGE_LEN || len > in.available()) throw new ProtocolException("invalid image length");
++                byte[] bytes = new byte[len]; in.readFully(bytes);
++                return new Packet.TurnBundle(id, index, kind, distance, text, bytes);
++            }
++            case PROGRESS:
++                return new Packet.Progress(uint(in), in.readUnsignedShort(), in.readInt(), in.readShort(),
++                    in.readUnsignedShort(), in.readInt(), in.readInt(), unmarker(in), unmarker(in), unmarker(in), in.readInt());
+             case DISPLAY_CONFIG: {
+-                int tlOrd = in.readUnsignedByte();
+-                int trOrd = in.readUnsignedByte();
+-                int blOrd = in.readUnsignedByte();
+-                int brOrd = in.readUnsignedByte();
+-                // muteTts flag is appended; payloads without it decode as muteTts=false.
+-                boolean muteTts = in.available() > 0 && in.readUnsignedByte() != 0;
+-                // screenWakeSec (uint16) is appended after muteTts; payloads without it decode as
+-                // the default timeout.
+-                int screenWakeSec = in.available() >= 2
+-                    ? in.readUnsignedShort()
+-                    : Packet.DisplayConfig.DEFAULT_SCREEN_WAKE_SEC;
+-                return new Packet.DisplayConfig(
+-                    Packet.DisplayConfig.Field.fromCode(tlOrd),
+-                    Packet.DisplayConfig.Field.fromCode(trOrd),
+-                    Packet.DisplayConfig.Field.fromCode(blOrd),
+-                    Packet.DisplayConfig.Field.fromCode(brOrd),
+-                    muteTts, screenWakeSec);
+-            }
+-            case TURN_ALERT: {
+-                long routeId = in.readInt() & 0xffffffffL;
+-                int turnIndex = in.readUnsignedShort();
+-                return new Packet.TurnAlert(routeId, turnIndex);
+-            }
+-            case ROUTE_END: {
+-                long routeId = in.readInt() & 0xffffffffL;
+-                int reasonOrd = in.readUnsignedByte();
+-                return new Packet.RouteEnd(routeId, Packet.RouteEnd.Reason.fromCode(reasonOrd));
+-            }
+-            case PING:
+-                return new Packet.Ping(in.readInt() & 0xffffffffL);
+-            case PONG:
+-                return new Packet.Pong(in.readInt() & 0xffffffffL);
+-            default:
+-                throw new ProtocolException("unhandled packet type " + type);
++                Packet.DisplayConfig.Field tl = Packet.DisplayConfig.Field.fromCode(in.readUnsignedByte());
++                Packet.DisplayConfig.Field tr = Packet.DisplayConfig.Field.fromCode(in.readUnsignedByte());
++                Packet.DisplayConfig.Field bl = Packet.DisplayConfig.Field.fromCode(in.readUnsignedByte());
++                Packet.DisplayConfig.Field br = Packet.DisplayConfig.Field.fromCode(in.readUnsignedByte());
++                int mute = in.readUnsignedByte(); int wake = in.readUnsignedShort();
++                if (mute > 1 || wake < 1 || wake > 60) throw new ProtocolException("invalid display policy");
++                return new Packet.DisplayConfig(tl, tr, bl, br, mute == 1, wake);
++            }
++            case TURN_ALERT: return new Packet.TurnAlert(uint(in), in.readUnsignedShort());
++            case ROUTE_END: return new Packet.RouteEnd(uint(in), Packet.RouteEnd.Reason.fromCode(in.readUnsignedByte()));
++            case PING: return new Packet.Ping(uint(in));
++            case PONG: return new Packet.Pong(uint(in));
++            default: throw new ProtocolException("unhandled type");
+         }
+     }
+-
+-    private static void writePstr(DataOutputStream out, String s) throws IOException {
+-        byte[] bytes = s.getBytes(StandardCharsets.UTF_8);
+-        if (bytes.length > 0xffff) {
+-            throw new IllegalArgumentException("pstr too long: " + bytes.length);
+-        }
+-        out.writeShort(bytes.length);
+-        out.write(bytes);
++    private static long uint(DataInputStream in) throws IOException { return in.readInt() & 0xffffffffL; }
++    private static void route(DataOutputStream out, long value) throws IOException {
++        if (value < 0 || value > 0xffffffffL) throw new IllegalArgumentException("uint32 out of range"); out.writeInt((int) value);
+     }
+-
+-    /** Encode a marker field (MARKER_NONE → 0xFFFF). Caller is responsible for clamping to uint16. */
+-    private static int encodeMarker(int value) {
+-        return value == Packet.Progress.MARKER_NONE ? 0xffff : (value & 0xffff);
++    private static void u16(DataOutputStream out, int value) throws IOException {
++        if (value < 0 || value > 65535) throw new IllegalArgumentException("uint16 out of range"); out.writeShort(value);
+     }
+-
+-    /** Decode a marker field (0xFFFF → MARKER_NONE). */
+-    private static int decodeMarker(int wire) {
+-        return wire == 0xffff ? Packet.Progress.MARKER_NONE : wire;
++    private static void nonnegative(DataOutputStream out, int value) throws IOException {
++        if (value < 0) throw new IllegalArgumentException("negative value"); out.writeInt(value);
+     }
+-
+-    private static String readPstr(DataInputStream in) throws IOException {
++    private static void metric(DataOutputStream out, int value) throws IOException {
++        if (value < -1) throw new IllegalArgumentException("invalid metric"); out.writeInt(value);
++    }
++    private static void marker(DataOutputStream out, int value, int max) throws IOException {
++        if (value < -1 || value > max) throw new IllegalArgumentException("invalid marker"); out.writeShort(value == -1 ? 65535 : value);
++    }
++    private static int unmarker(DataInputStream in) throws IOException { int n = in.readUnsignedShort(); return n == 65535 ? -1 : n; }
++    private static void pstr(DataOutputStream out, String value) throws IOException {
++        byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
++        if (bytes.length > MAX_TEXT_BYTES) throw new IllegalArgumentException("text too long");
++        out.writeShort(bytes.length); out.write(bytes);
++    }
++    private static String pstr(DataInputStream in) throws IOException {
+         int len = in.readUnsignedShort();
+-        byte[] bytes = new byte[len];
+-        in.readFully(bytes);
+-        return new String(bytes, StandardCharsets.UTF_8);
++        if (len > MAX_TEXT_BYTES || len > in.available()) throw new ProtocolException("invalid text length");
++        byte[] bytes = new byte[len]; in.readFully(bytes);
++        try { return StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
++            .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString(); }
++        catch (CharacterCodingException e) { throw new ProtocolException("malformed UTF-8", e); }
+     }
+ }
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameReader.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameReader.java
+index be33efca67fee012674735711fb8e8402b5d78eb..f82d04a1d1340d8902179513095dcd06bc4a8a9d 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameReader.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameReader.java
+@@ -1,50 +1,49 @@
+ package com.goodanser.osmglass.protocol;
+ 
+-import java.io.DataInputStream;
+-import java.io.EOFException;
+-import java.io.IOException;
+-import java.io.InputStream;
++import java.io.*;
+ 
+-/**
+- * Stateful frame reassembler. Reads one full frame at a time from an {@link InputStream},
+- * blocking until the frame is complete. Reuses the underlying stream's blocking read semantics.
+- */
++/** A connection owns exactly one reader. A fresh, ordered v2 Hello must precede navigation. */
+ public final class FrameReader {
+     private final DataInputStream in;
+-
+-    public FrameReader(InputStream in) {
+-        this.in = new DataInputStream(in);
+-    }
+-
+-    /**
+-     * Read the next packet, blocking until one is available.
+-     *
+-     * @return the decoded packet, or null on clean end-of-stream.
+-     * @throws ProtocolException for invalid frames.
+-     * @throws IOException for transport errors.
+-     */
++    private final long localEpoch;
++    private long epoch, nextSequence;
++    private boolean handshakeComplete;
++    /** Test-only unbound reader rejects all connection frames. Production must pass writer.getEpoch(). */
++    public FrameReader(InputStream in) { this(in, 0); }
++    public FrameReader(InputStream in, long localEpoch) { this.in = new DataInputStream(in); this.localEpoch = localEpoch; }
++    public long getPeerEpoch() { return epoch; }
++    public boolean isHandshakeComplete() { return handshakeComplete; }
+     public Packet readNext() throws IOException {
+-        byte magic;
+-        try {
+-            magic = in.readByte();
+-        } catch (EOFException eof) {
+-            return null;
+-        }
+-        if (magic != Codec.MAGIC) {
+-            throw new ProtocolException(String.format("bad magic 0x%02x", magic & 0xff));
+-        }
+-        byte ver = in.readByte();
+-        if (ver != Codec.PROTO_VERSION) {
+-            throw new ProtocolException("unsupported protoVersion " + (ver & 0xff));
++        int magic = in.read();
++        if (magic == -1) return null;
++        long frameReadStarted = System.nanoTime();
++        if (magic != (Codec.MAGIC & 255)) throw new ProtocolException("bad magic");
++        int version = in.readUnsignedByte();
++        if (version != Codec.PROTO_VERSION) throw new ProtocolException("unsupported protoVersion " + version);
++        PacketType type = PacketType.fromCode(in.readByte());
++        int len = in.readInt();
++        if (len < 0 || len > Codec.MAX_PAYLOAD_LEN) throw new ProtocolException("invalid payloadLen");
++        long receivedEpoch = in.readLong(), sequence = in.readLong(), recipientEpoch = in.readLong();
++        if (localEpoch == 0) throw new ProtocolException("local challenge required");
++        if (!handshakeComplete) {
++            if (receivedEpoch == 0 || sequence != 0 || recipientEpoch != 0 || type != PacketType.HELLO)
++                throw new ProtocolException("fresh Hello required");
++        } else if (receivedEpoch != epoch || sequence != nextSequence || recipientEpoch != localEpoch || type == PacketType.HELLO) {
++            throw new ProtocolException("epoch/sequence replay or reorder");
+         }
+-        byte typeCode = in.readByte();
+-        int payloadLen = in.readInt();
+-        if (payloadLen < 0 || payloadLen > Codec.MAX_PAYLOAD_LEN) {
+-            throw new ProtocolException("invalid payloadLen " + payloadLen);
++        byte[] payload = new byte[len]; in.readFully(payload);
++        Packet p = Codec.decodePayload(type, payload);
++        if (p instanceof Packet.Progress) {
++            Packet.Progress q = (Packet.Progress) p;
++            long readAge = Math.max(0, (System.nanoTime() - frameReadStarted) / 1_000_000L);
++            int age = (int) Math.min(Integer.MAX_VALUE, (long) q.fixAgeMs + readAge);
++            p = new Packet.Progress(q.routeId, q.turnIndex, q.distanceToTurnM, q.bearingDelta100,
++                    q.speedKmh, q.remainingDistanceM, q.etaSec, q.markerPxX, q.markerPxY,
++                    q.markerBearingDeg100, age);
+         }
+-        byte[] payload = new byte[payloadLen];
+-        in.readFully(payload);
+-        PacketType type = PacketType.fromCode(typeCode);
+-        return Codec.decodePayload(type, payload);
++        if (!handshakeComplete) { epoch = receivedEpoch; handshakeComplete = true; }
++        if (sequence == Long.MAX_VALUE) throw new ProtocolException("sequence exhausted");
++        nextSequence = sequence + 1;
++        return p;
+     }
+ }
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameWriter.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameWriter.java
+index f665ac589ef1d68b00cdc374146f2ded6d65f2ee..963d51642b9f5ab7f2d342c814a58479d21faabd 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameWriter.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/FrameWriter.java
+@@ -1,25 +1,87 @@
+ package com.goodanser.osmglass.protocol;
+ 
+-import java.io.IOException;
+-import java.io.OutputStream;
++import java.io.*;
++import java.security.SecureRandom;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.AtomicBoolean;
++import java.util.concurrent.locks.ReentrantLock;
+ 
+-/**
+- * Writes {@link Packet}s as length-prefixed frames to an {@link OutputStream}. Thread-safe — each
+- * {@link #write(Packet)} acquires the writer lock before flushing.
+- */
++/** Ordered v2 connection writer with an absolute monotonic queue+write deadline.
++ * The watchdog closes the exact raw socket supplied by its owner, without writer locks. */
+ public final class FrameWriter {
++    public static final long DEFAULT_WRITE_TIMEOUT_MS = 10_000;
++    private static final ScheduledExecutorService WATCHDOG = Executors.newScheduledThreadPool(2, r -> {
++        Thread t = new Thread(r, "FrameWriteDeadline"); t.setDaemon(true); return t;
++    });
+     private final OutputStream out;
+-    private final Object lock = new Object();
+-
++    private final Runnable closeRaw;
++    private final long timeoutMs;
++    private final ReentrantLock lock = new ReentrantLock();
++    private final AtomicBoolean failed = new AtomicBoolean();
++    private final long epoch;
++    private long sequence;
++    private volatile long peerEpoch;
++    private boolean helloWritten;
+     public FrameWriter(OutputStream out) {
+-        this.out = out;
++        this(out, () -> { try { out.close(); } catch (IOException ignored) {} }, DEFAULT_WRITE_TIMEOUT_MS);
+     }
+-
++    public FrameWriter(OutputStream out, Runnable closeRaw, long timeoutMs) {
++        if (timeoutMs <= 0 || closeRaw == null) throw new IllegalArgumentException("deadline required");
++        this.out = out; this.closeRaw = closeRaw; this.timeoutMs = timeoutMs;
++        long nonce; SecureRandom random = new SecureRandom(); do { nonce = random.nextLong(); } while (nonce == 0); epoch = nonce;
++    }
++    public long getEpoch() { return epoch; }
++    public void bindPeerEpoch(long peerEpoch) {
++        if (peerEpoch == 0 || this.peerEpoch != 0) throw new IllegalStateException("one nonzero peer epoch required");
++        this.peerEpoch = peerEpoch;
++    }
++    /** Symmetric challenge handshake: both endpoints send Hello before waiting for the peer.
++     * A recorded old Hello can be received, but its following frames cannot echo this fresh epoch. */
++    public FrameReader handshake(InputStream input) throws IOException {
++        long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(timeoutMs);
++        ScheduledFuture<?> watchdog = WATCHDOG.schedule(this::abort, timeoutMs, TimeUnit.MILLISECONDS);
++        try {
++            FrameReader reader = new FrameReader(input, epoch);
++            write(new Packet.Hello(Codec.PROTO_VERSION));
++            Packet peer = reader.readNext();
++            if (!(peer instanceof Packet.Hello)) throw new ProtocolException("peer Hello required");
++            if (failed.get() || System.nanoTime() >= deadline) throw new IOException("handshake deadline exceeded");
++            bindPeerEpoch(reader.getPeerEpoch());
++            return reader;
++        } catch (IOException | RuntimeException e) { abort(); throw e; }
++        finally { watchdog.cancel(false); }
++    }
++    private void abort() { if (failed.compareAndSet(false, true)) { try { closeRaw.run(); } catch (Throwable ignored) {} } }
+     public void write(Packet p) throws IOException {
+-        byte[] frame = Codec.encode(p);
+-        synchronized (lock) {
+-            out.write(frame);
+-            out.flush();
+-        }
++        long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(timeoutMs);
++        if (failed.get()) throw new IOException("writer revoked");
++        ScheduledFuture<?> watchdog = WATCHDOG.schedule(this::abort, timeoutMs, TimeUnit.MILLISECONDS);
++        boolean acquired = false;
++        try {
++            acquired = lock.tryLock(timeoutMs, TimeUnit.MILLISECONDS);
++            if (!acquired || failed.get() || System.nanoTime() >= deadline) { abort(); throw new IOException("write deadline exceeded"); }
++            if ((!helloWritten && !(p instanceof Packet.Hello)) || (helloWritten && p instanceof Packet.Hello))
++                throw new ProtocolException("one initial Hello required");
++            if (!(p instanceof Packet.Hello) && peerEpoch == 0) throw new ProtocolException("peer Hello required");
++            Packet wirePacket = p;
++            if (p instanceof Packet.Progress) {
++                Packet.Progress q = (Packet.Progress) p;
++                if (q.fixAgeMs < 0) throw new IllegalArgumentException("negative fix age");
++                long residenceMs = Math.max(0, (System.nanoTime() - q.createdAtNanos) / 1_000_000L);
++                int age = (int) Math.min(Integer.MAX_VALUE, (long) q.fixAgeMs + residenceMs);
++                wirePacket = new Packet.Progress(q.routeId, q.turnIndex, q.distanceToTurnM, q.bearingDelta100,
++                        q.speedKmh, q.remainingDistanceM, q.etaSec, q.markerPxX, q.markerPxY,
++                        q.markerBearingDeg100, age);
++            }
++            byte[] frame = Codec.encode(wirePacket, epoch, sequence, p instanceof Packet.Hello ? 0 : peerEpoch);
++            out.write(frame); out.flush();
++            if (failed.get() || System.nanoTime() >= deadline) { abort(); throw new IOException("write deadline exceeded"); }
++            helloWritten = true;
++            if (sequence == Long.MAX_VALUE) { abort(); throw new IOException("sequence exhausted"); }
++            sequence++;
++        } catch (InterruptedException e) {
++            Thread.currentThread().interrupt(); abort(); throw new IOException("write interrupted", e);
++        } catch (IOException | RuntimeException e) { abort(); throw e; }
++        finally { if (acquired) lock.unlock(); watchdog.cancel(false); }
+     }
+ }
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/Packet.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/Packet.java
+index 1e5aa2091bcb831b12fa77d46e8e8a138c12e1cf..ecc0c42560f4219d1ed802d3b404924d97bd02a9 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/Packet.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/Packet.java
+@@ -69,7 +69,7 @@ public abstract class Packet {
+         public final long routeId;             // uint32
+         public final int turnIndex;            // uint16
+         public final TurnKind kind;            // uint8 (ordinal)
+-        public final int distanceFromStartM;   // uint16
++        public final int distanceFromStartM;   // nonnegative int32
+         public final String instructionText;
+         public final byte[] pngBytes;
+ 
+@@ -108,14 +108,20 @@ public abstract class Packet {
+     public static final class Progress extends Packet {
+         /** Sentinel for "unknown / no marker" in the marker fields below. */
+         public static final int MARKER_NONE = -1;
++        public static final int UNKNOWN_DISTANCE = -1;
++        public static final int FRESH_FIX_MAX_AGE_MS = 10_000;
++        /** Sender-local age at enqueue; unknown/frozen fixes must not be shown as live. */
++        public final int fixAgeMs;
++        /** Local-only monotonic creation time; not serialized. Writer adds queue residence to fix age. */
++        final long createdAtNanos = System.nanoTime();
+ 
+         public final long routeId;            // uint32
+         public final int turnIndex;           // uint16
+-        public final int distanceToTurnM;     // uint16
++        public final int distanceToTurnM;     // int32 nonnegative, or UNKNOWN_DISTANCE
+         public final short bearingDelta100;   // int16, centidegrees
+         public final int speedKmh;            // uint16
+-        public final int remainingDistanceM;  // uint16, meters from current position to arrival
+-        public final int etaSec;              // uint16, seconds remaining to arrival
++        public final int remainingDistanceM;  // nonnegative int32 meters, or UNKNOWN_DISTANCE
++        public final int etaSec;              // nonnegative int32 seconds, or UNKNOWN_DISTANCE
+         /** X pixel coord (0..snippetWidth-1) of the position arrow in the current TurnBundle's
+          *  snippet bitmap, or {@link #MARKER_NONE} if no marker should be drawn. Set by the phone
+          *  using the same projection used to render the snippet. */
+@@ -135,8 +141,16 @@ public abstract class Packet {
+         public Progress(long routeId, int turnIndex, int distanceToTurnM, short bearingDelta100,
+                         int speedKmh, int remainingDistanceM, int etaSec,
+                         int markerPxX, int markerPxY, int markerBearingDeg100) {
++            this(routeId, turnIndex, distanceToTurnM, bearingDelta100, speedKmh, remainingDistanceM,
++                etaSec, markerPxX, markerPxY, markerBearingDeg100, Integer.MAX_VALUE);
++        }
++
++        public Progress(long routeId, int turnIndex, int distanceToTurnM, short bearingDelta100,
++                        int speedKmh, int remainingDistanceM, int etaSec,
++                        int markerPxX, int markerPxY, int markerBearingDeg100, int fixAgeMs) {
+             this.routeId = routeId;
+             this.turnIndex = turnIndex;
++            this.fixAgeMs = fixAgeMs;
+             this.distanceToTurnM = distanceToTurnM;
+             this.bearingDelta100 = bearingDelta100;
+             this.speedKmh = speedKmh;
+@@ -157,11 +171,11 @@ public abstract class Packet {
+                 && speedKmh == p.speedKmh
+                 && remainingDistanceM == p.remainingDistanceM && etaSec == p.etaSec
+                 && markerPxX == p.markerPxX && markerPxY == p.markerPxY
+-                && markerBearingDeg100 == p.markerBearingDeg100;
++                && markerBearingDeg100 == p.markerBearingDeg100 && fixAgeMs == p.fixAgeMs;
+         }
+         @Override public int hashCode() {
+             return Objects.hash(routeId, turnIndex, distanceToTurnM, bearingDelta100, speedKmh,
+-                remainingDistanceM, etaSec, markerPxX, markerPxY, markerBearingDeg100);
++                remainingDistanceM, etaSec, markerPxX, markerPxY, markerBearingDeg100, fixAgeMs);
+         }
+         @Override public String toString() {
+             return "Progress(id=" + routeId + ", #" + turnIndex + ", " + distanceToTurnM
+@@ -177,12 +191,9 @@ public abstract class Packet {
+      * applies it to subsequent updates. A corner set to {@link Field#NONE} renders blank.
+      */
+     public static final class DisplayConfig extends Packet {
+-        /** Default screen-on timeout (seconds) when the phone hasn't specified one — also what an
+-         *  older phone's DisplayConfig (which lacks the field) decodes to. Bounds how long Glass
+-         *  holds the display bright after waking for an approaching turn. */
++        /** Default bounded screen-on timeout in seconds. V2 does not accept partial legacy config. */
+         public static final int DEFAULT_SCREEN_WAKE_SEC = 15;
+-        /** {@link #screenWakeSec} value meaning "no timeout": hold the screen on for the whole
+-         *  approach until the turn is passed (the original, unbounded behavior). */
++        /** Legacy configuration value; normalized to DEFAULT_SCREEN_WAKE_SEC in v2. */
+         public static final int SCREEN_WAKE_NO_TIMEOUT = 0;
+ 
+         public enum Field {
+@@ -210,8 +221,7 @@ public abstract class Packet {
+         /** How long (seconds) Glass keeps the display bright after waking for an approaching turn,
+          *  before letting it dim on its normal timeout — even if the turn hasn't been passed yet.
+          *  Bounds battery drain when a turn is still far away or the rider stops within the approach
+-         *  radius. {@link #SCREEN_WAKE_NO_TIMEOUT} (0) restores the unbounded hold-until-passed
+-         *  behavior. */
++         *  radius. V2 bounds the timeout to 1..60 seconds; legacy 0 becomes 15 seconds. */
+         public final int screenWakeSec;
+ 
+         public DisplayConfig(Field topLeft, Field topRight, Field bottomLeft, Field bottomRight) {
+@@ -230,7 +240,7 @@ public abstract class Packet {
+             this.bottomLeft = Objects.requireNonNull(bottomLeft);
+             this.bottomRight = Objects.requireNonNull(bottomRight);
+             this.muteTts = muteTts;
+-            this.screenWakeSec = screenWakeSec;
++            this.screenWakeSec = screenWakeSec == 0 ? DEFAULT_SCREEN_WAKE_SEC : Math.max(1, Math.min(60, screenWakeSec));
+         }
+ 
+         @Override public PacketType type() { return PacketType.DISPLAY_CONFIG; }
+@@ -312,7 +322,7 @@ public abstract class Packet {
+         @Override public boolean equals(Object o) {
+             return o instanceof Ping && timestampMs == ((Ping) o).timestampMs;
+         }
+-        @Override public int hashCode() { return Long.hashCode(timestampMs); }
++        @Override public int hashCode() { return (int) (timestampMs ^ (timestampMs >>> 32)); }
+         @Override public String toString() { return "Ping(t=" + timestampMs + ")"; }
+     }
+ 
+@@ -324,7 +334,7 @@ public abstract class Packet {
+         @Override public boolean equals(Object o) {
+             return o instanceof Pong && echoTimestampMs == ((Pong) o).echoTimestampMs;
+         }
+-        @Override public int hashCode() { return Long.hashCode(echoTimestampMs); }
++        @Override public int hashCode() { return (int) (echoTimestampMs ^ (echoTimestampMs >>> 32)); }
+         @Override public String toString() { return "Pong(t=" + echoTimestampMs + ")"; }
+     }
+ }
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/TurnKind.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/TurnKind.java
+index 812e058e945090c7da0a68fa1e7aefe8be82808f..438a2b7bb3c3fab388e7d38e97c6631bc874f690 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/TurnKind.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/TurnKind.java
+@@ -15,7 +15,9 @@ public enum TurnKind {
+     KL,       // keep left
+     KR,       // keep right
+     TU,       // u-turn
+-    ARRIVE;   // route end / arrived
++    ARRIVE,   // destination preview; arrival only from canonical RouteEnd
++    STRAIGHT,
++    ROUNDABOUT; // exit number/handedness retained in localized instruction text
+ 
+     public static TurnKind fromOrdinal(int ord) throws ProtocolException {
+         TurnKind[] vs = values();
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Keepalive.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Keepalive.java
+index baae92e6cad3eebc161e77b996a1695ba28d9970..19ae2ce7ae6ab1053554abc3d3cd8894231a2962 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Keepalive.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Keepalive.java
+@@ -35,6 +35,7 @@ public final class Keepalive {
+     private final AtomicLong lastInboundMs = new AtomicLong();
+     private volatile boolean running;
+     private Thread thread;
++    private Thread pingThread;
+ 
+     public Keepalive(boolean sendPings, Sender sender, Runnable onDead) {
+         this(sendPings, DEFAULT_PING_INTERVAL_MS, DEFAULT_TIMEOUT_MS, sender, onDead);
+@@ -50,16 +51,23 @@ public final class Keepalive {
+     }
+ 
+     public void start() {
++        if (running) return;
+         running = true;
+-        lastInboundMs.set(System.currentTimeMillis());
++        lastInboundMs.set(monotonicMs());
+         thread = new Thread(this::run, "Keepalive");
+         thread.setDaemon(true);
+         thread.start();
++        if (sendPings) {
++            pingThread = new Thread(this::runPings, "KeepalivePing");
++            pingThread.setDaemon(true);
++            pingThread.start();
++        }
+     }
+ 
+     public void stop() {
+         running = false;
+         if (thread != null) thread.interrupt();
++        if (pingThread != null) pingThread.interrupt();
+     }
+ 
+     /**
+@@ -67,7 +75,7 @@ public final class Keepalive {
+      * whether the packet was a Ping/Pong (which the caller should NOT forward to its listener).
+      */
+     public boolean handleInbound(Packet p) {
+-        lastInboundMs.set(System.currentTimeMillis());
++        lastInboundMs.set(monotonicMs());
+         if (p instanceof Packet.Ping) {
+             try { sender.send(new Packet.Pong(((Packet.Ping) p).timestampMs)); } catch (Throwable ignored) {}
+             return true;
+@@ -75,20 +83,27 @@ public final class Keepalive {
+         return p instanceof Packet.Pong;
+     }
+ 
++    private static long monotonicMs() { return System.nanoTime() / 1_000_000L; }
++
++    // Never write on this watchdog thread: a Ping may be blocked inside a raw socket write.
+     private void run() {
+-        long nextPingAt = System.currentTimeMillis() + pingIntervalMs;
+-        long tickMs = Math.max(200L, Math.min(pingIntervalMs, timeoutMs / 3));
++        long tickMs = Math.max(10L, Math.min(200L, timeoutMs / 3));
+         while (running) {
+-            long now = System.currentTimeMillis();
+-            if (now - lastInboundMs.get() > timeoutMs) {
++            if (monotonicMs() - lastInboundMs.get() >= timeoutMs) {
++                running = false;
+                 try { onDead.run(); } catch (Throwable ignored) {}
++                if (pingThread != null) pingThread.interrupt();
+                 return;
+             }
+-            if (sendPings && now >= nextPingAt) {
+-                try { sender.send(new Packet.Ping(now & 0xffffffffL)); } catch (Throwable ignored) {}
+-                nextPingAt = now + pingIntervalMs;
+-            }
+             try { Thread.sleep(tickMs); } catch (InterruptedException e) { return; }
+         }
+     }
++
++    private void runPings() {
++        while (running) {
++            try { Thread.sleep(pingIntervalMs); } catch (InterruptedException e) { return; }
++            if (!running) return;
++            try { sender.send(new Packet.Ping(monotonicMs() & 0xffffffffL)); } catch (Throwable ignored) {}
++        }
++    }
+ }
+diff --git a/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/TcpTransport.java b/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/TcpTransport.java
+index d6339f4f5034d044822f1948f81f2758d872968c..4431f03948df550d77ab1179e651db5aa6f0a183 100644
+--- a/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/TcpTransport.java
++++ b/protocol/src/main/java/com/goodanser/osmglass/protocol/transport/TcpTransport.java
+@@ -1,146 +1,120 @@
+ package com.goodanser.osmglass.protocol.transport;
+ 
+-import com.goodanser.osmglass.protocol.FrameReader;
+-import com.goodanser.osmglass.protocol.FrameWriter;
+-import com.goodanser.osmglass.protocol.Packet;
+-
++import com.goodanser.osmglass.protocol.*;
+ import java.io.IOException;
+-import java.net.InetSocketAddress;
+-import java.net.ServerSocket;
+-import java.net.Socket;
++import java.net.*;
+ import java.util.concurrent.atomic.AtomicBoolean;
+ 
+-/**
+- * Pure-JDK TCP transport used in container/emulator. Acts as either listening server or client.
+- *
+- * Server mode: accepts a single connection, then services it. Reconnect on disconnect is the
+- * caller's responsibility (call {@link #stop()} then {@link #start()} again).
+- */
++/** Loopback-only debug transport. Each run owns its raw handles and callbacks by generation. */
+ public final class TcpTransport implements Transport {
+     public enum Role { SERVER, CLIENT }
+-
+     private final Role role;
+     private final String host;
+     private final int port;
+-    private final AtomicBoolean running = new AtomicBoolean(false);
+-
+-    private Listener listener;
++    private final AtomicBoolean running = new AtomicBoolean();
++    private volatile Listener listener;
++    private volatile long generation;
+     private Thread thread;
+-    private ServerSocket serverSocket;
+-    private Socket socket;
+-    private FrameWriter writer;
+-
++    private volatile ServerSocket serverSocket;
++    private volatile Socket socket;
++    private volatile FrameWriter writer;
+     public TcpTransport(Role role, String host, int port) {
+-        this.role = role;
+-        this.host = host;
+-        this.port = port;
+-    }
+-
+-    @Override public void setListener(Listener listener) {
+-        this.listener = listener;
++        if (!("127.0.0.1".equals(host) || "localhost".equals(host) || "::1".equals(host)))
++            throw new IllegalArgumentException("debug TCP is loopback-only");
++        this.role = role; this.host = host; this.port = port;
+     }
+-
++    @Override public void setListener(Listener listener) { this.listener = listener; }
+     @Override public synchronized void start() throws IOException {
+         if (!running.compareAndSet(false, true)) return;
+-        if (role == Role.SERVER) {
+-            serverSocket = new ServerSocket();
+-            serverSocket.setReuseAddress(true);
+-            serverSocket.bind(new InetSocketAddress(host, port));
++        long owner = ++generation;
++        ServerSocket server = null;
++        try {
++            if (role == Role.SERVER) {
++                server = new ServerSocket(); server.setReuseAddress(true);
++                server.bind(new InetSocketAddress(host, port)); serverSocket = server;
++            }
++            final ServerSocket ownedServer = server;
++            thread = new Thread(() -> run(owner, ownedServer), "TcpTransport-" + role + "-" + port);
++            thread.setDaemon(true); thread.start();
++        } catch (IOException | RuntimeException e) {
++            running.set(false); close(server); serverSocket = null; throw e;
+         }
+-        thread = new Thread(this::run, "TcpTransport-" + role + "-" + port);
+-        thread.setDaemon(true);
+-        thread.start();
+     }
+-
+     @Override public synchronized void stop() {
+-        if (!running.compareAndSet(true, false)) return;
+-        try { if (serverSocket != null) serverSocket.close(); } catch (IOException ignored) {}
+-        try { if (socket != null) socket.close(); } catch (IOException ignored) {}
++        running.set(false); generation++;
++        writer = null;
++        close(serverSocket); serverSocket = null;
++        close(socket); socket = null;
+         if (thread != null) thread.interrupt();
+     }
+-
+     @Override public void send(Packet p) throws IOException {
+-        FrameWriter w = writer;
+-        if (w == null) throw new IOException("not connected");
+-        w.write(p);
++        FrameWriter owned = writer;
++        if (owned == null || !running.get()) throw new IOException("not connected");
++        owned.write(p);
+     }
+-
+     public boolean isConnected() {
+-        Socket s = socket;
+-        return s != null && s.isConnected() && !s.isClosed();
++        Socket owned = socket;
++        return running.get() && writer != null && owned != null && !owned.isClosed();
+     }
+-
+-    private void run() {
+-        if (role == Role.SERVER) runServer();
+-        else runClient();
+-    }
+-
+-    private void runServer() {
+-        // Accept loop: serve one connection at a time, re-accept after disconnect.
+-        while (running.get()) {
+-            Throwable cause = null;
+-            Keepalive keepalive = null;
+-            try {
+-                socket = serverSocket.accept();
+-                socket.setTcpNoDelay(true);
+-                writer = new FrameWriter(socket.getOutputStream());
+-                FrameReader reader = new FrameReader(socket.getInputStream());
+-                if (listener != null) listener.onConnected();
+-                final Socket sessionSocket = socket;
+-                keepalive = new Keepalive(
+-                        /* sendPings = */ false,
+-                        p -> { FrameWriter w = writer; if (w != null) { try { w.write(p); } catch (Throwable ignored) {} } },
+-                        () -> { try { sessionSocket.close(); } catch (Throwable ignored) {} });
+-                keepalive.start();
+-                while (running.get()) {
+-                    Packet p = reader.readNext();
+-                    if (p == null) break;
+-                    if (keepalive.handleInbound(p)) continue;
+-                    if (listener != null) listener.onPacket(p);
+-                }
+-            } catch (Throwable t) {
+-                cause = t;
+-            } finally {
+-                if (keepalive != null) keepalive.stop();
+-                try { if (socket != null) socket.close(); } catch (IOException ignored) {}
+-                writer = null;
+-                if (listener != null) listener.onDisconnected(cause);
+-                socket = null;
+-            }
+-        }
+-        try { if (serverSocket != null) serverSocket.close(); } catch (IOException ignored) {}
+-    }
+-
+-    private void runClient() {
+-        Throwable cause = null;
+-        Keepalive keepalive = null;
++    private boolean owns(long owner) { return running.get() && generation == owner; }
++    private static void close(Socket socket) { try { if(socket != null) socket.close(); } catch(IOException ignored){} }
++    private static void close(ServerSocket socket) { try { if(socket != null) socket.close(); } catch(IOException ignored){} }
++    private void run(long owner, ServerSocket ownedServer) {
+         try {
+-            socket = new Socket();
+-            socket.connect(new InetSocketAddress(host, port), 5_000);
+-            socket.setTcpNoDelay(true);
+-            writer = new FrameWriter(socket.getOutputStream());
+-            FrameReader reader = new FrameReader(socket.getInputStream());
+-            if (listener != null) listener.onConnected();
+-            final Socket sessionSocket = socket;
+-            keepalive = new Keepalive(
+-                    /* sendPings = */ true,
+-                    p -> { FrameWriter w = writer; if (w != null) { try { w.write(p); } catch (Throwable ignored) {} } },
+-                    () -> { try { sessionSocket.close(); } catch (Throwable ignored) {} });
+-            keepalive.start();
+-            while (running.get()) {
+-                Packet p = reader.readNext();
+-                if (p == null) break;
+-                if (keepalive.handleInbound(p)) continue;
+-                if (listener != null) listener.onPacket(p);
+-            }
+-        } catch (Throwable t) {
+-            cause = t;
++            do {
++                Socket owned = null;
++                FrameWriter ownedWriter = null;
++                Keepalive keepalive = null;
++                Throwable cause = null;
++                boolean announced = false;
++                try {
++                    if (!owns(owner)) return;
++                    owned = role == Role.SERVER ? ownedServer.accept() : new Socket();
++                    synchronized(this) {
++                        if(!owns(owner)) {close(owned); return;}
++                        socket = owned; // publish before connect, allowing Stop to close it.
++                    }
++                    if(role == Role.CLIENT) owned.connect(new InetSocketAddress(host,port),5000);
++                    owned.setTcpNoDelay(true);
++                    final Socket raw = owned;
++                    ownedWriter = new FrameWriter(raw.getOutputStream(), () -> close(raw), FrameWriter.DEFAULT_WRITE_TIMEOUT_MS);
++                    FrameReader reader = ownedWriter.handshake(raw.getInputStream());
++                    synchronized(this) {
++                        if(!owns(owner)) return;
++                        writer = ownedWriter;
++                    }
++                    Listener target = listener;
++                    if(target != null && owns(owner)) {
++                        target.onConnected();
++                        if (owns(owner)) target.onPacket(new Packet.Hello(Codec.PROTO_VERSION));
++                        announced = true;
++                    }
++                    final FrameWriter sessionWriter = ownedWriter;
++                    keepalive = new Keepalive(role == Role.CLIENT,
++                        p -> {try {sessionWriter.write(p);}catch(IOException ignored){close(raw);}}, () -> close(raw));
++                    keepalive.start();
++                    while(owns(owner)) {
++                        Packet p=reader.readNext(); if(p==null)break;
++                        if(keepalive.handleInbound(p))continue;
++                        if(target != null && owns(owner))target.onPacket(p);
++                    }
++                } catch(Throwable t) { cause=t; }
++                finally {
++                    if(keepalive != null)keepalive.stop();
++                    close(owned);
++                    synchronized(this) {
++                        if(socket == owned)socket=null;
++                        if(writer == ownedWriter)writer=null;
++                    }
++                    Listener target=listener;
++                    if(announced && owns(owner) && target != null)target.onDisconnected(cause);
++                }
++            } while(role==Role.SERVER && owns(owner));
+         } finally {
+-            if (keepalive != null) keepalive.stop();
+-            try { if (socket != null) socket.close(); } catch (IOException ignored) {}
+-            writer = null;
+-            running.set(false);
+-            if (listener != null) listener.onDisconnected(cause);
++            close(ownedServer);
++            synchronized(this) {
++                if(generation==owner) {running.set(false);if(serverSocket==ownedServer)serverSocket=null;}
++            }
+         }
+     }
+ }
+diff --git a/protocol/src/test/java/com/goodanser/osmglass/protocol/CodecTest.java b/protocol/src/test/java/com/goodanser/osmglass/protocol/CodecTest.java
+index aae1f945b5fcc907177dd741fe7f1214df6aeb49..ab549b33b7d4904a49dc05eb54ceac55a1c36f5f 100644
+--- a/protocol/src/test/java/com/goodanser/osmglass/protocol/CodecTest.java
++++ b/protocol/src/test/java/com/goodanser/osmglass/protocol/CodecTest.java
+@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
+ class CodecTest {
+ 
+     @Test void roundTripHello() throws Exception {
+-        Packet.Hello in = new Packet.Hello(0x0001);
++        Packet.Hello in = new Packet.Hello(Codec.PROTO_VERSION);
+         Packet out = Codec.decode(Codec.encode(in));
+         assertThat(out).isEqualTo(in);
+     }
+@@ -37,7 +37,7 @@ class CodecTest {
+         assertThat(out.startLabel).isEqualTo("Head north on Bramfelder Straße");
+     }
+ 
+-    @Test void routeStartDecodesLegacyPayloadWithoutStartLabel() throws Exception {
++    @Test void rejectsLegacyRouteStartPayloadWithoutStartLabel() throws Exception {
+         // Synthesize a payload with only the original fields (no trailing startLabel pstr).
+         java.io.ByteArrayOutputStream payload = new java.io.ByteArrayOutputStream();
+         java.io.DataOutputStream out = new java.io.DataOutputStream(payload);
+@@ -47,11 +47,8 @@ class CodecTest {
+         out.writeShort(dest.length);      // destinationLabel pstr
+         out.write(dest);
+         out.flush();
+-        Packet.RouteStart decoded =
+-            (Packet.RouteStart) Codec.decodePayload(PacketType.ROUTE_START, payload.toByteArray());
+-        assertThat(decoded.routeId).isEqualTo(42L);
+-        assertThat(decoded.destinationLabel).isEqualTo("Berlin");
+-        assertThat(decoded.startLabel).isEqualTo("");
++        assertThatThrownBy(() -> Codec.decodePayload(PacketType.ROUTE_START, payload.toByteArray()))
++            .isInstanceOf(ProtocolException.class);
+     }
+ 
+     @ParameterizedTest
+@@ -89,7 +86,7 @@ class CodecTest {
+         assertThat(out.markerBearingDeg100).isEqualTo(9000);
+     }
+ 
+-    @Test void progressDecodesLegacyPayloadWithoutMarker() throws Exception {
++    @Test void rejectsLegacyProgressPayloadWithoutMarker() throws Exception {
+         // Synthesize a payload that contains only the original 16 bytes (no marker trailer).
+         java.io.ByteArrayOutputStream payload = new java.io.ByteArrayOutputStream();
+         java.io.DataOutputStream out = new java.io.DataOutputStream(payload);
+@@ -101,12 +98,8 @@ class CodecTest {
+         out.writeShort(800);           // remainingDistanceM
+         out.writeShort(180);           // etaSec
+         out.flush();
+-        Packet.Progress decoded = (Packet.Progress) Codec.decodePayload(PacketType.PROGRESS, payload.toByteArray());
+-        assertThat(decoded.routeId).isEqualTo(42L);
+-        assertThat(decoded.turnIndex).isEqualTo(5);
+-        assertThat(decoded.markerPxX).isEqualTo(Packet.Progress.MARKER_NONE);
+-        assertThat(decoded.markerPxY).isEqualTo(Packet.Progress.MARKER_NONE);
+-        assertThat(decoded.markerBearingDeg100).isEqualTo(Packet.Progress.MARKER_NONE);
++        assertThatThrownBy(() -> Codec.decodePayload(PacketType.PROGRESS, payload.toByteArray()))
++            .isInstanceOf(ProtocolException.class);
+     }
+ 
+     @Test void roundTripDisplayConfig() throws Exception {
+@@ -128,7 +121,7 @@ class CodecTest {
+         }
+     }
+ 
+-    @Test void displayConfigDecodesLegacyPayloadWithoutScreenWake() throws Exception {
++    @Test void rejectsLegacyDisplayConfigPayloadWithoutScreenWake() throws Exception {
+         // Synthesize a payload with the four corner ordinals + muteTts byte but no trailing
+         // screenWakeSec — an older phone. It should decode to the default timeout.
+         java.io.ByteArrayOutputStream payload = new java.io.ByteArrayOutputStream();
+@@ -139,10 +132,8 @@ class CodecTest {
+         out.writeByte(Packet.DisplayConfig.Field.NONE.ordinal());
+         out.writeByte(1); // muteTts
+         out.flush();
+-        Packet.DisplayConfig decoded =
+-            (Packet.DisplayConfig) Codec.decodePayload(PacketType.DISPLAY_CONFIG, payload.toByteArray());
+-        assertThat(decoded.muteTts).isTrue();
+-        assertThat(decoded.screenWakeSec).isEqualTo(Packet.DisplayConfig.DEFAULT_SCREEN_WAKE_SEC);
++        assertThatThrownBy(() -> Codec.decodePayload(PacketType.DISPLAY_CONFIG, payload.toByteArray()))
++            .isInstanceOf(ProtocolException.class);
+     }
+ 
+     @Test void roundTripTurnAlert() throws Exception {
+@@ -174,7 +165,7 @@ class CodecTest {
+ 
+     @Test void rejectsUnsupportedVersion() {
+         byte[] frame = Codec.encode(new Packet.Ping(1L));
+-        frame[1] = 0x02;
++        frame[1] = 0x01;
+         assertThatThrownBy(() -> Codec.decode(frame))
+             .isInstanceOf(ProtocolException.class)
+             .hasMessageContaining("protoVersion");
+diff --git a/protocol/src/test/java/com/goodanser/osmglass/protocol/FrameReaderTest.java b/protocol/src/test/java/com/goodanser/osmglass/protocol/FrameReaderTest.java
+index e514864d65e3a048cd3e52a24f168e3f5be5d76b..a69a4733567df366f4705e8ccc536dd67a48138d 100644
+--- a/protocol/src/test/java/com/goodanser/osmglass/protocol/FrameReaderTest.java
++++ b/protocol/src/test/java/com/goodanser/osmglass/protocol/FrameReaderTest.java
+@@ -1,98 +1,66 @@
+ package com.goodanser.osmglass.protocol;
+ 
+ import org.junit.jupiter.api.Test;
+-
+-import java.io.ByteArrayInputStream;
+-import java.io.ByteArrayOutputStream;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.util.Arrays;
+-import java.util.Random;
+-
+-import static org.assertj.core.api.Assertions.assertThat;
+-import static org.assertj.core.api.Assertions.assertThatThrownBy;
++import java.io.*;
++import java.util.*;
++import static org.assertj.core.api.Assertions.*;
+ 
+ class FrameReaderTest {
+-
+-    @Test void readsMultipleFramesInSequence() throws IOException {
+-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+-        Packet[] packets = {
+-            new Packet.Hello(1),
+-            new Packet.RouteStart(7L, 5, "Berlin"),
+-            new Packet.Progress(7L, 0, 200, (short) 0, 25, 0, 0),
+-            new Packet.RouteEnd(7L, Packet.RouteEnd.Reason.ARRIVED),
+-        };
+-        for (Packet p : packets) stream.write(Codec.encode(p));
+-
+-        FrameReader reader = new FrameReader(new ByteArrayInputStream(stream.toByteArray()));
+-        for (Packet expected : packets) {
+-            assertThat(reader.readNext()).isEqualTo(expected);
+-        }
+-        assertThat(reader.readNext()).isNull(); // clean EOF
++    private static final long LOCAL = 987654321L, PEER = 123456789L;
++    private static byte[] hello() { return Codec.encode(new Packet.Hello(2), PEER, 0, 0); }
++    private static byte[] frame(Packet p, long seq) { return Codec.encode(p, PEER, seq, LOCAL); }
++    private static byte[] concat(byte[]... frames) throws IOException {
++        ByteArrayOutputStream out = new ByteArrayOutputStream();
++        for (byte[] bytes : frames) out.write(bytes); return out.toByteArray();
+     }
+-
+-    @Test void readsFrameSplitAcrossManyReads() throws IOException {
+-        Packet.TurnBundle p = new Packet.TurnBundle(
+-            1L, 0, TurnKind.TR, 500, "Right",
+-            randomBytes(50_000, 7));
+-        byte[] full = Codec.encode(p);
+-
+-        // Wrap in an InputStream that hands out 1 byte at a time, exercising readFully's loop.
+-        FrameReader reader = new FrameReader(new SlowInputStream(full, 1));
+-        assertThat(reader.readNext()).isEqualTo(p);
++    @Test void readsMultipleFramesInSequence() throws Exception {
++        Packet[] packets = {new Packet.RouteStart(7,5,"Berlin"), new Packet.Progress(7,0,200,(short)0,25,0,0),
++            new Packet.RouteEnd(7, Packet.RouteEnd.Reason.ARRIVED)};
++        ByteArrayOutputStream out = new ByteArrayOutputStream(); out.write(hello());
++        for(int i=0;i<packets.length;i++) out.write(frame(packets[i],i+1));
++        FrameReader reader = new FrameReader(new ByteArrayInputStream(out.toByteArray()), LOCAL);
++        assertThat(reader.readNext()).isEqualTo(new Packet.Hello(2));
++        assertThat(reader.isHandshakeComplete()).isTrue(); assertThat(reader.getPeerEpoch()).isEqualTo(PEER);
++        for(Packet p:packets) assertThat(reader.readNext()).isEqualTo(p);
++        assertThat(reader.readNext()).isNull();
+     }
+-
+-    @Test void readsFrameSplitAcrossOddChunks() throws IOException {
+-        Packet.TurnBundle p = new Packet.TurnBundle(
+-            1L, 0, TurnKind.TL, 1000, "Left",
+-            randomBytes(80_000, 11));
+-        byte[] full = Codec.encode(p);
+-        FrameReader reader = new FrameReader(new SlowInputStream(full, 7919)); // prime chunk
+-        assertThat(reader.readNext()).isEqualTo(p);
++    @Test void readsSplitFrames() throws Exception {
++        byte[] image=new byte[80_000];new Random(7).nextBytes(image);
++        Packet p=new Packet.TurnBundle(1,0,TurnKind.TR,300_000,"Right",image);
++        byte[] full=concat(hello(),frame(p,1));
++        for(int chunk:new int[]{1,7919}) {
++            InputStream in=new ByteArrayInputStream(full) {
++                @Override public synchronized int read(byte[] b,int off,int len) { return super.read(b,off,Math.min(chunk,len)); }
++            };
++            FrameReader reader=new FrameReader(in,LOCAL);reader.readNext();assertThat(reader.readNext()).isEqualTo(p);
++        }
+     }
+-
+-    @Test void rejectsCorruptedMagicMidStream() throws IOException {
+-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+-        stream.write(Codec.encode(new Packet.Ping(1L)));
+-        // Inject a bad byte that should be the next magic.
+-        stream.write(new byte[]{ 0x00, 0x01, 0x02, 0x03 });
+-
+-        FrameReader reader = new FrameReader(new ByteArrayInputStream(stream.toByteArray()));
+-        assertThat(reader.readNext()).isInstanceOf(Packet.Ping.class);
+-        assertThatThrownBy(reader::readNext)
+-            .isInstanceOf(ProtocolException.class)
+-            .hasMessageContaining("bad magic");
++    @Test void requiresHelloAndFreshLocalChallenge() throws Exception {
++        assertThatThrownBy(() -> new FrameReader(new ByteArrayInputStream(frame(new Packet.Ping(1),0)), LOCAL).readNext())
++            .isInstanceOf(ProtocolException.class).hasMessageContaining("Hello");
++        assertThatThrownBy(() -> new FrameReader(new ByteArrayInputStream(hello())).readNext())
++            .isInstanceOf(ProtocolException.class).hasMessageContaining("local challenge");
+     }
+-
+-    private static byte[] randomBytes(int n, long seed) {
+-        byte[] b = new byte[n];
+-        new Random(seed).nextBytes(b);
+-        return b;
++    @Test void rejectsRecordedWholeSessionOnNewConnection() throws Exception {
++        byte[] recording=concat(hello(),frame(new Packet.RouteStart(7,1,"Destination"),1));
++        FrameReader reader=new FrameReader(new ByteArrayInputStream(recording), LOCAL+1);
++        reader.readNext();
++        assertThatThrownBy(reader::readNext).isInstanceOf(ProtocolException.class).hasMessageContaining("epoch/sequence");
+     }
+-
+-    private static final class SlowInputStream extends InputStream {
+-        private final byte[] data;
+-        private final int chunkSize;
+-        private int pos;
+-
+-        SlowInputStream(byte[] data, int chunkSize) {
+-            this.data = data;
+-            this.chunkSize = Math.max(1, chunkSize);
++    @Test void rejectsReplayedReorderedAndWrongEpochFrames() throws Exception {
++        for(byte[] invalid:new byte[][] {
++                frame(new Packet.Ping(1),0), frame(new Packet.Ping(1),2),
++                Codec.encode(new Packet.Ping(1), PEER+1,1,LOCAL),
++                Codec.encode(new Packet.Hello(2), PEER+1,0,0)}) {
++            FrameReader reader=new FrameReader(new ByteArrayInputStream(concat(hello(),invalid)), LOCAL);
++            reader.readNext();assertThatThrownBy(reader::readNext).isInstanceOf(ProtocolException.class);
+         }
+-
+-        @Override public int read() {
+-            if (pos >= data.length) return -1;
+-            return data[pos++] & 0xff;
+-        }
+-
+-        @Override public int read(byte[] b, int off, int len) {
+-            if (pos >= data.length) return -1;
+-            int n = Math.min(Math.min(len, chunkSize), data.length - pos);
+-            System.arraycopy(data, pos, b, off, n);
+-            pos += n;
+-            return n;
++    }
++    @Test void rejectsAllPartialHeadersAndPayloads() throws Exception {
++        byte[] full=frame(new Packet.RouteStart(7,1,"Destination"),1);
++        for(int size=1;size<full.length;size++) {
++            FrameReader reader=new FrameReader(new ByteArrayInputStream(concat(hello(),Arrays.copyOf(full,size))), LOCAL);
++            reader.readNext();assertThatThrownBy(reader::readNext).isInstanceOf(IOException.class);
+         }
+-
+-        @Override public int available() { return Math.max(0, data.length - pos); }
+     }
+ }
+diff --git a/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/KeepaliveTest.java b/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/KeepaliveTest.java
+index 5f859f068372b94ec37b3cbd39134266e789b624..868a19c61ab25df77dd7c7322a5cc999b6ee9aed 100644
+--- a/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/KeepaliveTest.java
++++ b/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/KeepaliveTest.java
+@@ -95,4 +95,17 @@ class KeepaliveTest {
+             k.stop();
+         }
+     }
++
++    @Test void blockedPingCannotBlockIndependentWatchdog() throws Exception {
++        CountDownLatch entered = new CountDownLatch(1), release = new CountDownLatch(1), dead = new CountDownLatch(1);
++        Keepalive k = new Keepalive(true, 10, 80, p -> {
++            entered.countDown();
++            try { release.await(2, TimeUnit.SECONDS); } catch (InterruptedException ignored) {}
++        }, dead::countDown);
++        k.start();
++        try {
++            assertThat(entered.await(1, TimeUnit.SECONDS)).isTrue();
++            assertThat(dead.await(1, TimeUnit.SECONDS)).isTrue();
++        } finally { release.countDown(); k.stop(); }
++    }
+ }
+diff --git a/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/TcpTransportTest.java b/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/TcpTransportTest.java
+index 357b7cb2bf24cd69312371400f2a090b7486e61f..821ada35b131a6967c7dc872bfb5b72728d51d6b 100644
+--- a/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/TcpTransportTest.java
++++ b/protocol/src/test/java/com/goodanser/osmglass/protocol/transport/TcpTransportTest.java
+@@ -28,7 +28,7 @@ class TcpTransportTest {
+ 
+         server.setListener(new Transport.Listener() {
+             @Override public void onConnected() { serverConnected.countDown(); }
+-            @Override public void onPacket(Packet p) { received.offer(p); }
++            @Override public void onPacket(Packet p) { if (!(p instanceof Packet.Hello)) received.offer(p); }
+             @Override public void onDisconnected(Throwable cause) {
+                 if (cause != null && !"socket closed".equalsIgnoreCase(cause.getMessage())) {
+                     failure.compareAndSet(null, cause);
+@@ -87,6 +87,39 @@ class TcpTransportTest {
+         }
+     }
+ 
++    @Test void debugTcpRejectsRemoteBinding() {
++        org.assertj.core.api.Assertions.assertThatThrownBy(
++            () -> new TcpTransport(TcpTransport.Role.SERVER, "0.0.0.0", 8765))
++            .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("loopback");
++    }
++
++    @Test void rapidStopRestartDoesNotLetOldRunCloseNewSession() throws Exception {
++        int port = findFreePort();
++        TcpTransport server = new TcpTransport(TcpTransport.Role.SERVER, "127.0.0.1", port);
++        TcpTransport client = new TcpTransport(TcpTransport.Role.CLIENT, "127.0.0.1", port);
++        BlockingQueue<Packet> received = new ArrayBlockingQueue<>(10);
++        BlockingQueue<Boolean> connected = new ArrayBlockingQueue<>(10);
++        server.setListener(new Transport.Listener() {
++            public void onConnected() {}
++            public void onPacket(Packet p) { if (!(p instanceof Packet.Hello)) received.offer(p); }
++            public void onDisconnected(Throwable cause) {}
++        });
++        client.setListener(new Transport.Listener() {
++            public void onConnected() { connected.offer(true); }
++            public void onPacket(Packet p) {}
++            public void onDisconnected(Throwable cause) {}
++        });
++        try {
++            server.start(); server.stop(); server.start(); // old accept finally may still be settling.
++            for (int attempt=0;attempt<3;attempt++) {
++                client.start(); assertThat(connected.poll(3,TimeUnit.SECONDS)).isTrue();
++                Packet.RouteStart route = new Packet.RouteStart(attempt+1,1,"Current generation");
++                client.send(route); assertThat(received.poll(3,TimeUnit.SECONDS)).isEqualTo(route);
++                client.stop();
++            }
++        } finally { client.stop(); server.stop(); }
++    }
++
+     private static int findFreePort() throws Exception {
+         try (ServerSocket s = new ServerSocket(0)) {
+             return s.getLocalPort();
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/SnippetImagePolicy.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/SnippetImagePolicy.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..3d205ed5fcae15551604039d1813ae4a2b71b1b1
+--- /dev/null
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/SnippetImagePolicy.java
+@@ -0,0 +1,41 @@
++package com.goodanser.osmglass.glass.livecard;
++
++/** Allocation-free format/dimension admission. Decoder still performs its own bounds validation. */
++public final class SnippetImagePolicy {
++    public static final int MAX_BYTES = 128 * 1024;
++    private SnippetImagePolicy() { }
++    public static boolean accepts(byte[] b) {
++        if (b == null || b.length < 24 || b.length > MAX_BYTES) return false;
++        if ((b[0]&255)==137 && b[1]==80 && b[2]==78 && b[3]==71 && b[4]==13 && b[5]==10
++                && b[6]==26 && b[7]==10 && be32(b,8)==13 && word(b,12,"IHDR")) {
++            return be32(b,16)==640 && be32(b,20)==360;
++        }
++        if (b.length < 30 || !word(b,0,"RIFF") || !word(b,8,"WEBP") || le32(b,4) != b.length-8) return false;
++        long size = le32(b,16);
++        if (size < 10 || size > b.length - 20) return false;
++        int width, height;
++        if (word(b,12,"VP8 ")) {
++            if (b[23]!=(byte)0x9d || b[24]!=1 || b[25]!=0x2a) return false;
++            width = ((b[26]&255) | (b[27]&255)<<8) & 0x3fff;
++            height = ((b[28]&255) | (b[29]&255)<<8) & 0x3fff;
++        } else if (word(b,12,"VP8X")) {
++            // Animation is not a supported navigation snippet.
++            if ((b[20]&2)!=0) return false;
++            width=1+le24(b,24); height=1+le24(b,27);
++        } else if (word(b,12,"VP8L")) {
++            if (b[20]!=0x2f) return false;
++            width=1+((b[21]&255)|((b[22]&0x3f)<<8));
++            height=1+(((b[22]&255)>>6)|((b[23]&255)<<2)|((b[24]&0x0f)<<10));
++        } else return false;
++        return width==640 && height==360;
++    }
++    private static boolean word(byte[] b,int o,String s) {
++        for (int i=0;i<4;i++) if ((b[o+i]&255)!=s.charAt(i)) return false;
++        return true;
++    }
++    private static long be32(byte[] b,int o) {
++        return ((long)(b[o]&255)<<24)|((long)(b[o+1]&255)<<16)|((long)(b[o+2]&255)<<8)|(b[o+3]&255);
++    }
++    private static long le32(byte[] b,int o) { return (b[o]&255)|((long)(b[o+1]&255)<<8)|((long)(b[o+2]&255)<<16)|((long)(b[o+3]&255)<<24); }
++    private static int le24(byte[] b,int o) { return (b[o]&255)|((b[o+1]&255)<<8)|((b[o+2]&255)<<16); }
++}
+diff --git a/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TrustedPhoneStore.java b/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TrustedPhoneStore.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..2e819d2b079e3198b1f2724075eba6ed357ebeff
+--- /dev/null
++++ b/glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TrustedPhoneStore.java
+@@ -0,0 +1,17 @@
++package com.goodanser.osmglass.glass.transport;
++
++import android.content.Context;
++import android.content.SharedPreferences;
++
++/** Owner-selected Bluetooth identity; no trust-on-first-connect or insecure fallback. */
++public final class TrustedPhoneStore {
++    public static final String KEY = "trusted_phone";
++    private TrustedPhoneStore() { }
++    public static SharedPreferences preferences(Context c) {
++        return c.getSharedPreferences("navigation_peer", Context.MODE_PRIVATE);
++    }
++    public static String selected(Context c) { return preferences(c).getString(KEY, ""); }
++    public static boolean admits(String selected, String remote, boolean bonded) {
++        return bonded && selected != null && !selected.isEmpty() && selected.equalsIgnoreCase(remote);
++    }
++}
+diff --git a/protocol/HANDOFF.md b/protocol/HANDOFF.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f7f35399b2a3d88e97bd147166e2d514fdea84d7
+--- /dev/null
++++ b/protocol/HANDOFF.md
+@@ -0,0 +1,26 @@
++# Protocol v2 adapter handoff (2026-10-29)
++
++Native collaboration message relay returned `Native hook relay unavailable`; this file records the coordinated API so transport owners can integrate against actual sources.
++
++```java
++FrameWriter sessionWriter = new FrameWriter(socket.getOutputStream(), () -> closeExactRawSocket(socket), 10000);
++FrameReader reader = sessionWriter.handshake(socket.getInputStream());
++// handshake sends v2 Hello, waits under its own absolute deadline, binds both fresh challenge nonces.
++listener.onConnected();
++listener.onPacket(new Packet.Hello(Codec.PROTO_VERSION)); // consumed Hello, notify dispatcher after reset
++// Only now start keepalive and normal read loop. No extra Hello write.
++```
++
++Alternative low-level APIs: writer.getEpoch(); new FrameReader(input,writer.getEpoch()); writer.write(Hello(v2)); reader.readNext() must be Hello; writer.bindPeerEpoch(reader.getPeerEpoch()). Low-level handshake needs its own independent raw-close deadline. The one-arg FrameReader is deliberately unbound and rejects connection frames. Header is31 bytes: magic/version/type/length/senderEpoch64/seq64/recipientEpoch64. Initial Hello has seq0,recipient0; all later frames echo peer's fresh challenge and strictly increment sequence. A whole recorded session cannot replay on a fresh reader's different local challenge. This framing is not authentication; secure bonded peer-bound transport remains required.
++
++Packet.Progress adds11th `fixAgeMs` argument; old overloads default Integer.MAX_VALUE (unknown/stale); FRESH_FIX_MAX_AGE_MS=10000. Distances/ETA are signed-positive32-bit up to2,147,483,647, with -1 unknown only for progress metric fields. TurnBundle cumulative distance never negative. STRAIGHT/ROUNDABOUT kinds added; exit details travel in localized instructionText. Compressed image256KiB cap, payload320KiB, text1024 UTF-8 bytes strict; reject v1/partial/trailing/malformed payload. Wake config0 normalizes15sec, max60sec.
++
++No device or phone Gradle task run by protocol owner. Root wrapper invoked only outer protocol:test/glass-app:assembleDebug. Tests/run results will be appended before final handoff.
++
++## Observed protocol verification
++
++`../scripts/build-glass.sh` completed successfully (outer modules only) after these repairs:53 discovered,52 passed,1 opt-in emulator case skipped; zero failures/errors. Production FrameReader tests cover mandatory Hello, fresh local challenge, recorded whole-session rejection after reconnect, wrong epochs/reordered/duplicate sequences, exact truncation boundaries and chunked input. Production FrameWriter tests use a deliberately blocked OutputStream whose raw-close callback releases a successful late write: deadline still fails, exact callback once, future writes rejected. Silent handshake expires independently. Keepalive ping sender is separately latched: watchdog still fires. TCP loopback test performs real symmetric challenge handshake and sends100 packets. No radio/API19 optical or installed phone proof.
++
++Main wrapper assembled the Glass debug APK concurrently against sibling changes; final artifact hashes/review belong to root integration and should be regenerated after all owners settle. No phone Gradle was invoked.
++
++Final observed run also covers queue residence added by actual FrameWriter, slow-frame transfer age added by actual FrameReader, loopback-only TCP rejection, and rapid stop/restart generation ownership. All53 cases settled with52 PASS/1 SKIP/0 failures. `git diff --check -- protocol` passed. Protocol owner is finished; no active command processes remain.
+diff --git a/protocol/src/test/java/com/goodanser/osmglass/protocol/SafetyV2Test.java b/protocol/src/test/java/com/goodanser/osmglass/protocol/SafetyV2Test.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..a38240c6ccc4852667e79b97d4f5223b6fb37971
+--- /dev/null
++++ b/protocol/src/test/java/com/goodanser/osmglass/protocol/SafetyV2Test.java
+@@ -0,0 +1,126 @@
++package com.goodanser.osmglass.protocol;
++
++import org.junit.jupiter.api.Test;
++import java.io.*;
++import java.util.*;
++import java.util.concurrent.*;
++import java.util.concurrent.atomic.*;
++import static org.assertj.core.api.Assertions.*;
++
++class SafetyV2Test {
++    @Test void preservesLongTripBoundariesAndUnknowns() throws Exception {
++        for(int distance:new int[]{65_534,65_535,65_536,70_000,300_000,Integer.MAX_VALUE,-1}) {
++            Packet.Progress p=new Packet.Progress(1,0,distance,(short)0,0,distance,100_000,-1,-1,-1,250);
++            Packet.Progress decoded=(Packet.Progress)Codec.decode(Codec.encode(p));
++            assertThat(decoded).isEqualTo(p);assertThat(decoded.fixAgeMs).isEqualTo(250);
++        }
++        for(TurnKind kind:new TurnKind[]{TurnKind.STRAIGHT,TurnKind.ROUNDABOUT}) {
++            Packet p=new Packet.TurnBundle(1,0,kind,300_000,"Кольцо: пятый съезд",new byte[0]);
++            assertThat(Codec.decode(Codec.encode(p))).isEqualTo(p);
++        }
++    }
++    @Test void unknownConstructorFreshnessIsFailClosed() throws Exception {
++        Packet.Progress p=new Packet.Progress(1,0,0,(short)0,0,0,0);
++        assertThat(p.fixAgeMs).isGreaterThan(Packet.Progress.FRESH_FIX_MAX_AGE_MS);
++        assertThat(Codec.decode(Codec.encode(p))).isEqualTo(p);
++    }
++    @Test void rejectsInvalidRangesInsteadOfMasking() {
++        Packet[] bad={
++            new Packet.RouteStart(-1,1,"x"),new Packet.RouteStart(1,65536,"x"),
++            new Packet.TurnBundle(1,0,TurnKind.TR,-1,"x",new byte[0]),
++            new Packet.TurnBundle(1,0,TurnKind.TR,0,"x",new byte[Codec.MAX_IMAGE_LEN+1]),
++            new Packet.Progress(1,0,-2,(short)0,0,0,0),
++            new Packet.Progress(1,0,0,(short)0,0,0,0,640,0,0,0),
++            new Packet.Progress(1,0,0,(short)0,0,0,0,0,-1,0,0),
++            new Packet.Progress(1,0,0,(short)0,0,0,0,-1,-1,36000,0),
++            new Packet.Hello(1)};
++        for(Packet p:bad) assertThatThrownBy(() -> Codec.encode(p)).isInstanceOf(IllegalArgumentException.class);
++    }
++    @Test void rejectsTrailingBytesEveryPayloadAndEveryTruncation() throws Exception {
++        Packet[] packets={new Packet.Hello(2),new Packet.RouteStart(1,1,"x","start"),
++            new Packet.TurnBundle(1,0,TurnKind.TR,5,"x",new byte[3]),
++            new Packet.Progress(1,0,1,(short)0,0,1,1),
++            new Packet.DisplayConfig(Packet.DisplayConfig.Field.NONE,Packet.DisplayConfig.Field.NONE,
++                Packet.DisplayConfig.Field.NONE,Packet.DisplayConfig.Field.NONE),
++            new Packet.TurnAlert(1,0),new Packet.RouteEnd(1,Packet.RouteEnd.Reason.CANCELLED),new Packet.Ping(1),new Packet.Pong(1)};
++        for(Packet p:packets) {
++            byte[] frame=Codec.encode(p), payload=Arrays.copyOfRange(frame,Codec.FRAME_HEADER_LEN,frame.length);
++            byte[] extra=Arrays.copyOf(payload,payload.length+1);
++            assertThatThrownBy(() -> Codec.decodePayload(p.type(),extra)).isInstanceOf(ProtocolException.class);
++            for(int n=0;n<payload.length;n++) {
++                byte[] truncated=Arrays.copyOf(payload,n);
++                assertThatThrownBy(() -> Codec.decodePayload(p.type(),truncated)).isInstanceOf(ProtocolException.class);
++            }
++        }
++    }
++    @Test void rejectsMalformedUtf8AndPayloadAllocation() throws Exception {
++        byte[] payload={0,0,0,1,0,1,0,2,(byte)0xc3,0x28,0,0};
++        assertThatThrownBy(() -> Codec.decodePayload(PacketType.ROUTE_START,payload)).isInstanceOf(ProtocolException.class);
++        assertThatThrownBy(() -> Codec.decodePayload(PacketType.PING,new byte[Codec.MAX_PAYLOAD_LEN+1]))
++            .isInstanceOf(ProtocolException.class);
++    }
++    @Test void blockedActualWriteIsClosedByIndependentDeadlineAndNeverAdmitsAgain() throws Exception {
++        CountDownLatch entered=new CountDownLatch(1),closed=new CountDownLatch(1);
++        AtomicInteger closes=new AtomicInteger();
++        OutputStream blocked=new OutputStream(){
++            @Override public void write(int b) throws IOException {
++                entered.countDown();
++                try { if(!closed.await(2,TimeUnit.SECONDS))throw new AssertionError("watchdog absent"); }
++                catch(InterruptedException e){throw new IOException(e);}
++                // Deliberately successful late native write: writer must still report deadline failure.
++            }
++        };
++        FrameWriter writer=new FrameWriter(blocked,()->{closes.incrementAndGet();closed.countDown();},75);
++        ExecutorService pool=Executors.newSingleThreadExecutor();
++        try {
++            Future<?> result=pool.submit(()->{assertThatThrownBy(()->writer.write(new Packet.Hello(2)))
++                .isInstanceOf(IOException.class).hasMessageContaining("deadline");});
++            assertThat(entered.await(1,TimeUnit.SECONDS)).isTrue();
++            result.get(2,TimeUnit.SECONDS);assertThat(closes.get()).isEqualTo(1);
++            assertThatThrownBy(()->writer.write(new Packet.Hello(2))).isInstanceOf(IOException.class).hasMessageContaining("revoked");
++            FrameWriter fresh=new FrameWriter(new ByteArrayOutputStream());fresh.write(new Packet.Hello(2));
++        } finally {pool.shutdownNow();}
++    }
++    @Test void silentHandshakeHasIndependentDeadline() throws Exception {
++        CountDownLatch closed=new CountDownLatch(1);
++        InputStream silent=new InputStream(){public int read() throws IOException {
++            try {if(!closed.await(2,TimeUnit.SECONDS))throw new AssertionError("handshake deadline absent");}
++            catch(InterruptedException e){throw new IOException(e);}return -1;
++        }};
++        FrameWriter writer=new FrameWriter(new ByteArrayOutputStream(),closed::countDown,75);
++        assertThatThrownBy(()->writer.handshake(silent)).isInstanceOf(IOException.class);
++        assertThat(closed.getCount()).isZero();
++    }
++
++    @Test void actualWriterAddsQueueResidenceToFixAge() throws Exception {
++        ByteArrayOutputStream output = new ByteArrayOutputStream();
++        FrameWriter writer = new FrameWriter(output);
++        writer.write(new Packet.Hello(2)); writer.bindPeerEpoch(17);
++        Packet.Progress queued = new Packet.Progress(1,0,100,(short)0,0,100,50,-1,-1,-1,500);
++        Thread.sleep(60);
++        writer.write(queued);
++        FrameReader reader = new FrameReader(new ByteArrayInputStream(output.toByteArray()),17);
++        reader.readNext();
++        Packet.Progress received = (Packet.Progress) reader.readNext();
++        assertThat(received.fixAgeMs).isGreaterThanOrEqualTo(550);
++    }
++
++    @Test void actualReaderAddsSlowFrameTransferToFixAge() throws Exception {
++        ByteArrayOutputStream output = new ByteArrayOutputStream();
++        output.write(Codec.encode(new Packet.Hello(2),11,0,0));
++        output.write(Codec.encode(new Packet.Progress(1,0,100,(short)0,0,100,50,-1,-1,-1,500),11,1,17));
++        InputStream slow = new ByteArrayInputStream(output.toByteArray()) {
++            private boolean delayed;
++            @Override public synchronized int read(byte[] b,int off,int len) {
++                if (!delayed && pos > Codec.FRAME_HEADER_LEN+2) {
++                    delayed=true;
++                    try {Thread.sleep(60);}catch(InterruptedException e){Thread.currentThread().interrupt();}
++                }
++                return super.read(b,off,len);
++            }
++        };
++        FrameReader reader = new FrameReader(slow,17); reader.readNext();
++        Packet.Progress received=(Packet.Progress)reader.readNext();
++        assertThat(received.fixAgeMs).isGreaterThanOrEqualTo(550);
++    }
++}

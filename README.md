@@ -6,9 +6,33 @@
 
 Built and developed by **Ivan Shpak**. Based on **OpenClaw**, with a maintained local runtime customization, a dedicated continuity system and native applications for **Google Glass XE24** and **Pixel 7**.
 
-[The assistant](docs/FRANZISKA.md) · [Architecture](docs/ARCHITECTURE.md) · [OpenClaw engineering](docs/OPENCLAW.md) · [Glass & Pixel](docs/WEARABLE.md) · [In operation](docs/STATUS.md) · [Credits](docs/CREDITS.md)
+[Get started](docs/GETTING_STARTED.md) · [Source release](https://github.com/JohnnyStarling/franziska-glass/releases/tag/v2026.11.06) · [The assistant](docs/FRANZISKA.md) · [Architecture](docs/ARCHITECTURE.md) · [OpenClaw engineering](docs/OPENCLAW.md) · [Glass & Pixel](docs/WEARABLE.md) · [In operation](docs/STATUS.md) · [Credits](docs/CREDITS.md)
 
 ---
+
+## Run your own instance
+
+This is a **source-focused community release**. Start with the portable continuity tools, build the native companion applications, or reconstruct the pinned OpenClaw/navigation sources with the included patches.
+
+```sh
+git clone https://github.com/JohnnyStarling/franziska-glass.git
+cd franziska-glass
+python3 scripts/init-workspace.py --workspace "$HOME/franziska-workspace"
+python3 "$HOME/franziska-workspace/continuity/recall.py" "example project" --json
+```
+
+That first step needs Python 3.11+ and creates only a new user-owned workspace. The full [getting-started guide](docs/GETTING_STARTED.md) covers model setup, application builds, signing, installation and fresh pairing.
+
+| Included source | Entry point |
+| --- | --- |
+| Continuity search and OpenClaw plugin | [components/continuity](components/continuity/README.md) |
+| Separate Glass and Pixel source trees | [assistant/BUILDING.md](assistant/BUILDING.md) |
+| Public-only pairing and setup tools | [assistant/SETUP.md](assistant/SETUP.md) |
+| Pinned OpenClaw / navigation patches | [docs/UPSTREAM_BUILD.md](docs/UPSTREAM_BUILD.md) |
+| Generic identity and memory templates | [templates/workspace](templates/workspace) |
+| Upstream source/provenance lock | [source-components.json](source-components.json) |
+
+You supply your own accounts, model access, network route and device identities. Prebuilt navigation APKs are not part of this source release; its upstream components and artwork keep their own licenses. [Release notes](RELEASE_NOTES.md) distinguish source/build verification from user hardware setup.
 
 ## 01 / The project
 
@@ -20,7 +44,7 @@ OpenClaw provides the foundation. Our work includes changes to its voice and age
 
 ## 02 / System structure
 
-<img src="assets/system-architecture.svg" alt="Franziska architecture: interfaces, Pixel bridge, OpenClaw main agent and realtime relay, memory, tools and voice provider" width="100%">
+<img src="assets/system-architecture.svg" alt="Franziska architecture: interfaces, Pixel bridge, OpenClaw main agent and realtime relay, memory, tools and voice provider" width="720">
 
 | Layer | Responsibility |
 | --- | --- |
@@ -32,7 +56,9 @@ OpenClaw provides the foundation. Our work includes changes to its voice and age
 | **Glass application** | Microphone and playback, conversation display, status, gestures and camera-related interaction. |
 | **Navigation** | Phone-side OsmAnd routing with Bluetooth guidance on Glass through OsmGlass. |
 
-The main agent and durable context remain on the Mac running OpenClaw. The phone is a companion and media bridge; it does not become a second independent assistant. Navigation is a separate phone-to-Glass path and does not require the Mac.
+The Mac hosts the agent runtime and durable context; its configured model backend supplies inference. The phone is a companion and media bridge; it does not become a second independent assistant. Navigation is a separate phone-to-Glass path and does not require the Mac.
+
+[Open the full-size architecture diagram](assets/system-architecture.svg).
 
 ## 03 / From a question to an action
 
@@ -61,6 +87,16 @@ This separation matters. A microphone stream, an accepted task, a completed agen
 
 The [OpenClaw engineering chapter](docs/OPENCLAW.md) explains the mechanisms and the boundary between upstream infrastructure and our local work. The [wearable chapter](docs/WEARABLE.md) covers the device path and navigation.
 
+### What the integration changes for the user
+
+| Situation | Mechanism |
+| --- | --- |
+| Stop is requested during a long task | A server-owned control path addresses the captured task without waiting behind its consultation. |
+| An old result arrives after a new turn | Session, request and generation ownership prevent it from becoming the successor's response. |
+| A photo is asked about during Talk | Image submission, agent final/history receipt and text return are linked to the same owned interaction. |
+| The phone's local address changes | Endpoint discovery finds a candidate; the established peer identity still decides whether it is accepted. |
+| An earlier project decision matters | Source-grounded recall retrieves the relevant record and evidence for the main agent. |
+
 ## 05 / Memory is part of the architecture
 
 A conversation transcript records what was said. A project record states what matters now. A handoff states what the next run needs. An index makes those sources retrievable. Franziska uses these as distinct layers rather than treating the current model context window as the entire memory system.
@@ -79,4 +115,4 @@ Glass makes the assistant available through voice and short visible text. Pixel 
 
 **Project and integration:** Ivan Shpak. **Foundation:** OpenClaw and configured AI models. **Navigation:** OsmAnd / OsmGlass and OpenStreetMap data.
 
-This repository is the technical presentation of the project. Application source and deployment material are maintained separately. See [credits and provenance](docs/CREDITS.md).
+Original first-party code, documentation and SVG artwork are MIT-licensed. OpenClaw and navigation keep their respective component licenses; see [licensing](LICENSE), [credits](docs/CREDITS.md) and [contribution guide](CONTRIBUTING.md). Personal records and production deployment material are not included.

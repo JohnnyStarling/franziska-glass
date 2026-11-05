@@ -1,0 +1,23 @@
+FRANZISKA — COMPONENT LICENSE INDEX
+
+This repository contains components under different licenses. There is no
+blanket MIT grant over navigation forks, third-party libraries or resources.
+
+Original first-party assistant code, continuity code, templates, documentation
+and original SVG artwork: MIT; see LICENSE-MIT and assistant/LICENSE.
+
+OpenClaw delta: distributed compatibly with OpenClaw's MIT license; retain
+LICENSES/openclaw notices and the source tree's existing third-party notices.
+
+Navigation deltas and reconstructed sources: the upstream GPL terms and
+file-level notices apply. OsmGlass is GPL-3.0; OsmAnd code is GPL-3.0-or-later
+with separate resource/library exceptions. Native core and resources retain
+their own applicable licenses. See LICENSES/README.md, LICENSES/index.json,
+source-components.json and the complete license texts.
+
+Fetched build/runtime dependencies retain their declared upstream licenses.
+The assistant's dependency notices are in assistant/THIRD_PARTY_NOTICES.md.
+
+See THIRD_PARTY_NOTICES.md for the repository-wide component map. Names and
+credits do not replace license grants. No existing navigation APK is
+redistributed by this source-focused release.

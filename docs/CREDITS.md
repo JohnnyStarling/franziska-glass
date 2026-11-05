@@ -33,8 +33,9 @@ The deployed navigation release includes local repairs and selected compatible u
 
 - **`assets/franziska-glass.svg`** — original monochrome editorial cover.
 - **`assets/system-architecture.svg`** — original architecture diagram, showing principal ownership and transport links.
+- **`assets/glass-status.png`** — unchanged 26 October 2026 framebuffer capture of the assistant's own idle status display.
 - **`assets/navigation-left.png` / `assets/navigation-right.png`** — unchanged 30 October 2026 framebuffer captures from real Glass during native route simulation. The Russian text belongs to the captured application UI. Navigation UI: OsmAnd/OsmGlass; map: © OpenStreetMap contributors.
 
 The captures are dated engineering material. The diagrams describe the system; they are not photographs of a running interface.
 
-Application source and packaged binaries are maintained separately from this technical presentation. Independent project, not affiliated with Google. Third-party names belong to their respective owners.
+The repository distributes original first-party source and pinned patch sets with a component license index. Runtime dependencies are fetched from their declared upstreams. The source release does not redistribute the existing navigation APK and its bundled third-party assets/native libraries. Independent project, not affiliated with Google. Third-party names belong to their respective owners.

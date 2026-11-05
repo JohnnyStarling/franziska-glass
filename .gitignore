@@ -12,3 +12,24 @@
 node_modules/
 build/
 private/
+
+# Local development and personal generated state
+__pycache__/
+*.pyc
+*.class
+*.dex
+*.sqlite
+*.sqlite-*
+*.db
+.venv/
+.gradle/
+.cache/
+dist/
+workspaces/
+**/SEMANTIC_INDEX.json
+
+# Optional developer navigation downloads are local inputs, not release source.
+local-phone-inputs/
+*.aar
+*.obf
+*.ocbf

@@ -1,0 +1,164 @@
+{
+  "release": "v2026.11.06",
+  "scope": "source/developer edition; unsigned reference builds not distributed",
+  "assistant": {
+    "glass": {
+      "role": "glass",
+      "apk": "candidate-unsigned.apk",
+      "bytes": 628923,
+      "sha256": "f94a75b5ce21515109efe4eded7fdc98c284cd3e7f01b4550d9b646a46b0b411",
+      "package": "lab.franziska.glass",
+      "version_code": "56",
+      "version_name": "0.6.19-route",
+      "min_sdk": "15",
+      "target_sdk": "36",
+      "debuggable": true,
+      "permissions": [
+        [
+          "android.permission.ACCESS_NETWORK_STATE",
+          null
+        ],
+        [
+          "android.permission.ACCESS_WIFI_STATE",
+          null
+        ],
+        [
+          "android.permission.CAMERA",
+          null
+        ],
+        [
+          "android.permission.CHANGE_WIFI_STATE",
+          null
+        ],
+        [
+          "android.permission.INTERNET",
+          null
+        ],
+        [
+          "android.permission.READ_EXTERNAL_STORAGE",
+          null
+        ],
+        [
+          "android.permission.RECEIVE_BOOT_COMPLETED",
+          null
+        ],
+        [
+          "android.permission.RECORD_AUDIO",
+          null
+        ],
+        [
+          "android.permission.WRITE_EXTERNAL_STORAGE",
+          "28"
+        ],
+        [
+          "com.google.android.glass.permission.DEVELOPMENT",
+          null
+        ]
+      ],
+      "dex_count": 1,
+      "dex_sha256": "ec86546961f8b4c5ad90247f6c4ad2447a9ae79ded8d710820e1a75622d1972b",
+      "dex_classes": 857,
+      "shaded_bc_classes": 574,
+      "runtime_notice_sha256": "175003285bd49eae9d0930b969c78410284d0db573ae19b07cb4684991e329a9",
+      "mapping_sha256": "1b4d5c7cd7ea8a9fc94fb405efba2171cf8743ad031f03231fc45fe2b7d152fc",
+      "aligned": true,
+      "unsigned": true,
+      "native_libraries": 0,
+      "relocation_checks": "PASS",
+      "device_verification": "NOT_PERFORMED"
+    },
+    "pixel": {
+      "role": "pixel",
+      "apk": "candidate-unsigned.apk",
+      "bytes": 706996,
+      "sha256": "4c76b2b94af30964446187bb68ef946935158c97c4d2555b4e9ebd425961f154",
+      "package": "lab.franziska.pixelbridge",
+      "version_code": "50",
+      "version_name": "0.6.12-route",
+      "min_sdk": "23",
+      "target_sdk": "36",
+      "debuggable": true,
+      "permissions": [
+        [
+          "android.permission.ACCESS_FINE_LOCATION",
+          null
+        ],
+        [
+          "android.permission.ACCESS_NETWORK_STATE",
+          null
+        ],
+        [
+          "android.permission.BLUETOOTH",
+          "30"
+        ],
+        [
+          "android.permission.BLUETOOTH_CONNECT",
+          null
+        ],
+        [
+          "android.permission.CALL_PHONE",
+          null
+        ],
+        [
+          "android.permission.CAMERA",
+          null
+        ],
+        [
+          "android.permission.CHANGE_NETWORK_STATE",
+          null
+        ],
+        [
+          "android.permission.FOREGROUND_SERVICE",
+          null
+        ],
+        [
+          "android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE",
+          null
+        ],
+        [
+          "android.permission.FOREGROUND_SERVICE_LOCATION",
+          null
+        ],
+        [
+          "android.permission.INTERNET",
+          null
+        ],
+        [
+          "android.permission.READ_CALENDAR",
+          null
+        ],
+        [
+          "android.permission.RECEIVE_BOOT_COMPLETED",
+          null
+        ],
+        [
+          "android.permission.RECORD_AUDIO",
+          null
+        ]
+      ],
+      "dex_count": 1,
+      "dex_sha256": "4ac66650c267269380ded30e00dc6d7ca8574d20b71ba9b583c1c8737a933194",
+      "dex_classes": 1014,
+      "shaded_bc_classes": 573,
+      "runtime_notice_sha256": "175003285bd49eae9d0930b969c78410284d0db573ae19b07cb4684991e329a9",
+      "mapping_sha256": "bc1ad3faa53502795f4e4e65b29a7fe400b934858e810aa5dd6550c285b6a226",
+      "aligned": true,
+      "unsigned": true,
+      "native_libraries": 0,
+      "relocation_checks": "PASS",
+      "device_verification": "NOT_PERFORMED"
+    }
+  },
+  "tests": {
+    "assistant_host": 20,
+    "continuity_python": 5,
+    "continuity_plugin_node": 4
+  },
+  "upstream_source_reconstruction": {
+    "components": 5,
+    "changed_files_verified": 108,
+    "native_source_files_verified": 12848,
+    "navigation_build_verified": false
+  },
+  "private_deployment_changed": false
+}

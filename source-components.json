@@ -1,0 +1,1283 @@
+{
+  "build_verified": false,
+  "components": [
+    {
+      "base_commit": "1306cc5e4be6a1e4153870759505ea8c26bbacfc",
+      "base_tree": "ade54514a04a469ff7d7e620a9affa16051cc7c5",
+      "changed_files_sha256": "2fdc9e50c0fad1b88ea015196fb3aca31434f9f4d24364b6a7dd16625d6ef392",
+      "destination": "openclaw",
+      "files": [
+        {
+          "bytes": 29889,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "docs/gateway/protocol/rpc-talk-config-and-agents.md",
+          "sha256": "5f95715bdff692bac91844513d6268b543b901d62e4c340e8e41e6b790094a7a"
+        },
+        {
+          "bytes": 17974,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "extensions/google/realtime-voice-consult-serialization.test.ts",
+          "sha256": "30041557eef2c3e766829d6d154274009df64a72f84e2d5a80abdf2c14da8064"
+        },
+        {
+          "bytes": 6491,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "extensions/google/realtime-voice-model-contract.ts",
+          "sha256": "58620e7b9ba93a83f5232406c59e956897710e3814d699efa4854ee7741c6383"
+        },
+        {
+          "bytes": 47930,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "extensions/google/realtime-voice-provider.test.ts",
+          "sha256": "028a487903f39545b76182fe051b036a4d5a493f0eee83ae22aeea5a491d44a0"
+        },
+        {
+          "bytes": 49203,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "extensions/google/realtime-voice-provider.ts",
+          "sha256": "ff45c250305a35a9d4881eb4ea6ef397bcf5b0b2d44b0ffa58d26f6214239223"
+        },
+        {
+          "bytes": 99098,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/compiled/protocol.generated/predicates.d.ts",
+          "sha256": "a3dfed553dde448b778435c90d126d1434b3259d2b5ac3327bd835c2ea1ddf0d"
+        },
+        {
+          "bytes": 1036762,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/compiled/protocol.generated/predicates.js",
+          "sha256": "976de5aef7e5eea8bb9c8bf8a51b6a895e5501baa3dae42d2c9dcc7984c3442e"
+        },
+        {
+          "bytes": 1977,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/compiled/protocol.generated/validators-integrations.d.ts",
+          "sha256": "f45abe44f700daa82d3ffc9394e27c363035a7ff30dc05f53458415e733c7da0"
+        },
+        {
+          "bytes": 1977,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/compiled/protocol.generated/validators-integrations.js",
+          "sha256": "f45abe44f700daa82d3ffc9394e27c363035a7ff30dc05f53458415e733c7da0"
+        },
+        {
+          "bytes": 17277,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/public-schema.ts",
+          "sha256": "5e29059dc75d18fd4c7c3692db5722cd1b2e97200c7d3e2e9ec0aab5d3bee0bc"
+        },
+        {
+          "bytes": 27232,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/schema/channels.ts",
+          "sha256": "31d382e7bd4a46aaab65ef6143d891c337d5f09955f8b8480db99f02c0ce771c"
+        },
+        {
+          "bytes": 10122,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "packages/gateway-protocol/src/validators/integrations.ts",
+          "sha256": "659cd95c76ca36fc07a075d8dbf7fd14f34dcb0c3f7bbc6f064c9a7335e55fdb"
+        },
+        {
+          "bytes": 13920,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/daemon/service-process-membership.test.ts",
+          "sha256": "409227d42dd50c3d6dd53f0e024a7f387f0ae9d349142de290f8aa500ab51d6f"
+        },
+        {
+          "bytes": 10496,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/daemon/service-process-membership.ts",
+          "sha256": "a1689b7b427b96d16e50d081781531805b4513afa9c318895a3ac8a3bbf13a10"
+        },
+        {
+          "bytes": 47867,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/methods/core-descriptors.ts",
+          "sha256": "f318b486506aebf66b91a5f6cfd63b7f36dae37940ce2c9c79dbe5a822acba31"
+        },
+        {
+          "bytes": 3356,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/server-methods-list.test.ts",
+          "sha256": "965109101233a95e82143b6e450aef2faf702eb0221716c19b97259174b4c6a9"
+        },
+        {
+          "bytes": 9953,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/session-method-policy.ts",
+          "sha256": "40e93271938e66fd96d9fbda9ad64244852a871097c8e2a4cd576874314adc1c"
+        },
+        {
+          "bytes": 12983,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/session-sharing-target-input.ts",
+          "sha256": "fcfe39d2f3a293c5eee3af3d0f5af5cbc930467cb942c16802168aea65a2508a"
+        },
+        {
+          "bytes": 7422,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/handlers/session-send-text.test.ts",
+          "sha256": "9afb1605ec82986035a5b0b5eadd1562cf905c6d53587cdfb349795e87cc07b0"
+        },
+        {
+          "bytes": 26585,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/handlers/session.ts",
+          "sha256": "436f042dd3f433362bbb2008a3679264318df1596d432726c0152d41428c674b"
+        },
+        {
+          "bytes": 12659,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/agent-consult.ts",
+          "sha256": "bb70a3ce388aeea3d04abcfe656185bc4e9e073f1ca7ebefaddc284442e5e4f1"
+        },
+        {
+          "bytes": 1413,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/agent-control.ts",
+          "sha256": "6d18bc069b5edc6d5a9ffbfc42c7a4c973e78ac695feacf4772ce57b9c1443e6"
+        },
+        {
+          "bytes": 14642,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/forced-consults.ts",
+          "sha256": "1fe3f0a0d5b9d8ecb9f6b9f09cbbac01246d584fb5e04a7dbe1b1046ece638d8"
+        },
+        {
+          "bytes": 139694,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/index.test.ts",
+          "sha256": "dc097a6a9f42ef111c68e36973372c60a6bf06b0fea5be4fa13bdd9254193440"
+        },
+        {
+          "bytes": 26120,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/operations.ts",
+          "sha256": "31c70c4b2ca8de25140640be1d7397d9616092a316932f96934e81876e964564"
+        },
+        {
+          "bytes": 2319,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/output-ownership.test.ts",
+          "sha256": "fc3647a8425d910f3fcfc44143104a34bd79309e9e8a19981852054425a526c4"
+        },
+        {
+          "bytes": 6783,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/provider-results.ts",
+          "sha256": "67c9e8cb8b723d896bea8d9860e3ba0009090cecd7a96a78e69b390a338fb732"
+        },
+        {
+          "bytes": 25475,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/session-create.ts",
+          "sha256": "8a8c468d3ce99337e33ea4776fd0eff8468a8f6dea070e9f71fe3b127145a204"
+        },
+        {
+          "bytes": 23818,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/state.ts",
+          "sha256": "3121f1c698edabe869b38f6ea52df9a0de6e959dfd9ac940cafed5daf12bbfbb"
+        },
+        {
+          "bytes": 3798,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/tool-call-ledger.test.ts",
+          "sha256": "b4eaf19b0eddc9c492944b8d832ec865eaad07bee3b703ec316f28c94c02fa25"
+        },
+        {
+          "bytes": 5016,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "src/gateway/talk/relay/tool-call-ledger.ts",
+          "sha256": "0d0394132fd96f52c926112c124e4dc51fdf8a22efac338d7c4779b680598a05"
+        },
+        {
+          "bytes": 42437,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "test/vitest/vitest.gateway-server-paths.mjs",
+          "sha256": "8686002abf91e87f00e11c0ac57eb0495b77dec15ce1424b8e74ce0c1e02fa91"
+        },
+        {
+          "bytes": 398,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "vitest.consult-fix.config.ts",
+          "sha256": "b0c2e551fe2b1d7b3cef9ccf8133e35ae113703039a88fcc83c85d3dd92a5652"
+        }
+      ],
+      "id": "openclaw",
+      "license": "MIT",
+      "local_content_commit": "5c73cf2b31264d3650a67d0419a8a69921d9d5ca",
+      "patch": {
+        "bytes": 1086729,
+        "path": "patches/openclaw-franziska.patch",
+        "sha256": "2ee5f8edfa89aa162aeda0e9cd0954e146233f9d0035dd8e901a0a9e3bb0d674"
+      },
+      "repository": "https://github.com/openclaw/openclaw.git",
+      "source_snapshot": {
+        "archive_asset": "openclaw-source.tar.gz",
+        "asset_state": "release asset uploaded and SHA256 verified",
+        "bytes": 195786514,
+        "download_url": "https://github.com/JohnnyStarling/franziska-glass/releases/download/v2026.11.06/openclaw-source.tar.gz",
+        "file_manifest": "patches/manifests/snapshots/openclaw-files.json",
+        "file_manifest_sha256": "153d0e1abb7c7004a7fc9e3d446d4d427e2090336492865ec819866edab709a4",
+        "files": 62726,
+        "omitted": 1,
+        "release_tag": "v2026.11.06",
+        "sha256": "caa1dade5640c92c4187f44b33bfa1635896f2e67cb996bb18d4f09c0b00405f"
+      }
+    },
+    {
+      "base_commit": "13626781089e6f22862395483430a89db98b6ae4",
+      "base_tree": "1ca047ebdec30368b33210f86a01dded6a2e7f9a",
+      "changed_files_sha256": "1c98e394452dd3b6ee45b0ebb020e5c614068dfa3a0eae8becebc2781a50cd5a",
+      "destination": "navigation/osmglass",
+      "files": [
+        {
+          "bytes": 1735,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/build.gradle.kts",
+          "sha256": "2d1f3a5f9db5077942f252de750bded8c7461b89b5e0e70f02ed91d710a71ae7"
+        },
+        {
+          "bytes": 2079,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/LauncherActivity.java",
+          "sha256": "d3d77128052fe327bcba29e7c20e7d938174d113b5b68c032a9c408a93e84823"
+        },
+        {
+          "bytes": 1233,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/MenuActivity.java",
+          "sha256": "b6e8afb87d33bbe817388145101cfda6154acf63cda242e758dabdde7a62b5d5"
+        },
+        {
+          "bytes": 32387,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/NavLiveCardService.java",
+          "sha256": "c6d6f60cd09439d94f0005f58424f5e65df189b1a27c54ebf934ff7bdb995088"
+        },
+        {
+          "bytes": 10661,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/PacketDispatcher.java",
+          "sha256": "a4a618438d02de66e783b0192e0235053a675b76c26000515c8258a80a4fedc0"
+        },
+        {
+          "bytes": 2152,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/SnippetImagePolicy.java",
+          "sha256": "9163c392648f9757acf84a89462a39447c6632706e04eb444f640d48c3569b1f"
+        },
+        {
+          "bytes": 4756,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/livecard/TtsSpeaker.java",
+          "sha256": "542b68d5b589d5f06dad58cfc85b0a37e1bb7c27b281f16381b685227addb6c6"
+        },
+        {
+          "bytes": 7118,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/transport/RfcommServerTransport.java",
+          "sha256": "7a4c6a16c885638c6773e1c06049178090e789011361a31bf0aec20d10121195"
+        },
+        {
+          "bytes": 2544,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TransportFactory.java",
+          "sha256": "476aa8547cc8ff0352a2501f31c3a1a99029841317a7b692d8116cec2b67dd80"
+        },
+        {
+          "bytes": 775,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/java/com/goodanser/osmglass/glass/transport/TrustedPhoneStore.java",
+          "sha256": "135849e47ad77d4324e2ee6d81cf8540d94fdb2332ff0225957eaa64a395b75f"
+        },
+        {
+          "bytes": 7116,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/res/layout/livecard_nav.xml",
+          "sha256": "15d2e8f89b37742bf72f2c5970a9ed1e65a0e2594e15c4b2fecb69e107b69efd"
+        },
+        {
+          "bytes": 734,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "glass-app/src/main/res/values/strings.xml",
+          "sha256": "b52ba209ce89adb0380236db8685c211dfe730b1a728cc378b45b71cecc01c09"
+        },
+        {
+          "bytes": 414,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "gradle/wrapper/gradle-wrapper.properties",
+          "sha256": "e1b104891b779adf349cc3e4f310d3e68dfcfbab55fa75c4e1621615ae588b57"
+        },
+        {
+          "bytes": 3574,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/HANDOFF.md",
+          "sha256": "fd270b70a5a69a48ab4344685006bb6c7876dd79c823639955f4aa5aeb175f23"
+        },
+        {
+          "bytes": 11381,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/Codec.java",
+          "sha256": "47d0bb0a9b5b7307b14a7b571ecb9dce2c258e39c00b31e7bcd96d50dbf96bdd"
+        },
+        {
+          "bytes": 2851,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/FrameReader.java",
+          "sha256": "23da790d74d922c432c1fa5655b5e98f707188b1aebb0375413c30799f671ea1"
+        },
+        {
+          "bytes": 5356,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/FrameWriter.java",
+          "sha256": "7c382be63221ec0b99880a53cc9902537e45ccf8861def869743731e0f3d1452"
+        },
+        {
+          "bytes": 16845,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/Packet.java",
+          "sha256": "a0952d6751b3a687047715938fc113e489e5f96d364362879744c8ee9a87f1de"
+        },
+        {
+          "bytes": 1002,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/TurnKind.java",
+          "sha256": "63a48af8b5aa80c659f79c6fc2eaa33adc8500ef1281c4ebd76a9855c2a81be8"
+        },
+        {
+          "bytes": 4260,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/transport/Keepalive.java",
+          "sha256": "cd9f2132c97feaa53a852140a06885ed10b8cdc0d28e075960770efe6b69b481"
+        },
+        {
+          "bytes": 5799,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/main/java/com/goodanser/osmglass/protocol/transport/TcpTransport.java",
+          "sha256": "d9adfa844a73eca270dd8b0cef98fd8e8cdab6fadeddb534196b4c0b53e7d907"
+        },
+        {
+          "bytes": 9480,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/CodecTest.java",
+          "sha256": "d6e7ef4e04c74d070ad19039c004073ace345f3dd509cd14d22dc8207ed6f4eb"
+        },
+        {
+          "bytes": 3996,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/FrameReaderTest.java",
+          "sha256": "574f0d399c2c619a65ac733f5cac5a1addebefdb2c755373e95130d212bbf175"
+        },
+        {
+          "bytes": 7524,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/SafetyV2Test.java",
+          "sha256": "dff4fc55160ba4a19fb9c6e6d7d8c9b2f2a1856d8dbd965c091f159027ec242c"
+        },
+        {
+          "bytes": 3995,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/transport/KeepaliveTest.java",
+          "sha256": "33bce125ee23d8f9eed68bda3ef9c00070f52a9f954f92a40f43278a2322ef38"
+        },
+        {
+          "bytes": 5829,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "protocol/src/test/java/com/goodanser/osmglass/protocol/transport/TcpTransportTest.java",
+          "sha256": "f1795a8b8405edc5fb7d22ed564ce5e04a8feb4f46085b1dc9d536ad6cf95c79"
+        }
+      ],
+      "id": "osmglass",
+      "license": "GPL-3.0-only; file-level notices control",
+      "local_content_state": "working-tree including explicit new-file allowlist; not base HEAD",
+      "patch": {
+        "bytes": 161709,
+        "path": "patches/osmglass-franziska.patch",
+        "sha256": "72d1c7f6efe61f5b73c6ca06525ec7eb86600a6c154b291551d0327e1aaf4ecc"
+      },
+      "repository": "https://github.com/zakwilson/OsmGlass.git",
+      "source_snapshot": {
+        "archive_asset": "osmglass-source.tar.gz",
+        "asset_state": "release asset uploaded and SHA256 verified",
+        "bytes": 75853,
+        "download_url": "https://github.com/JohnnyStarling/franziska-glass/releases/download/v2026.11.06/osmglass-source.tar.gz",
+        "file_manifest": "patches/manifests/snapshots/osmglass-files.json",
+        "file_manifest_sha256": "80be1fe8a504aad3ea4b00bc6aac28f5cd63055fdfb31bdcbe812fdb11fe6d9e",
+        "files": 48,
+        "omitted": 13,
+        "release_tag": "v2026.11.06",
+        "sha256": "37bf2197fda53835d853beca38ec1f5a9332d86d8144b47a38e001f0f9e1a3c9"
+      }
+    },
+    {
+      "base_commit": "fd9b8e0b8ecbe0167b233dc472bca8976aee66bd",
+      "base_tree": "a125836c6753e0ae6f91f38d999fe6a19c3fd440",
+      "changed_files_sha256": "95798f0e6509424fcb954bd3d851fa074ea701728aba0d10c857a147e5d812de",
+      "destination": "navigation/osmglass/OsmAnd",
+      "files": [
+        {
+          "bytes": 3952,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd-java/build.gradle",
+          "sha256": "e1f8e43a250b1011952df193e833a903b7ca1f277e1bee94b7cfb1ef774bad90"
+        },
+        {
+          "bytes": 48716,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd-java/src/main/java/net/osmand/router/BinaryRoutePlanner.java",
+          "sha256": "f52c6806e04bc3c8f402672cb8c3af1376f469da264bf95d3667c18adca17740"
+        },
+        {
+          "bytes": 3072,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd-java/src/main/java/net/osmand/router/FastRoutingState.java",
+          "sha256": "b1a0f77c96eb326b665a1176a62bdff1798b9679b532858362f7634291250af1"
+        },
+        {
+          "bytes": 9224,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd-java/src/main/java/net/osmand/router/RouteCalculationProgress.java",
+          "sha256": "73cfc9c016026389433ded77dc0264c83c20f3e1f893e358b3fbf522b307dc4e"
+        },
+        {
+          "bytes": 93975,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd-java/src/main/java/net/osmand/router/RouteResultPreparation.java",
+          "sha256": "ec86e131870f3b80b26a3ff79bff0cc01fe3f3700ac99cf5d2e881572dcd425a"
+        },
+        {
+          "bytes": 15637,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/build-common.gradle",
+          "sha256": "2f69224bd22899250493c75e4746001c97f1807ed08ca9f9e07f28d58c9b7807"
+        },
+        {
+          "bytes": 9782,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/build.gradle",
+          "sha256": "dca315283ae30ad7c0517b7ca8925d10c753b54433a2664bc3c29ab7aa36ff12"
+        },
+        {
+          "bytes": 707488,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/res/values-ru/strings.xml",
+          "sha256": "518d13cbe7837bfe492d961e64e9c4ef28c1759f6626a564ce0c67b471ef97b9"
+        },
+        {
+          "bytes": 518694,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/res/values/strings.xml",
+          "sha256": "c59089a2360d6f38f4758c2f62a5df85427c91644a98beb17de18c15aacb7d43"
+        },
+        {
+          "bytes": 10717,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/NavigationService.java",
+          "sha256": "b4946451aa60e3dc3a76f82876dd0129b79f4465db898f8749b6ec4e36aa4443"
+        },
+        {
+          "bytes": 29246,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/auto/NavigationSession.java",
+          "sha256": "5bdaec2b7bccaf4d1b248036ca4c90b0b79a30fddefb1bdd99c7994790d42f06"
+        },
+        {
+          "bytes": 9075,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/auto/screens/RoutePreviewScreen.java",
+          "sha256": "b325d0ba38c0ad322355ac042e771fbebf6258ea07efb8a77dea3f6cf43a3246"
+        },
+        {
+          "bytes": 27125,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/GlassNavController.kt",
+          "sha256": "884bd6d12ba6659cce2cf7c15eaaf9af4b74b4a5d755cab246fe3a93a4629d71"
+        },
+        {
+          "bytes": 3196,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/GlassNavRoutingListener.kt",
+          "sha256": "91c8f2bb9fda951e5d26a3438d19930a2798894c5663bdd469aeb012db6affb4"
+        },
+        {
+          "bytes": 4663,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/GlassNavSettings.java",
+          "sha256": "ba0a0ac18e8cd5770b561679bd2bb768652b004ddee65556487bb07c75388906"
+        },
+        {
+          "bytes": 9410,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/GlassStreamingService.kt",
+          "sha256": "3e3254c3f1c86a3b8ea34cf45530de3fb514236ab7735fbeaf95190acbdee44b"
+        },
+        {
+          "bytes": 912,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/NavigationSafety.kt",
+          "sha256": "68b9a551380a6a236a858a437ffebd28e94ad736724434fa0ddda8d6511f2a40"
+        },
+        {
+          "bytes": 13759,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/fragments/GlassNavSettingsFragment.java",
+          "sha256": "ad9571827ee4168e1b89c73faeb453d583549d7fc8bd365f35c108d3ad76299f"
+        },
+        {
+          "bytes": 3888,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/render/Geo.kt",
+          "sha256": "e8a4b8cf1b4dbaa519737575223eb38366eb48ba6c98d05863201eb1b30887c9"
+        },
+        {
+          "bytes": 19541,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/render/OsmAndSnippetRenderer.kt",
+          "sha256": "a1091b81e8645ff2d286f72f799063ea4b071da1b3a15c6120f5d8eee1becb5e"
+        },
+        {
+          "bytes": 1487,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/render/TurnTypeMapping.kt",
+          "sha256": "1d32b669bbe47fa8c1ceca4d89bdfaea53141e8aaf65fb2fbabfdab2398fa6b5"
+        },
+        {
+          "bytes": 2782,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/transport/GlassDeviceFinder.kt",
+          "sha256": "da2d9a40962c2c8601885291d6cacc6f4a0d38da2f32ec22e84a467a3730551a"
+        },
+        {
+          "bytes": 5797,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/transport/RfcommTransport.kt",
+          "sha256": "d4f0a3657d9af43281f13b59cb31cc50ec6ad9f34cfe8466669a6c5733d42789"
+        },
+        {
+          "bytes": 5531,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/plugins/glassnav/transport/TransportFactory.kt",
+          "sha256": "d4722a88c4de6524b5138c110f7a03e3784edf63f398e0255d3ee44f09597b81"
+        },
+        {
+          "bytes": 96046,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routepreparationmenu/MapRouteInfoMenu.java",
+          "sha256": "3f66cdef431abe5fd6d3ba9700929e7e400e96524756cf9fc57af7e40d48ae66"
+        },
+        {
+          "bytes": 338,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routing/IRoutingDataUpdateListener.java",
+          "sha256": "1d40a40a7081dd45fc13083e9b9ef504312d410ac627663a4510f6da56eac5fa"
+        },
+        {
+          "bytes": 4601,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routing/NativeRoutingMemoryGuard.java",
+          "sha256": "62aee16b28ab064894327ed55a2846f1a10fb5423d84b42d722942099b44cd03"
+        },
+        {
+          "bytes": 42279,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routing/RouteProvider.java",
+          "sha256": "a2313fea0af20221c71246250e4450bb7b6e0e9687ea00af23a0f923c70f5b4f"
+        },
+        {
+          "bytes": 18454,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routing/RouteRecalculationHelper.java",
+          "sha256": "33d1bb220e3468f810559432efb1dcf6b2e3dc4f8646c58bf9be4ce1f1077fa5"
+        },
+        {
+          "bytes": 39271,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routing/RoutingHelper.java",
+          "sha256": "6c9cb39dbfb3e04f24750b1955967248c211940c85802f804ec7603c45dd66e5"
+        },
+        {
+          "bytes": 2645,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/routing/SuppressedRecalculationPrompt.java",
+          "sha256": "6807c8c13d8dcbe4fca00c9364ca24664214f016de78a0b510e591caad5a0077"
+        },
+        {
+          "bytes": 169712,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/settings/backend/OsmandSettings.java",
+          "sha256": "80c28878484ab845da07e74140be26d63cbb95849af48112c5d743f8fcf838cf"
+        },
+        {
+          "bytes": 14962,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/settings/fragments/VehicleParametersFragment.java",
+          "sha256": "8e62eee2b5913260fa7b95217751dee80371c9056f3f9d352807382bcd5fafa7"
+        },
+        {
+          "bytes": 4832,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "OsmAnd/src/net/osmand/plus/views/mapwidgets/utils/AverageSpeedComputer.java",
+          "sha256": "386f2b59ccf38a3a27df6a715d5adb18634c13d15125ab4bb070e7236f220aa1"
+        },
+        {
+          "bytes": 2054,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "build.gradle",
+          "sha256": "656072df3810cd980db6010d5787fde152deb9ab51fda03107fe51bdae18e834"
+        },
+        {
+          "bytes": 370914,
+          "change": "added",
+          "kind": "build-verification-metadata",
+          "mode": "0o600",
+          "path": "gradle/verification-metadata.xml",
+          "sha256": "e565b29dc88b8564db7bd98d20dcaaf010ff9cb9bc09fcba3316dd283b3f39c9"
+        },
+        {
+          "bytes": 368,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "gradle/wrapper/gradle-wrapper.properties",
+          "sha256": "fb760b433305c0dddd54b31f11647b7650e685be8c24fef8a36d20817b4e3e88"
+        },
+        {
+          "bytes": 35059,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "original_working_file_sha256": "d205595ea24f479ed43479d3eb7045a5ae4e0b52cb656a9088671c9574275c32",
+          "path": "test/glassnav-host/run.py",
+          "public_transform": "Replace private absolute Kotlin compiler library path with required GLASSNAV_HOST_KOTLIN_LIB_DIR environment input; no app/runtime source changes.",
+          "sha256": "2c40e1dbb1900da47f1af5d506ed7ea2a7bfc8bbec1c7990e9b52848b4a07cec"
+        },
+        {
+          "bytes": 2226,
+          "change": "added",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "tools/compact-navigation-vector.py",
+          "sha256": "489c32c28e8ec11aa8afb2459a5c21f486a075229ac750b90b30d18b4d785500"
+        }
+      ],
+      "id": "osmand",
+      "license": "GPL-3.0-or-later code; separate resource/library exceptions",
+      "local_content_state": "working-tree including explicit new-file allowlist; not base HEAD",
+      "packaging_patches": [
+        {
+          "bytes": 652,
+          "files": [
+            {
+              "path": "OsmAnd/build.gradle",
+              "sha256": "f85dc5c37467d7b110fa25ec9999d2bb0ef0889f6289f855e380ea888486ea74"
+            }
+          ],
+          "path": "patches/osmand-public-debug-signing.patch",
+          "purpose": "Source-only packaging overlay after exact app-source hash verification. Use AGP developer-owned default debug signing; no upstream or owner keystore exported.",
+          "sha256": "19f4717aaa8698fd31a7cc6084f805d593586e403ce918918dfa5a1f1413d8f8"
+        }
+      ],
+      "patch": {
+        "bytes": 589725,
+        "path": "patches/osmand-franziska.patch",
+        "sha256": "c6be0bf70961745c49b124db1e2a4470ff5a748e905df9c479d2829601f0aac3"
+      },
+      "repository": "https://github.com/zakwilson/OsmAnd.git",
+      "source_snapshot": {
+        "archive_asset": "osmand-source.tar.gz",
+        "asset_state": "release asset uploaded and SHA256 verified",
+        "bytes": 16168458,
+        "download_url": "https://github.com/JohnnyStarling/franziska-glass/releases/download/v2026.11.06/osmand-source.tar.gz",
+        "file_manifest": "patches/manifests/snapshots/osmand-files.json",
+        "file_manifest_sha256": "2c2116947a7c0ab6bac512d79a3b51755d5325b265d8b8eb34a0987e1a0e1baf",
+        "files": 5792,
+        "omitted": 2955,
+        "release_tag": "v2026.11.06",
+        "sha256": "f57509b35980348bbfacc42986a2b84ba5dc4bb389fe9e3d100503c0caf0a629"
+      }
+    },
+    {
+      "base_commit": "18c1d826178e5334f623095787ef2b268eb22b13",
+      "base_tree": "74f6e2ab85ce9fc7e75713b6a3cebaeaf4646160",
+      "changed_files_sha256": "f22004b6284e56c6cb5a57c7bbaf59795ed2e4badc4d9040718ac734b3a21566",
+      "destination": "navigation/osmglass/core-legacy",
+      "files": [
+        {
+          "bytes": 138653,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "native/src/binaryRead.cpp",
+          "sha256": "183839158ce359b1d414d040e01f7b3a02759f47e911c1d72ad1933879246be5"
+        },
+        {
+          "bytes": 31103,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "native/src/binaryRead.h",
+          "sha256": "8d3b7ae12f8e6083b12fef8546d82217acd239c927cd0733a2abc159491f6883"
+        },
+        {
+          "bytes": 51755,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "native/src/binaryRoutePlanner.cpp",
+          "sha256": "93b1e51397bef7b797b025dcf48c1d6d1d70a737d0816fa0006c3039a4423a4f"
+        },
+        {
+          "bytes": 98827,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "native/src/routeResultPreparation.cpp",
+          "sha256": "3ad8fd389abcce2dccd32d5e0fdda36733beadaf823201509f08e7136c84ee18"
+        },
+        {
+          "bytes": 9036,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "native/src/routeSegment.h",
+          "sha256": "6dbb39ccfbd26d493736c082241ef988f32c8fa878ff4a816fb39347ce9df956"
+        }
+      ],
+      "id": "core-legacy",
+      "license": "GPL code; included libraries retain their own licenses",
+      "local_content_state": "working-tree including explicit new-file allowlist; not base HEAD",
+      "patch": {
+        "bytes": 6460,
+        "path": "patches/core-legacy-franziska.patch",
+        "sha256": "07086da3a2664a0e1fecccfb985769a8c1eceb9cb3bf5edf6ab6312ba3337966"
+      },
+      "repository": "https://github.com/osmandapp/OsmAnd-core-legacy.git",
+      "source_snapshot": {
+        "archive_asset": "core-legacy-source.tar.gz",
+        "asset_state": "release asset uploaded and SHA256 verified",
+        "bytes": 19078099,
+        "download_url": "https://github.com/JohnnyStarling/franziska-glass/releases/download/v2026.11.06/core-legacy-source.tar.gz",
+        "file_manifest": "patches/manifests/snapshots/core-legacy-files.json",
+        "file_manifest_sha256": "f2e0c19862ec9936b058f4d220e4976b87bdda0ac3334a5d15f52fc8fd25baba",
+        "files": 10586,
+        "omitted": 2580,
+        "release_tag": "v2026.11.06",
+        "sha256": "de39bf11138c0c4a85ecedd98dbbf644aac5c9c2e312801a13c012202f4bbbb0"
+      }
+    },
+    {
+      "base_commit": "0b2fbe17bf6b62688e96128cd9e1c5dce4eaeaf3",
+      "base_tree": "ec95158f57114e934d4ec2c10077d89f1c3a06e8",
+      "changed_files_sha256": "01f9caa7f60674e07988ac0a11eacebaff88d54fbc3587e2caa14834f54bfb4c",
+      "destination": "navigation/osmglass/resources",
+      "files": [
+        {
+          "bytes": 69231,
+          "change": "added",
+          "kind": "routing-test-fixture",
+          "mode": "0o600",
+          "path": "test-resources/routing/Routing_test_90_traffic_light.obf",
+          "sha256": "b220aeb719da56644af69951a10290de67a23d6e17c962a078f8c195eae99782"
+        },
+        {
+          "bytes": 41172,
+          "change": "added",
+          "kind": "routing-test-fixture",
+          "mode": "0o600",
+          "path": "test-resources/routing/Routing_test_90_traffic_light.osm.gz",
+          "sha256": "538d740448de975c90606c78da97eb4432b352b8d76c1a6ed122544839ac4cba"
+        },
+        {
+          "bytes": 89093,
+          "change": "added",
+          "kind": "routing-test-fixture",
+          "mode": "0o600",
+          "path": "test-resources/routing/Routing_test_91_bicycle_srtm_downhill.obf",
+          "sha256": "6f5caf502dd9815ed433d0c8193e5ad0abdd65fa185057d90bcc341aea3d35de"
+        },
+        {
+          "bytes": 43031,
+          "change": "added",
+          "kind": "routing-test-fixture",
+          "mode": "0o600",
+          "path": "test-resources/routing/Routing_test_91_bicycle_srtm_downhill.osm.gz",
+          "sha256": "dd2c49a81bfbdaa5f1a0a54ba26fb1fed3e5069b74ceb5ca69fe008837d11804"
+        },
+        {
+          "bytes": 45214,
+          "change": "modified",
+          "kind": "source-build-config-test-or-documentation",
+          "mode": "0o600",
+          "path": "test-resources/test_routing.json",
+          "sha256": "be6c0b52f9bb8c64adfb9be037a4a790deb8338ed5b023d55e8f318712d83f16"
+        }
+      ],
+      "id": "resources",
+      "license": "Mixed upstream resource terms; OSM-derived routing fixtures retain data attribution",
+      "local_content_state": "working-tree including explicit new-file allowlist; not base HEAD",
+      "patch": {
+        "bytes": 224926,
+        "path": "patches/resources-franziska.patch",
+        "sha256": "f18082c934cd5495b0ed1a6dc87e72272a952d0eee57c9c17abaa7c503110629"
+      },
+      "repository": "https://github.com/osmandapp/OsmAnd-resources.git",
+      "source_snapshot": {
+        "archive_asset": "resources-source.tar.gz",
+        "asset_state": "release asset uploaded and SHA256 verified",
+        "bytes": 5703727,
+        "download_url": "https://github.com/JohnnyStarling/franziska-glass/releases/download/v2026.11.06/resources-source.tar.gz",
+        "file_manifest": "patches/manifests/snapshots/resources-files.json",
+        "file_manifest_sha256": "e7bebbc14be72e8b40f1d376a651842d6c1adb0d7b1065861ef46a0d7b8fde87",
+        "files": 377,
+        "omitted": 47230,
+        "release_tag": "v2026.11.06",
+        "sha256": "2307c08ffad8deb97a3d9a086f9713f371047d6c8faa3fdc22ea01067ae9ec1b"
+      }
+    }
+  ],
+  "distribution": "source-only patches and verified reconstruction; no APK or prebuilt navigation payloads",
+  "format_version": 1,
+  "gdk": {
+    "classes": 32,
+    "commit": "e4822d65290bb915ee8f0451c1d40c594b41f918",
+    "destination": "navigation/osmglass/gdk",
+    "fetch_by_default": false,
+    "kind": "compile-only public class API, NOT Java implementation source or firmware",
+    "license": "Apache-2.0",
+    "repository": "https://github.com/glasskit/gdk.git",
+    "retained_stub_sha256": "59a5e23df38fc3cee10fb92409db72fc22d89567df77bc685fec505deaec1452"
+  },
+  "limitations": [
+    "No navigation APK distributed. Installed/tested navigation is not characterized as broken.",
+    "OpenGL/Qt AAR corresponding source identities and build recipe remain unresolved; legacy core is separate.",
+    "Exact custom chart, patched Trove/ICU source mappings, artwork/data rights, Google dependency compatibility and portable JDK/SDK archive pins remain incomplete.",
+    "Public-only reconstruction verifies app/code and selected test fixture bytes, not a clean full navigation binary rebuild.",
+    "Routing .obf/.osm.gz additions are upstream regression fixtures, not personal/regional map downloads."
+  ],
+  "native_sources": {
+    "manifest": "patches/manifests/native-source-files.json",
+    "manifest_sha256": "37637b39465efeafb42517aac6b5baf51b32a5cb67b56fd7de603fc926b19f1c",
+    "patch_order": "lexicographic *.patch within core-legacy/externals/{protobuf,skia}/patches",
+    "protobuf": {
+      "sha256": "13bfc5ae543cf3aa180ac2485c0bc89495e3ae711fc6fab4f8ffe90dfb4bb677",
+      "url": "https://builder.osmand.net/dependencies-mirror/protobuf-2.5.0.tar.bz2"
+    },
+    "skia": {
+      "commit": "2432e5a4c45e724b96f1d32d9ac6973c84cc67d5",
+      "dependencies": [
+        {
+          "commit": "e5aa0a2cb0a5f759ef31c0819dc67d9b14246a4a",
+          "path": "third_party/externals/expat",
+          "url": "https://android.googlesource.com/platform/external/expat.git"
+        },
+        {
+          "commit": "0a3d2bb99b45b72e1d45185ab054efa993d97210",
+          "path": "third_party/externals/freetype",
+          "url": "https://skia.googlesource.com/third_party/freetype2.git"
+        },
+        {
+          "commit": "b37f03f16b39d397a626f097858e9ae550234ca0",
+          "path": "third_party/externals/harfbuzz",
+          "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git"
+        },
+        {
+          "commit": "574f3a772c96dc9db2c98ef24706feb3f6dbda9a",
+          "path": "third_party/externals/libjpeg-turbo",
+          "url": "https://skia.googlesource.com/external/github.com/libjpeg-turbo/libjpeg-turbo.git"
+        },
+        {
+          "commit": "386707c6d19b974ca2e3db7f5c61873813c6fe44",
+          "path": "third_party/externals/libpng",
+          "url": "https://skia.googlesource.com/third_party/libpng.git"
+        },
+        {
+          "commit": "e354c6355e7f48e087678ec49e340ca0696725b1",
+          "path": "third_party/externals/lua",
+          "url": "https://skia.googlesource.com/external/github.com/lua/lua.git"
+        },
+        {
+          "commit": "47af7c547f8551bd25424e56354a2ae1e9062859",
+          "path": "third_party/externals/zlib",
+          "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib"
+        }
+      ],
+      "repository": "https://github.com/google/skia.git"
+    },
+    "verify_before_build": true
+  },
+  "navigation_toolchain": {
+    "glass": {
+      "agp": "8.13.0",
+      "distribution": "bin",
+      "gradle": "8.13",
+      "kotlin_plugin": "2.0.21",
+      "min_target_api": 19,
+      "sha256": "20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78"
+    },
+    "jdk": {
+      "historical_distribution_archive_pin": null,
+      "major": 21,
+      "status": "Public archive/checksum pin read; selected as a portable JDK21 prerequisite, not installed or build-qualified here. Exact historical local OpenJDK21 build unavailable.",
+      "suggested_portable_distribution": {
+        "checksum_source": "same immutable release asset URL plus .sha256.txt",
+        "platform": "macOS-aarch64",
+        "sha256": "59422c2292ae4e76b87e00d8808dbe49cffa39af731e08bb0292ddb0af4e0261",
+        "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.8%2B9/OpenJDK21U-jdk_aarch64_mac_hotspot_21.0.8_9.tar.gz",
+        "vendor": "Eclipse Temurin",
+        "version": "21.0.8+9"
+      }
+    },
+    "ndk": {
+      "platform": "darwin-x86_64",
+      "release": "r27d",
+      "revision": "27.3.13750724",
+      "sha256": "e69092f9d2bfa5d1199039980a14eb91c03cc971ab5c6968fc08a8e6b84e7bb7",
+      "url": "https://dl.google.com/android/repository/android-ndk-r27d-darwin.zip"
+    },
+    "phone": {
+      "agp": "8.7.3",
+      "distribution": "bin",
+      "gradle": "8.9",
+      "kotlin": "2.1.10",
+      "min_api": 24,
+      "sha256": "d725d707bfabd4dfdc958c624003b3c80accc03f7037b5122c4b1d0ef15cecab",
+      "variant": ":OsmAnd:assembleGlassnavOpenglArm64Debug"
+    },
+    "sdk": {
+      "glass_compile_api": 36,
+      "phone_build_tools": "35.0.0",
+      "phone_compile_target_api": 35,
+      "pin_source": "https://dl.google.com/android/repository/repository2-3.xml",
+      "pin_status": "Exact upstream archive URLs, revisions, byte lengths and SHA1 checksums read from public metadata. Archive SHA256 not independently measured; packages not fetched/installed/build-qualified.",
+      "public_package_pins": [
+        {
+          "archives": [
+            {
+              "bytes": 65878410,
+              "checksum": {
+                "algorithm": "sha1",
+                "value": "2c1a80dd4d9f7d0e6dd336ec603d9b5c55a6f576"
+              },
+              "host": null,
+              "url": "https://dl.google.com/android/repository/platform-36_r02.zip"
+            }
+          ],
+          "package": "platforms;android-36",
+          "revision": {
+            "major": "2"
+          }
+        },
+        {
+          "archives": [
+            {
+              "bytes": 64273788,
+              "checksum": {
+                "algorithm": "sha1",
+                "value": "0bb560a90a7a2cbd0dd8348224d518b638fe7949"
+              },
+              "host": null,
+              "url": "https://dl.google.com/android/repository/platform-35_r02.zip"
+            }
+          ],
+          "package": "platforms;android-35",
+          "revision": {
+            "major": "2"
+          }
+        },
+        {
+          "archives": [
+            {
+              "bytes": 76857898,
+              "checksum": {
+                "algorithm": "sha1",
+                "value": "93ab8ce91230e067b5add4bfa79919c52b27f072"
+              },
+              "host": "macosx",
+              "url": "https://dl.google.com/android/repository/build-tools_r35_macosx.zip"
+            }
+          ],
+          "package": "build-tools;35.0.0",
+          "revision": {
+            "major": "35",
+            "micro": "0",
+            "minor": "0"
+          }
+        },
+        {
+          "archives": [
+            {
+              "bytes": 143250852,
+              "checksum": {
+                "algorithm": "sha1",
+                "value": "c3e06a1959762e89167d1cbaa988605f6f7c1d24"
+              },
+              "host": "macosx",
+              "url": "https://dl.google.com/android/repository/commandlinetools-mac-13114758_latest.zip"
+            }
+          ],
+          "package": "cmdline-tools;19.0",
+          "revision": {
+            "major": "19",
+            "minor": "0"
+          }
+        }
+      ]
+    }
+  },
+  "openclaw_toolchain": {
+    "declared_node_range": ">=24.16.0 <25 || >=26.1.0",
+    "files": {
+      "package.json": "4204b8a3db3ccfe31e359eacc7ea6c74869f805dd0986c62269f1b8a76aa0420",
+      "pnpm-lock.yaml": "4a8a9622f17ec98e6295e32c02502012fbdec8f08e5fa0b7a5fd4da613403f1e",
+      "pnpm-workspace.yaml": "8fa05be7deb44e308af15d7da1879541e478ed03455f5e515ba9667ec470a7de"
+    },
+    "package_manager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61",
+    "qualified_node": "26.12.1"
+  },
+  "phone_downloads": {
+    "MPAndroidChart-custom-snapshot-debug.aar": {
+      "bytes": 426359,
+      "sha256": "43139fb886b31d7c382cc428ea6336c62a75b88497f490b093a66b8adac631eb",
+      "upstream_sha256": "43139fb886b31d7c382cc428ea6336c62a75b88497f490b093a66b8adac631eb",
+      "url": "https://builder.osmand.net/ivy/net.osmand/MPAndroidChart/custom-snapshot-debug/MPAndroidChart-custom-snapshot-debug.aar"
+    },
+    "OsmAndCore_android-master-snapshot.aar": {
+      "bytes": 42524631,
+      "sha256": "f1f7d8c85bb5698272cd019c4cc894ee11c7b53574556ae98ae1c82686e529e8",
+      "upstream_sha256": "f1f7d8c85bb5698272cd019c4cc894ee11c7b53574556ae98ae1c82686e529e8",
+      "url": "https://builder.osmand.net/ivy/net.osmand/OsmAndCore_android/master-snapshot/OsmAndCore_android-master-snapshot.aar"
+    },
+    "OsmAndCore_androidNativeRelease-master-snapshot.aar": {
+      "bytes": 52619329,
+      "sha256": "06e6df8c688340f475ca71507d0f4f0faa40dd4804fb65b97a865f8fc12d17bf",
+      "upstream_sha256": "06e6df8c688340f475ca71507d0f4f0faa40dd4804fb65b97a865f8fc12d17bf",
+      "url": "https://builder.osmand.net/ivy/net.osmand/OsmAndCore_androidNativeRelease/master-snapshot/OsmAndCore_androidNativeRelease-master-snapshot.aar"
+    },
+    "World_basemap_mini_2.obf": {
+      "bytes": 72773393,
+      "sha256": "058017aa0e25d1421679a6e8907bf73bdc9f9a0812d4c6e44576e28b65c1038c",
+      "url": "https://builder.osmand.net/basemap/World_basemap_mini_2.obf"
+    },
+    "regions.ocbf": {
+      "bytes": 7497055,
+      "sha256": "fe4151a23cd090110d5e726447b0841f64300817e103e4903efe245c678ed4e3",
+      "url": "https://builder.osmand.net/basemap/regions.ocbf"
+    },
+    "stars.db.gz": {
+      "bytes": 1308343,
+      "sha256": "d4a6e14a9fa904bbd8d4aacc2cd19002e1fefead2433509b26e3f565be071d2a",
+      "url": "https://builder.osmand.net/basemap/astro/stars.db.gz"
+    }
+  },
+  "release_date": "2026-11-06",
+  "snapshot_policy": {
+    "allow_test_fixtures": "Only the four explicit changed routing fixture files may pass map-extension exclusions.",
+    "exclude_git_metadata": true,
+    "exclude_keystores": true,
+    "exclude_prebuilt_artifacts": true,
+    "navigation_artwork": "Do not redistribute art/media/fonts; source-only snapshots omit these upstream assets. Restore needed upstream resources locally under their own terms."
+  },
+  "source_reconstruction": {
+    "build_verified": false,
+    "changed_files": 108,
+    "full_source_archive_delivery": "Five generated source archives prepared separately for release assets; repository contains patches, exact pins, reconstruction tool and all archive file manifests. OpenClaw archive exceeds GitHub single-file Git limit; publish as release asset, not Git blob.",
+    "legacy_native_input_files": 12848,
+    "privacy": "No private HOME/contact values in patches. AA/BB MACs in host-test fixtures are synthetic, not device identifiers.",
+    "public_https_fetch_smoke": "OsmGlass exact public base reconstructed directly without object cache",
+    "receipt": "patches/manifests/SOURCE_RECONSTRUCTION.json",
+    "receipt_sha256": "c830110e2946da87511c6bd200868e56691807e8196eb8282100339111e4fcc8",
+    "status": "verified"
+  }
+}

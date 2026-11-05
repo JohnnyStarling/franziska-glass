@@ -1,0 +1,142 @@
+diff --git a/native/src/binaryRead.cpp b/native/src/binaryRead.cpp
+index d539e49bf5f663c59df36857fba808f5dd07408c..605d78b395c9a4c6a762a26aae27012a0cf60a32 100644
+--- a/native/src/binaryRead.cpp
++++ b/native/src/binaryRead.cpp
+@@ -2836,7 +2836,8 @@ void convertRouteDataObjecToMapObjects(SearchQuery* q, std::vector<RouteDataObje
+ }
+ 
+ void checkAndInitRouteRegionRules(int fileInd, const SHARED_PTR<RoutingIndex>& routingIndex) {
+-	// init decoding rules
++	// init decoding rules; without the lock another thread reads the rules while push_back reallocates them
++	std::lock_guard<std::mutex> lock(routingIndex->initMutex);
+ 	if (routingIndex->routeEncodingRules.size() == 0) {
+ 		lseek(fileInd, 0, SEEK_SET);
+ 		FileInputStream input(fileInd);
+diff --git a/native/src/binaryRead.h b/native/src/binaryRead.h
+index 14d5c9f2c9fdbdc0865597d9b295cdc721cb81a1..c41f3cba181cf9efb064dafb419f738a58ca6e01 100644
+--- a/native/src/binaryRead.h
++++ b/native/src/binaryRead.h
+@@ -110,6 +110,8 @@ struct BinaryPartIndex {
+ };
+ 
+ struct RoutingIndex : BinaryPartIndex {
++	// guards the lazy read of routeEncodingRules: routing, geocoding and rendering share the index
++	std::mutex initMutex;
+ 	vector<RouteTypeRule> routeEncodingRules;
+ 	UNORDERED_map<std::string, uint32_t> decodingRules;
+ 	std::vector<RouteSubregion> subregions;
+diff --git a/native/src/binaryRoutePlanner.cpp b/native/src/binaryRoutePlanner.cpp
+index dc18dab08b3d6a11498e99fffd8e297f743b1053..72983c5948b92786efc3fa3d40c6bde3c90d705e 100644
+--- a/native/src/binaryRoutePlanner.cpp
++++ b/native/src/binaryRoutePlanner.cpp
+@@ -628,7 +628,7 @@ double calculateRouteSegmentTime(RoutingContext* ctx, bool reverseWaySearch, SHA
+ 	if (obstacle < 0) {
+ 		return -1;
+ 	}
+-	double heightObstacle = ctx->config->router->defineHeightObstacle(road, segmentInd, prevSegmentInd);
++	double heightObstacle = ctx->config->router->defineHeightObstacle(road, prevSegmentInd, segmentInd);
+ 	if (heightObstacle < 0) {
+ 		return -1;
+ 	}
+diff --git a/native/src/routeResultPreparation.cpp b/native/src/routeResultPreparation.cpp
+index f01d7946b00474b0e7cac28e0adf6ab06173280d..11529b4e02c91e6b845c9b34624005a489052c22 100644
+--- a/native/src/routeResultPreparation.cpp
++++ b/native/src/routeResultPreparation.cpp
+@@ -246,13 +246,31 @@ void splitRoadsAndAttachRoadSegments(RoutingContext* ctx, vector<SHARED_PTR<Rout
+     }
+ }
+ 
++static const double TRAFFIC_SIGNALS_INTERSECTION_SIZE = 60;
++
++struct CumulativeIntersectionDistance {
++    double currentDistance = 0;
++    double lastIntersectionDistance = -1;
++};
++
++static void calculateTimeSpeed(RoutingContext* ctx, SHARED_PTR<RouteSegmentResult>& rr, CumulativeIntersectionDistance& state);
++
+ void calculateTimeSpeed(RoutingContext* ctx, vector<SHARED_PTR<RouteSegmentResult>>& result) {
++    CumulativeIntersectionDistance state;
+     for (int i = 0; i < result.size(); i++) {
+-        calculateTimeSpeed(ctx, result[i]);
++        if (i > 0) {
++            state.currentDistance += result[i - 1]->distance;
++        }
++        calculateTimeSpeed(ctx, result[i], state);
+     }
+ }
+ 
+ void calculateTimeSpeed(RoutingContext* ctx, SHARED_PTR<RouteSegmentResult>& rr) {
++    CumulativeIntersectionDistance state;
++    calculateTimeSpeed(ctx, rr, state);
++}
++
++static void calculateTimeSpeed(RoutingContext* ctx, SHARED_PTR<RouteSegmentResult>& rr, CumulativeIntersectionDistance& state) {
+     // Naismith's/Scarf rules are used to clarify time on uphills
+     bool useNaismithRule = false;
+     double scarfSeconds = 0; // Additional time as per Naismith/Scarf
+@@ -297,6 +315,16 @@ void calculateTimeSpeed(RoutingContext* ctx, SHARED_PTR<RouteSegmentResult>& rr)
+             double obstacle = ctx->config->router->defineObstacle(road, j, !plus);
+             if (obstacle < 0) {
+                 obstacle = 0;
++            } else if (obstacle > 0 && road->hasTrafficLightAt(j)) {
++                // A driver stops once per intersection
++                double signalDistance = state.currentDistance + distance;
++                bool startsNewIntersection = state.lastIntersectionDistance < 0 ||
++                    signalDistance - state.lastIntersectionDistance >= TRAFFIC_SIGNALS_INTERSECTION_SIZE;
++                if (startsNewIntersection) {
++                    state.lastIntersectionDistance = signalDistance;
++                } else {
++                    obstacle = 0;
++                }
+             }
+             distOnRoadToPass += d / speed + obstacle;
+ 
+diff --git a/native/src/routeSegment.h b/native/src/routeSegment.h
+index 4ce74f435c5df63afb97dd27416400c927adf5ac..1cf9d5dd5fb0c95cd5ca2dad4d77ff0bce9e87f3 100644
+--- a/native/src/routeSegment.h
++++ b/native/src/routeSegment.h
+@@ -115,6 +115,7 @@ struct RouteSegment {
+ 
+ 	RouteSegment()
+ 		: segmentStart(0),
++		  segmentEnd(0),
+ 		  road(nullptr),
+ 		  oppositeDirection(),
+ 		  parentRoute(),
+@@ -148,7 +149,13 @@ struct RouteSegment {
+ 		  distanceToEnd(0),
+ 		  isFinalSegment(false) {}
+ 
+-	virtual ~RouteSegment() = default;
++	virtual ~RouteSegment() {
++		auto p = std::move(parentRoute);
++		while (p && p.use_count() == 1) {
++			auto next = std::move(p->parentRoute);
++			p = std::move(next);
++		}
++	}
+ 
+ 	virtual std::string toString() {
+ 		std::string dst;
+@@ -216,7 +223,7 @@ struct RouteSegmentPoint : RouteSegment {
+ struct FinalRouteSegment : RouteSegment {
+ 	FinalRouteSegment(const SHARED_PTR<RouteDataObject>& road, int segmentStart, int segmentEnd)
+ 		: RouteSegment(road, segmentStart, segmentEnd) {}
+-	bool reverseWaySearch;
++	bool reverseWaySearch = false;
+ 	SHARED_PTR<RouteSegment> opposite;
+ };
+ 
+@@ -234,9 +241,9 @@ struct GpxPoint {
+ 	bool straightLine = false;
+ 	SHARED_PTR<RouteDataObject> object;
+ 
+-	GpxPoint(int32_t ind, double lat, double lon, double cumDist) : ind(ind), lat(lat), lon(lon), cumDist(cumDist){};
++	GpxPoint(int32_t ind, double lat, double lon, double cumDist) : ind(ind), lat(lat), lon(lon), x31(0), y31(0), cumDist(cumDist){};
+ 
+-	GpxPoint(const SHARED_PTR<GpxPoint>& p) : ind(p->ind), lat(p->lat), lon(p->lon), cumDist(p->cumDist), object(p->object) {};
++	GpxPoint(const SHARED_PTR<GpxPoint>& p) : ind(p->ind), lat(p->lat), lon(p->lon), x31(0), y31(0), cumDist(p->cumDist), object(p->object) {};
+ 
+ 	SHARED_PTR<RouteSegmentResult> getFirstRouteRes() { return routeToTarget.empty() ? nullptr : routeToTarget.at(0); }
+ 	SHARED_PTR<RouteSegmentResult> getLastRouteRes() { return routeToTarget.empty() ? nullptr : routeToTarget.at(routeToTarget.size() - 1); }

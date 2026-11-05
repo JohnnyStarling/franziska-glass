@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Franziska</string>
+    <string name="native_entry_keyword">open my checklist</string>
+    <string name="assist_name">Franziska</string>
+    <string name="assist_entry_keyword">Franziska</string>
+    <string name="look_name">Франциска · взгляд</string>
+    <string name="look_entry_keyword">look with Franziska</string>
+</resources>

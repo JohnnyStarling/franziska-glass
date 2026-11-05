@@ -1,0 +1,41 @@
+name: Bug report
+description: Report a reproducible problem in a specific component.
+title: '[Bug] '
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Continuity / plugin
+        - Glass assistant
+        - Pixel companion
+        - OpenClaw patch
+        - Navigation patch / build
+        - Documentation / setup
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Source revision and environment
+      description: Include device/OS and tool versions. Do not include keys, tokens, serials or personal conversations.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Relevant checks or redacted trace
+      description: For voice issues, distinguish local link, Gateway connection, agent task and playback.

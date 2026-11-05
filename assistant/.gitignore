@@ -1,0 +1,5 @@
+/out/
+/deps/*.jar
+**/__pycache__/
+*.pyc
+/deps/*.jar.part

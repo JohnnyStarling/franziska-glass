@@ -59,6 +59,12 @@ The code and procedures distinguish immediate event recording, project updates, 
 
 Generated indexes and compact summaries are working aids. Source files and runtime conversation access remain important when the question depends on fresh or missing history. The architecture therefore treats retrieval as a route back to evidence, not an assertion that an index contains every conversation or automatically merges every interface's transcript.
 
+## Current coverage and freshness
+
+Lexical recall reads the selected files at query time. Sparse-vector recall uses a saved snapshot and is rebuilt explicitly; source edits do not automatically invalidate the cache. Current conversation history can be read through OpenClaw's native session tools when needed. The optional local legacy history loaders are not a complete index of the current Gateway session store.
+
+Memory writeback and consolidation are explicit agent/protocol operations, not guaranteed automatic capture of every event. The community continuity bridge includes the deep-search and source-freshness fields in its evidence pack; the reviewed earlier deployed bridge used a smaller compact response. Release code and private deployment state are tracked separately.
+
 ## The main agent owns the work
 
 The main agent interprets the task, retrieves context, inspects sources, selects tools and integrates their results. Tool availability depends on the configured runtime and connections. The working set includes research, documents, code, local files, connected applications and software on the user's machines.
@@ -76,3 +82,18 @@ The voice session and the agent task have different lifetimes. A provider connec
 Glass adds hands-free input, playback, glanceable text and camera-related interaction. Pixel handles the wearable connection and media bridge. The main agent, durable conversation and memory access remain with OpenClaw on the Mac.
 
 The objective is continuity of identity and work across these interfaces. Navigation complements the wearable system through its own phone-to-Glass path; it does not replace the assistant's reasoning, memory or tools.
+
+## Example record and workflow
+
+The following is an illustrative example, not a private transcript:
+
+```text
+Project: Companion setup
+Goal: build and configure a user-owned wearable assistant
+Current state: source checked out; local build is the next step
+Decision: preserve separate Glass/Pixel protocol roots
+Next action: run the documented build with pinned dependencies
+Evidence: source manifest and component build guide
+```
+
+When the user asks to continue this project, the agent retrieves the record, checks the cited source, performs the authorized next step and records its actual result. The card carries current state; build output supplies evidence; the conversation remains the history of the interaction. None of those alone substitutes for the others.

@@ -1,0 +1,26 @@
+--- a/OsmAnd/build.gradle
++++ b/OsmAnd/build.gradle
+@@ -30,13 +30,6 @@
+ 
+ android {
+ 	signingConfigs {
+-		development {
+-			storeFile file("../keystores/debug.keystore")
+-			storePassword "android"
+-			keyAlias "androiddebugkey"
+-			keyPassword "android"
+-		}
+-
+ 		publishing {
+ 			storeFile file("/var/lib/jenkins/osmand_key")
+ 			storePassword System.getenv("OSMAND_APK_PASSWORD")
+@@ -178,7 +171,8 @@
+ 
+ 	buildTypes {
+ 		debug {
+-			signingConfig signingConfigs.development
++			// Public source packaging: use the developer-owned Android debug key.
++			signingConfig signingConfigs.debug
+ 		}
+ 		release {
+ 			signingConfig signingConfigs.publishing

@@ -1,0 +1,398 @@
+[
+  {
+    "component": "openclaw",
+    "path": "LICENSES/openclaw/LICENSE",
+    "sha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4",
+    "upstream_path": "LICENSE"
+  },
+  {
+    "component": "openclaw",
+    "path": "LICENSES/openclaw/THIRD_PARTY_NOTICES.md",
+    "sha256": "3900fd8e96db8d9a38b1aa822bfa3c13e776533299d2744120f0e6ce60f60948",
+    "upstream_path": "THIRD_PARTY_NOTICES.md"
+  },
+  {
+    "component": "openclaw",
+    "path": "LICENSES/openclaw/packages/gateway-protocol/LICENSE",
+    "sha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4",
+    "upstream_path": "packages/gateway-protocol/LICENSE"
+  },
+  {
+    "component": "osmglass",
+    "path": "LICENSES/osmglass/LICENSE",
+    "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "upstream_path": "LICENSE"
+  },
+  {
+    "component": "osmand",
+    "path": "LICENSES/osmand/AUTHORS.md",
+    "sha256": "4b94cd307dcaa3893b6684d9afb3651fd3db24a4bfdf888812693008ae0a3b65",
+    "upstream_path": "AUTHORS.md"
+  },
+  {
+    "component": "osmand",
+    "path": "LICENSES/osmand/LICENSE",
+    "sha256": "ec0fc88ddc80e1a7c596fc05c667328f4f13e1aa7c85d5df20db381b34521e1b",
+    "upstream_path": "LICENSE"
+  },
+  {
+    "component": "core-legacy",
+    "path": "LICENSES/core-legacy/LICENSE",
+    "sha256": "53fb7109a4fba0a21a5df08f5ed847409e36c381611d776560bf95dbd36a8a13",
+    "upstream_path": "LICENSE"
+  },
+  {
+    "component": "core-legacy",
+    "path": "LICENSES/core-legacy/native/include/protozero/LICENSE.md",
+    "sha256": "254c0e9f18d261bfc55ff277cf12e3c1ca25839d56af17fba65d142396021466",
+    "upstream_path": "native/include/protozero/LICENSE.md"
+  },
+  {
+    "component": "core-legacy",
+    "path": "LICENSES/core-legacy/native/include/vtzero/LICENSE.txt",
+    "sha256": "10ec4a19b848ec18b5314e34794fb307b375ce2719a5149f79669d3648eeff95",
+    "upstream_path": "native/include/vtzero/LICENSE.txt"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/LICENSE",
+    "sha256": "7365003ac15b3a127ffd7402894b4662d8eb27992cbd53f921690e8c7ac2ae54",
+    "upstream_path": "LICENSE"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/icons/LICENSE.Open-SVG-Map-Icons.txt",
+    "sha256": "d50281c0cf947be03b82a26eeaf0baba5830c05cd18aeea66e04a6c46b562fa4",
+    "upstream_path": "icons/LICENSE.Open-SVG-Map-Icons.txt"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/icons/LICENSE.icons8.txt",
+    "sha256": "9d0a958d091c3dfe9c0c87a6690129a5429d7c2064fd73846e607fb43af24eab",
+    "upstream_path": "icons/LICENSE.icons8.txt"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/rendering_styles/fonts/LICENSE.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "upstream_path": "rendering_styles/fonts/LICENSE.txt"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoKufi/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "upstream_path": "rendering_styles/legacy_fonts/NotoKufi/LICENSE"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoNaskh/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "upstream_path": "rendering_styles/legacy_fonts/NotoNaskh/LICENSE"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoSans-extra/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "upstream_path": "rendering_styles/legacy_fonts/NotoSans-extra/LICENSE"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoSans/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "upstream_path": "rendering_styles/legacy_fonts/NotoSans/LICENSE"
+  },
+  {
+    "component": "resources",
+    "path": "LICENSES/resources/astro/README.md",
+    "sha256": "b9c444ed012de0ceb1f50dfb0c3bb02beba87e9c15264b6ba11be83abad72b90",
+    "upstream_path": "astro/README.md"
+  },
+  {
+    "component": "gdk",
+    "path": "LICENSES/gdk/LICENSE",
+    "sha256": "cbf47a814e8b9d98ac4bff5a986ea239be7c5d873fc35f1d295b77abd19b092f",
+    "upstream_path": "LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/protobuf/upstream.patched/COPYING.txt",
+    "sha256": "31c7505c31a1ea8557a5362cd69946dc9f5ee80fac8fa1d1b1531c08530497b0",
+    "upstream_path": "externals/protobuf/upstream.patched/COPYING.txt"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/protobuf/upstream.patched/gtest/LICENSE",
+    "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138",
+    "upstream_path": "externals/protobuf/upstream.patched/gtest/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/AUTHORS",
+    "sha256": "d29149080dbc9b07763b8d236668d321e3ebdcfa6a03b418a1ddefbf85f997f4",
+    "upstream_path": "externals/skia/upstream.patched/AUTHORS"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/LICENSE",
+    "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd",
+    "upstream_path": "externals/skia/upstream.patched/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/include/third_party/skcms/LICENSE",
+    "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+    "upstream_path": "externals/skia/upstream.patched/include/third_party/skcms/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/include/third_party/vulkan/LICENSE",
+    "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+    "upstream_path": "externals/skia/upstream.patched/include/third_party/vulkan/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/modules/canvaskit/canvaskit/LICENSE",
+    "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978",
+    "upstream_path": "externals/skia/upstream.patched/modules/canvaskit/canvaskit/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/modules/pathkit/npm-asmjs/LICENSE",
+    "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978",
+    "upstream_path": "externals/skia/upstream.patched/modules/pathkit/npm-asmjs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/modules/pathkit/npm-wasm/LICENSE",
+    "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978",
+    "upstream_path": "externals/skia/upstream.patched/modules/pathkit/npm-wasm/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/etc1/LICENSE",
+    "sha256": "5366e97b4478f15a1e2fd7e6094337426597df28de50cd9fed3f2e7e87f1229e",
+    "upstream_path": "externals/skia/upstream.patched/third_party/etc1/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/expat/NOTICE",
+    "sha256": "f6eeb2310d0b00e5cecac39c73a0696a5bdbfb754b26325ed5a502fc1a6c338c",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/expat/NOTICE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/freetype/docs/FTL.TXT",
+    "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/freetype/docs/FTL.TXT"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/freetype/docs/GPLv2.TXT",
+    "sha256": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/freetype/docs/GPLv2.TXT"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/freetype/docs/LICENSE.TXT",
+    "sha256": "fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/freetype/docs/LICENSE.TXT"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/AUTHORS",
+    "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/AUTHORS"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/COPYING",
+    "sha256": "beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/COPYING"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/src/ms-use/COPYING",
+    "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/src/ms-use/COPYING"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/aots/COPYING",
+    "sha256": "f55f74bf740db07bb032a90aa74af4307adea3d489c1ccba12453cf0c0a764cb",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/aots/COPYING"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/in-house/COPYING",
+    "sha256": "9b35b8485f69cd298fccbb3c40a827dc06cf1185553bef827903497d2944a8d7",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/in-house/COPYING"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/text-rendering-tests/COPYING",
+    "sha256": "d24039e4d22c9bc72096f6174374539d92a3d6e1163938546ec59179fe095e6f",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/text-rendering-tests/COPYING"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-arabic/script-arabic/language-urdu/crulp/ligatures/LICENSE",
+    "sha256": "ddbf5c14d6922ce9bc2bb415106a9e2f602c520a9729f7f12b3a23723558ea33",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-arabic/script-arabic/language-urdu/crulp/ligatures/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-assamese/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-assamese/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-bengali/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-bengali/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-devanagari/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-devanagari/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-gujarati/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-gujarati/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-gurmukhi/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-gurmukhi/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-kannada/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-kannada/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-malayalam/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-malayalam/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-oriya/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-oriya/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-sinhala/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-sinhala/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-tamil/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-tamil/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-telugu/utrrs/LICENSE",
+    "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-telugu/utrrs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/LICENSE.md",
+    "sha256": "8412238c5ad95965cf3c3197791e9dea8b5fae505d133449e33ee2fa754fe61e",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/LICENSE.md"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/README.ijg",
+    "sha256": "82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/README.ijg"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/release/License.rtf",
+    "sha256": "d26120ab237f87dea10aa4fa7fd4243cadffd26e54eb2f3903d5fb0f8ed336b2",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/release/License.rtf"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/AUTHORS",
+    "sha256": "e00d9011379c516a6fa5e21b1d9119c7b5fe91177c9ec0f1f362c886e45771ab",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libpng/AUTHORS"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/LICENSE",
+    "sha256": "bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libpng/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/contrib/gregbook/COPYING",
+    "sha256": "d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libpng/contrib/gregbook/COPYING"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/contrib/gregbook/LICENSE",
+    "sha256": "b6a03c1803eb58ffb1f1278d5c7d4096c4c116e66dce8a7553e8c77d163c3438",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libpng/contrib/gregbook/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/contrib/pngminus/LICENSE.txt",
+    "sha256": "71778de2e263e60e18d6e0112e65fc7229e90e4dc0d2b8e06640e442125a6dbe",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/libpng/contrib/pngminus/LICENSE.txt"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/zlib/LICENSE",
+    "sha256": "942755efa272dbfbcd7afea7a38556801e36c16dcad002d572378367094a2593",
+    "upstream_path": "externals/skia/upstream.patched/third_party/externals/zlib/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/skcms/LICENSE",
+    "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+    "upstream_path": "externals/skia/upstream.patched/third_party/skcms/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/vulkanmemoryallocator/LICENSE",
+    "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978",
+    "upstream_path": "externals/skia/upstream.patched/third_party/vulkanmemoryallocator/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/vulkanmemoryallocator/include/LICENSE.txt",
+    "sha256": "e21477eed484b07902a861a1b18d1e4ecd3e6f22fa81e2410f0770cfb67290e8",
+    "upstream_path": "externals/skia/upstream.patched/third_party/vulkanmemoryallocator/include/LICENSE.txt"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/wuffs/LICENSE",
+    "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36",
+    "upstream_path": "externals/skia/upstream.patched/third_party/wuffs/LICENSE"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/native/include/protozero/LICENSE.md",
+    "sha256": "254c0e9f18d261bfc55ff277cf12e3c1ca25839d56af17fba65d142396021466",
+    "upstream_path": "native/include/protozero/LICENSE.md"
+  },
+  {
+    "component": "native-dependencies",
+    "path": "LICENSES/native-dependencies/native/include/vtzero/LICENSE.txt",
+    "sha256": "10ec4a19b848ec18b5314e34794fb307b375ce2719a5149f79669d3648eeff95",
+    "upstream_path": "native/include/vtzero/LICENSE.txt"
+  }
+]

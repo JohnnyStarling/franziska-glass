@@ -1,0 +1,1740 @@
+{
+  "release": "v2026.11.06",
+  "created_date": "2026-11-06",
+  "scope": "Source/developer release; file list excludes this manifest itself and Git metadata. Release source archives have separate SHA256SUMS.",
+  "verification": "build-verification.json",
+  "component_provenance": "source-components.json",
+  "file_count": 346,
+  "files": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "bytes": 1131,
+      "sha256": "b1e3d29e9b2bc60890043a46ae2af0739f00ac1a9d65161a2bff6c443ab4d19f"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 398,
+      "sha256": "47f0769eaa759c63f5316a8f7c98c0839c22cf255be983a57f66a585dd0ce9d6"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 1251,
+      "sha256": "6b83c96ae70b725449b9074bbbab54c12d3a4dfac11ad1ed483db3bf374c0eb9"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 1409,
+      "sha256": "a85946d7a120cfd17f6cfecc539a930dd1e0016b0e8a80dceb9e2c8a1ce18966"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1198,
+      "sha256": "ff5e9845df9dcced278242f5fe52d7ecce8847480a2ad08221cbe7d89b262179"
+    },
+    {
+      "path": "LICENSE-MIT",
+      "bytes": 1067,
+      "sha256": "78bd1e1d5794be11e3b596c9d6c084d374cb93e406bdef0a566a195d3472a2f5"
+    },
+    {
+      "path": "LICENSES/GPL-3.0.txt",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "LICENSES/README.md",
+      "bytes": 3982,
+      "sha256": "2788cf2cba1bfa7441b66163f8c5271eaf709cb405f8478f1896f27d8dd64d39"
+    },
+    {
+      "path": "LICENSES/core-legacy/LICENSE",
+      "bytes": 420,
+      "sha256": "53fb7109a4fba0a21a5df08f5ed847409e36c381611d776560bf95dbd36a8a13"
+    },
+    {
+      "path": "LICENSES/core-legacy/native/include/protozero/LICENSE.md",
+      "bytes": 1297,
+      "sha256": "254c0e9f18d261bfc55ff277cf12e3c1ca25839d56af17fba65d142396021466"
+    },
+    {
+      "path": "LICENSES/core-legacy/native/include/vtzero/LICENSE.txt",
+      "bytes": 1311,
+      "sha256": "10ec4a19b848ec18b5314e34794fb307b375ce2719a5149f79669d3648eeff95"
+    },
+    {
+      "path": "LICENSES/gdk/LICENSE",
+      "bytes": 10274,
+      "sha256": "cbf47a814e8b9d98ac4bff5a986ea239be7c5d873fc35f1d295b77abd19b092f"
+    },
+    {
+      "path": "LICENSES/index.json",
+      "bytes": 21811,
+      "sha256": "3bc40511cc92b346d10936e7ec8d2b10a119caf503c336473800dbdd73306c5b"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/protobuf/upstream.patched/COPYING.txt",
+      "bytes": 1732,
+      "sha256": "31c7505c31a1ea8557a5362cd69946dc9f5ee80fac8fa1d1b1531c08530497b0"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/protobuf/upstream.patched/gtest/LICENSE",
+      "bytes": 1475,
+      "sha256": "9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/AUTHORS",
+      "bytes": 2244,
+      "sha256": "d29149080dbc9b07763b8d236668d321e3ebdcfa6a03b418a1ddefbf85f997f4"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/LICENSE",
+      "bytes": 1507,
+      "sha256": "5f787c1dee3c56547f09ccc2906ab5f5293c4d8dd6c8654e573216c38e908dbd"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/include/third_party/skcms/LICENSE",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/include/third_party/vulkan/LICENSE",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/modules/canvaskit/canvaskit/LICENSE",
+      "bytes": 1635,
+      "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/modules/pathkit/npm-asmjs/LICENSE",
+      "bytes": 1635,
+      "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/modules/pathkit/npm-wasm/LICENSE",
+      "bytes": 1635,
+      "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/etc1/LICENSE",
+      "bytes": 9233,
+      "sha256": "5366e97b4478f15a1e2fd7e6094337426597df28de50cd9fed3f2e7e87f1229e"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/expat/NOTICE",
+      "bytes": 1208,
+      "sha256": "f6eeb2310d0b00e5cecac39c73a0696a5bdbfb754b26325ed5a502fc1a6c338c"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/freetype/docs/FTL.TXT",
+      "bytes": 6743,
+      "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/freetype/docs/GPLv2.TXT",
+      "bytes": 17994,
+      "sha256": "c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/freetype/docs/LICENSE.TXT",
+      "bytes": 1743,
+      "sha256": "fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/AUTHORS",
+      "bytes": 201,
+      "sha256": "19bfe8f5ed100636cd24ab0c90a3f71c21d8b02d9ba00719447a0faab364d49f"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/COPYING",
+      "bytes": 1815,
+      "sha256": "beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/src/ms-use/COPYING",
+      "bytes": 1141,
+      "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/aots/COPYING",
+      "bytes": 593,
+      "sha256": "f55f74bf740db07bb032a90aa74af4307adea3d489c1ccba12453cf0c0a764cb"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/in-house/COPYING",
+      "bytes": 4370,
+      "sha256": "9b35b8485f69cd298fccbb3c40a827dc06cf1185553bef827903497d2944a8d7"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/data/text-rendering-tests/COPYING",
+      "bytes": 584,
+      "sha256": "d24039e4d22c9bc72096f6174374539d92a3d6e1163938546ec59179fe095e6f"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-arabic/script-arabic/language-urdu/crulp/ligatures/LICENSE",
+      "bytes": 126,
+      "sha256": "ddbf5c14d6922ce9bc2bb415106a9e2f602c520a9729f7f12b3a23723558ea33"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-assamese/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-bengali/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-devanagari/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-gujarati/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-gurmukhi/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-kannada/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-malayalam/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-oriya/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-sinhala/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-tamil/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/harfbuzz/test/shaping/texts/in-house/shaper-indic/script-telugu/utrrs/LICENSE",
+      "bytes": 1056,
+      "sha256": "9c5e2883a6e90dadaa85376d2749d3d1851ca7dc263560cd77c348e928f16810"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/LICENSE.md",
+      "bytes": 6008,
+      "sha256": "8412238c5ad95965cf3c3197791e9dea8b5fae505d133449e33ee2fa754fe61e"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/README.ijg",
+      "bytes": 13687,
+      "sha256": "82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libjpeg-turbo/release/License.rtf",
+      "bytes": 2178,
+      "sha256": "d26120ab237f87dea10aa4fa7fd4243cadffd26e54eb2f3903d5fb0f8ed336b2"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/AUTHORS",
+      "bytes": 1098,
+      "sha256": "e00d9011379c516a6fa5e21b1d9119c7b5fe91177c9ec0f1f362c886e45771ab"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/LICENSE",
+      "bytes": 5345,
+      "sha256": "bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/contrib/gregbook/COPYING",
+      "bytes": 18097,
+      "sha256": "d6cb0e9e560f51085556949a84af12b79a00f10ab8b66c752537faf7cd665572"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/contrib/gregbook/LICENSE",
+      "bytes": 2373,
+      "sha256": "b6a03c1803eb58ffb1f1278d5c7d4096c4c116e66dce8a7553e8c77d163c3438"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/libpng/contrib/pngminus/LICENSE.txt",
+      "bytes": 1164,
+      "sha256": "71778de2e263e60e18d6e0112e65fc7229e90e4dc0d2b8e06640e442125a6dbe"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/externals/zlib/LICENSE",
+      "bytes": 912,
+      "sha256": "942755efa272dbfbcd7afea7a38556801e36c16dcad002d572378367094a2593"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/skcms/LICENSE",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/vulkanmemoryallocator/LICENSE",
+      "bytes": 1635,
+      "sha256": "d27678cba0d529e77201e2d2a053628143e986aad8f1e77f7039ad4366c8f978"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/vulkanmemoryallocator/include/LICENSE.txt",
+      "bytes": 1099,
+      "sha256": "e21477eed484b07902a861a1b18d1e4ecd3e6f22fa81e2410f0770cfb67290e8"
+    },
+    {
+      "path": "LICENSES/native-dependencies/externals/skia/upstream.patched/third_party/wuffs/LICENSE",
+      "bytes": 1635,
+      "sha256": "e59bb5c5c6ba426a9ac4ba9fe667ad14c5166b12aa25be8af1d122b14fbe2e36"
+    },
+    {
+      "path": "LICENSES/native-dependencies/native/include/protozero/LICENSE.md",
+      "bytes": 1297,
+      "sha256": "254c0e9f18d261bfc55ff277cf12e3c1ca25839d56af17fba65d142396021466"
+    },
+    {
+      "path": "LICENSES/native-dependencies/native/include/vtzero/LICENSE.txt",
+      "bytes": 1311,
+      "sha256": "10ec4a19b848ec18b5314e34794fb307b375ce2719a5149f79669d3648eeff95"
+    },
+    {
+      "path": "LICENSES/openclaw/LICENSE",
+      "bytes": 1076,
+      "sha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4"
+    },
+    {
+      "path": "LICENSES/openclaw/THIRD_PARTY_NOTICES.md",
+      "bytes": 4779,
+      "sha256": "3900fd8e96db8d9a38b1aa822bfa3c13e776533299d2744120f0e6ce60f60948"
+    },
+    {
+      "path": "LICENSES/openclaw/packages/gateway-protocol/LICENSE",
+      "bytes": 1076,
+      "sha256": "9efd316ecf1c4c60f6fd5d26433142fff2b6794d7d328e9bc6179b29bf9c82a4"
+    },
+    {
+      "path": "LICENSES/osmand/AUTHORS.md",
+      "bytes": 477,
+      "sha256": "4b94cd307dcaa3893b6684d9afb3651fd3db24a4bfdf888812693008ae0a3b65"
+    },
+    {
+      "path": "LICENSES/osmand/LICENSE",
+      "bytes": 18317,
+      "sha256": "ec0fc88ddc80e1a7c596fc05c667328f4f13e1aa7c85d5df20db381b34521e1b"
+    },
+    {
+      "path": "LICENSES/osmglass/LICENSE",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "LICENSES/resources/LICENSE",
+      "bytes": 743,
+      "sha256": "7365003ac15b3a127ffd7402894b4662d8eb27992cbd53f921690e8c7ac2ae54"
+    },
+    {
+      "path": "LICENSES/resources/astro/README.md",
+      "bytes": 1028,
+      "sha256": "b9c444ed012de0ceb1f50dfb0c3bb02beba87e9c15264b6ba11be83abad72b90"
+    },
+    {
+      "path": "LICENSES/resources/icons/LICENSE.Open-SVG-Map-Icons.txt",
+      "bytes": 1793,
+      "sha256": "d50281c0cf947be03b82a26eeaf0baba5830c05cd18aeea66e04a6c46b562fa4"
+    },
+    {
+      "path": "LICENSES/resources/icons/LICENSE.icons8.txt",
+      "bytes": 44,
+      "sha256": "9d0a958d091c3dfe9c0c87a6690129a5429d7c2064fd73846e607fb43af24eab"
+    },
+    {
+      "path": "LICENSES/resources/rendering_styles/fonts/LICENSE.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoKufi/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoNaskh/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoSans-extra/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "LICENSES/resources/rendering_styles/legacy_fonts/NotoSans/LICENSE",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 9742,
+      "sha256": "f93d909396f4efbb47b95d7a94c9c708b476ba474d66a5e3b3149ccc47206a6d"
+    },
+    {
+      "path": "RELEASE_NOTES.md",
+      "bytes": 2221,
+      "sha256": "5f0c2bec7e1a1dd08460cac048f2d254b36b66725c5230d04c490eb549f9cab6"
+    },
+    {
+      "path": "SHA256SUMS",
+      "bytes": 447,
+      "sha256": "e98957f3df4bf7341bd4be900d082b6c165aae8640594f5347cfcf897b52f4b5"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 2061,
+      "sha256": "39985cf884d536acbc0481ea5de848bd32fa1327398d0c475d0c3cb249abbed5"
+    },
+    {
+      "path": "assets/franziska-glass.svg",
+      "bytes": 1428,
+      "sha256": "d477fb2bec721ecc892d4b280f3d3c8283b870f0beeecc267e923ff07f1d21a3"
+    },
+    {
+      "path": "assets/glass-status.png",
+      "bytes": 7412,
+      "sha256": "2425b30c737845b84517ca2dee6d6c93b27e3bc82d76860c88be6ec618c071b7"
+    },
+    {
+      "path": "assets/navigation-left.png",
+      "bytes": 335509,
+      "sha256": "c79f5f93d9af8dcc7272e687890eb116a20584bb433383f977adcb6983a8a6ea"
+    },
+    {
+      "path": "assets/navigation-right.png",
+      "bytes": 335288,
+      "sha256": "7deb512f4fe3938447785a71edd182f9985acce5bc28fa1470b45e63ce3ae574"
+    },
+    {
+      "path": "assets/system-architecture.svg",
+      "bytes": 4055,
+      "sha256": "8c59c3f7275de67336cb82bde6b0812e18470a005e1d61a10fe29d1e9c3cac8e"
+    },
+    {
+      "path": "assistant/.gitignore",
+      "bytes": 57,
+      "sha256": "f0222c4c2bbb8ad14ac52ce42ceed2b45e7172c860bc063fead255da633a4040"
+    },
+    {
+      "path": "assistant/BUILDING.md",
+      "bytes": 6553,
+      "sha256": "78430ee120732d7df9ea1f321ec321ad99cbf08f95daf87a7f057ddf5249bfad"
+    },
+    {
+      "path": "assistant/COMPATIBILITY.md",
+      "bytes": 4295,
+      "sha256": "fe857ac387bb56b5b9077fc6d7f0c2cb873956f741cc1165a33368c0b1848a84"
+    },
+    {
+      "path": "assistant/LICENSE",
+      "bytes": 1304,
+      "sha256": "bab3dcb823688de025f43c78980e9ce3667df40d38fba7ed59ddbe5e83915c8e"
+    },
+    {
+      "path": "assistant/README.md",
+      "bytes": 2640,
+      "sha256": "6dcc80ac3382bd2f2fbf182bd1bf5e1231ef136f9c7ce4836341ad2c8692485d"
+    },
+    {
+      "path": "assistant/SETUP.md",
+      "bytes": 6360,
+      "sha256": "6e426eebc617294457fab5625bf93c2891b2f332528fff6009dca96d9e6ff565"
+    },
+    {
+      "path": "assistant/THIRD_PARTY_NOTICES.md",
+      "bytes": 3550,
+      "sha256": "993a84b3c5c6af56c2d7df862a65ef73d2e28b477df89da144181bfd020a63f3"
+    },
+    {
+      "path": "assistant/artwork/README.md",
+      "bytes": 579,
+      "sha256": "0007767d58c33460bcf175a24346ea4d68a1533b19715050ffceee58c44c15ae"
+    },
+    {
+      "path": "assistant/artwork/franziska-launcher.svg",
+      "bytes": 277,
+      "sha256": "4d12d7eef17f57df7d80351f53bc823b8ee19431e0c3bac15192dc7a3b0f7707"
+    },
+    {
+      "path": "assistant/deps/SHA256SUMS",
+      "bytes": 707,
+      "sha256": "8ea7fbd5392442f463ebd679554076b2450f87e5fad97fd59ccaf77713d2a9ee"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/AndroidManifest.xml",
+      "bytes": 3765,
+      "sha256": "a349ff4e6eb47158852e754574e415cace68bde9338dc1f3a1db54fcf796269d"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/drawable/checklist_icon.png",
+      "bytes": 109,
+      "sha256": "1a480697dde7d5974fee24d72e9055bb2777f9f78d60403d4e3a44858e7c7abb"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/values/strings.xml",
+      "bytes": 427,
+      "sha256": "3a4b640a29ecfd5cf592acd586fe49eb62493b993d33c508a7ac31f58703b931"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/values/styles.xml",
+      "bytes": 600,
+      "sha256": "b109c1f92733389df0e5225a7048bd7b7efd01cd7f22105aba2b98a3d7265fb7"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/xml/assist_voice_trigger.xml",
+      "bytes": 90,
+      "sha256": "ce82d6fb406ca2f3ddc115fd55f165ea54ed050851ab540294d2dcbb89cd4c74"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/xml/gallery_voice_trigger.xml",
+      "bytes": 77,
+      "sha256": "16d0ced9bd059f147f80a642472a37c25205fb78b7be5beb2d110b63a0634a6a"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/xml/look_voice_trigger.xml",
+      "bytes": 88,
+      "sha256": "b37e13ebb5b79d57f32b546e3dca03b8b372882fe1d8f9edc3dd82cf2569ee9b"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/res/xml/voice_trigger.xml",
+      "bytes": 90,
+      "sha256": "ac111f8d9e9ef06c86e59f0c6a0831448ab36cc86b5a7b810d66e7a4dda1d4d3"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/AssistActivity.java",
+      "bytes": 242,
+      "sha256": "c20bc6bf70d581428877350897e8194031da2f3973a6819cc6666124bf022f11"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/AssistCapture.java",
+      "bytes": 15131,
+      "sha256": "716844468ef52502da3f52137f8241c18674381ae2b83e7f37a3ca69383434b4"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/AssistGate.java",
+      "bytes": 1781,
+      "sha256": "72a23861b927bd1425e5738c6fd5cfb131da155f5dc864f9a1fa6c8e04466737"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/AssistPages.java",
+      "bytes": 1390,
+      "sha256": "ccc57341476c2e6798dc47990c1658dc09425901a6e6265cbca1d162b352dd26"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/AssistPresentation.java",
+      "bytes": 2681,
+      "sha256": "8b4bf41f0a57e707abc489558d5739bc64470894ed1eed3ba0c099a25fd2ebfb"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/AssistSpeech.java",
+      "bytes": 4178,
+      "sha256": "8ea8dea3d19fe4c71d57c9956b8fceeed5e8fd764293ca990e1f709430e73f16"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/CameraButtonGate.java",
+      "bytes": 2398,
+      "sha256": "2ded4e10b9ed06983555645c13a5ba508e95fca32e2da3a60a69ffb525b0da67"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/CapturedPhotoStore.java",
+      "bytes": 4679,
+      "sha256": "7a8c8d1fa7fb2c748b78088af6be791f593e4129122e951d00d44142953b25ca"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/ChecklistInput.java",
+      "bytes": 2424,
+      "sha256": "01e311bc3b7b7c923ba13abb7e65c55655f42c8466b567f218460d60e4351d1e"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/ChecklistText.java",
+      "bytes": 1732,
+      "sha256": "df82e458fe38786076521fa8ed2d7f545cc9452bb67101c153bd15403ec931fb"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/ConnectionInputGate.java",
+      "bytes": 4712,
+      "sha256": "1849535d09787deb6f03e4a01a7f5aa04257f1473b939987a52c4bc7cb3edcb5"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/DisplayPaint.java",
+      "bytes": 981,
+      "sha256": "77c313f5999141241658ba06d8b2e95cac07baab16b49720d9f2b784a0c265f8"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/DisplayPatterns.java",
+      "bytes": 1381,
+      "sha256": "ae9881982ae227cee286fe03ca9bf7909481713f12c39e60fe2ca67e3a391188"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GalleryActivity.java",
+      "bytes": 23029,
+      "sha256": "f97f1cd726770322f58c66ff1e61be8c1729d45ea3de037250a9883cf8d9c0a2"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GalleryFlow.java",
+      "bytes": 2432,
+      "sha256": "7081e567da1c292f5fb07f941b73ee1fa559147554efc8694a2b8dad249e9099"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GalleryRenderer.java",
+      "bytes": 3220,
+      "sha256": "b3ea5b1fd4111bdc00bdaf31715ffae3e8d33533a8857a057216cb3fbd10bc23"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GalleryRendererFixture.java",
+      "bytes": 2013,
+      "sha256": "cc0366081eb828af7ffeb2c950b0d76107145b2466f33d4012cc3e4c46987e48"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GallerySelection.java",
+      "bytes": 1179,
+      "sha256": "33602c541650961acbe41bb8a164ba6c78786e69ecc3c21d62c8f733e93d991d"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GalleryShareService.java",
+      "bytes": 12112,
+      "sha256": "764327b188673ef24fc9238ff0deed33325b0f2fffc30bf4581cc49065e7d541"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GalleryShareStatus.java",
+      "bytes": 635,
+      "sha256": "d5ae0f47b5544a25f79d9671597090b818327a3f32bee1c75a0de0d934874043"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GlassActivity.java",
+      "bytes": 150879,
+      "sha256": "5efa3e8b834c91d2715f9836f574766ffca25d35a0922a12729f3d308216a6d4"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GlassCallPrompt.java",
+      "bytes": 4005,
+      "sha256": "a78e3f8971c942e3920076ec756dcd8e46dcdc05c451411dcaeeed60cd9c3aa5"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GlassCallWriteGate.java",
+      "bytes": 1476,
+      "sha256": "5742f1aa7a0803ce3be11dcab893fce4e16ae7f5ec2679dae72712a064e65276"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GlassDeleteIndex.java",
+      "bytes": 2729,
+      "sha256": "7a77aa6b4ae9ece6608009d5112b0c2af0e64666015e2f990cd3923ffa208841"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GlassMediaIndex.java",
+      "bytes": 7167,
+      "sha256": "8fd72e61ba6ffc7c981780b0f21bf93e913c7b862bd3647006d93fc1b78c7031"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/GlassTalkAudio.java",
+      "bytes": 21318,
+      "sha256": "00c62e177131182a748dad0f6b7d5cfaeb09484842d68867fe8ad2d8a1bd0c32"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/InputFeedback.java",
+      "bytes": 3005,
+      "sha256": "686c8c5b0e9fcd21aab1884297112dec72da845736c917b1f5f76306f64ae896"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/LookActivity.java",
+      "bytes": 282,
+      "sha256": "2979953fab96e4e603b88e642d8a5bfd6cabfe61979f8e2c90da8a2e69e4cb6d"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/NativeAudioAdmission.java",
+      "bytes": 768,
+      "sha256": "f46f4e9cd8c92f3d84db312df4e6662e19e20aa259c462d2c4cef70912851696"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/PeerRoute.java",
+      "bytes": 4473,
+      "sha256": "dbdce61f7606cca687ccae345f9c98c89572ee91db07ba37ce61775391f70988"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/PhotoPreviewOverlay.java",
+      "bytes": 958,
+      "sha256": "0943c51d4a0107a5fccdd1ae9371175659ae0f056be03a3d5e04ad03695c296f"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/PhotoSyncActivity.java",
+      "bytes": 8862,
+      "sha256": "24303eb9fed9cc83b7f442e316407836c00d2a580d8504ee6135620fb2f6d221"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/PhotoSyncBootReceiver.java",
+      "bytes": 829,
+      "sha256": "8b35f264bd565c57b80e14fcea75bdbbd285ad49acd4b341114e5f6ff2144f76"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/PhotoSyncPolicy.java",
+      "bytes": 3416,
+      "sha256": "a395e2feaa2409716e1bbe468a59ed922f9605b37af6f61e328add529734fa64"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/PhotoSyncService.java",
+      "bytes": 20090,
+      "sha256": "c41480615b55753b0959d45c89f6cf06c8295d4b0a8ba6563b8d3f74972fcfd9"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/Provisioning.java",
+      "bytes": 4272,
+      "sha256": "80b22e4496af704565ef8e48c265c031778c7b889f4dcf59415075f62c6cfe53"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/ReadingScreenPolicy.java",
+      "bytes": 1416,
+      "sha256": "8ec57d042898008b26d3eeda6301b85ff71282c329f71d9168bd32a303444092"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/SavedPeerWifi.java",
+      "bytes": 9519,
+      "sha256": "0c6b98c0235a7543f5e49c9a7140535767a856b487e2701e58556a28c56a5087"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkCardRenderer.java",
+      "bytes": 4623,
+      "sha256": "21539f1057222d6c08fff7f8e269a2896af5f6bebc2be18688cae9fbe707b3f4"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkChatLayout.java",
+      "bytes": 5125,
+      "sha256": "182fb22bc69f2c38f19b8f9e3017fed72a6ecc157d76b3cf21510e25da8e3f2a"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkDiagnostics.java",
+      "bytes": 5227,
+      "sha256": "b80e2a7dd6e08a08a685e7feec7e10fc0d6d268da661d1873b8107066f145a88"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkHudState.java",
+      "bytes": 3850,
+      "sha256": "3f0620022e7f8cd7a67905bd7a5455636905f98f65fb0b5d6a4aaca6b2887781"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkPlayoutPolicy.java",
+      "bytes": 907,
+      "sha256": "55d1c20a020eae643c738cd792ce71d9c5f0e2ec67865146f3ea40c0e4564f36"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkSendPolicy.java",
+      "bytes": 6415,
+      "sha256": "dc79de64923c4a3515aabf442173454746c65e6c89e628378fccc4303a26c582"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkStatusBar.java",
+      "bytes": 8736,
+      "sha256": "91e135dfdeab5e7ee5c3c30b2cf9c3dfb6fb4232c80ab4d426ba5be7152fce03"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TalkTranscriptLog.java",
+      "bytes": 2702,
+      "sha256": "bc1044f6fd1b36f167825fb7e55c7546d320f215d77f956283ea3289d9d42bd8"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TapDiagnostics.java",
+      "bytes": 2968,
+      "sha256": "6837f4b0b6219219072884aa3199f744480795c109e45835b0b2ccae6b648127"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/TapGesture.java",
+      "bytes": 2036,
+      "sha256": "1f9972384b3a2b59f5d33d047ad78798aba69fba9eb7129c6949a82114041189"
+    },
+    {
+      "path": "assistant/glass-source/android/glass-client/src/lab/franziska/glass/VoicePhotoGate.java",
+      "bytes": 3087,
+      "sha256": "aa9700ed9cdcb4ceb51e4b62cfa260ffb37a7665e7d476e62072dc3edf954352"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/android-probe/assets/THIRD_PARTY_NOTICES.txt",
+      "bytes": 1486,
+      "sha256": "175003285bd49eae9d0930b969c78410284d0db573ae19b07cb4684991e329a9"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/android-probe/build-tools/RelocateBcStrings.java",
+      "bytes": 3497,
+      "sha256": "788d88259cd80efe94bd93bffcdd39a44efc4ebe218cb45e8f732f2ea2cf11cc"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/integration/r8-rules.pro",
+      "bytes": 512,
+      "sha256": "b86e8e9aed1116af429036e9e375ee66b50c3f2c2aec5ae42b58038963da67c1"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/integration/relocation.rules",
+      "bytes": 68,
+      "sha256": "7286b2b1f70955445365e458b7d97b1589a7de9202f8017f795d221554ffe7bf"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/integration/src/lab/franziska/protocol/AppIdentityStore.java",
+      "bytes": 21271,
+      "sha256": "f1cfb157ab75f428de89087c9519f6b8b39b89dc5b18a6e73c3c39a62d6c2975"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/integration/src/lab/franziska/protocol/SecureTransport.java",
+      "bytes": 3300,
+      "sha256": "13cc09730792d74ac59e751114db2b26935a0622cce2c9933ba090540b0ab8af"
+    },
+    {
+      "path": "assistant/glass-source/compatibility/tls15/src/main/java/com/franziska/glass/compat/tls15/PinnedTlsTransport.java",
+      "bytes": 7685,
+      "sha256": "b4b8ead714c47d788318e6958796a681f7bc6dfed818c3bf7dd9cbf51c8a4b29"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/AssistPump.java",
+      "bytes": 2707,
+      "sha256": "39a98c5462e6481a561e7a10c05c0cd9df222809e57d86b2684d43df7400964b"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/AssistRequestIds.java",
+      "bytes": 3228,
+      "sha256": "8472ce2a62640aae8019b1bd02c1fd902aa07a9eed01b88d557baae26bec5513"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/AssistTransfer.java",
+      "bytes": 4741,
+      "sha256": "b418b9bb3c848bae7fd16fafc0dee05a99ea1f80908f2b97d17e189fc2a0caf4"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/AssistWire.java",
+      "bytes": 14194,
+      "sha256": "088825eee2cec88ef36e7cbe98c26857f2afedba20ee2d684607292e908c4762"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/CallWire.java",
+      "bytes": 3060,
+      "sha256": "9d196fcd1b41d5f15616f1fe8ffae1f04e07f2617edacb04dd0288a9466f0c04"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/DisplayCalibration.java",
+      "bytes": 8639,
+      "sha256": "9b1aecb9e89561a22306ae8a1e8e375bc03d3e3abe48606e9c2568ad67aecded"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/DisplayProfileStore.java",
+      "bytes": 2838,
+      "sha256": "8bda59681d287e7eedde4db4c4709d89a5c88f146d60195a0fcda1014ad7acdc"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/DisplaySender.java",
+      "bytes": 2939,
+      "sha256": "170b1faaf67b87e12a6ff161e5363f93e1e1896d8a7de1313aa8f165d9a7546d"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/Json.java",
+      "bytes": 17138,
+      "sha256": "f18d5172dae61b8928852a68b1c15a6ecf1f0ed535605d7e4f2f7c2a71b23fca"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/MediaDeleteGuard.java",
+      "bytes": 4027,
+      "sha256": "ac01bd4716b9eccac189c645202a6c966d904cf51b3b86290986124ca14941db"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/MediaSelectionPolicy.java",
+      "bytes": 1691,
+      "sha256": "a3e1b1f2bf37c3b60bac3c9f64d775c599cd486fae9ca1c7aa84b32e6f214fe1"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/MediaWire.java",
+      "bytes": 10378,
+      "sha256": "01341ae53bba54e4f59f7f79a9d6be9f54e518d082f9c75b32db6e8a8d51aed0"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/ModuleContract.java",
+      "bytes": 4241,
+      "sha256": "3f06a8157347ae1654251833b78b7cf4d233646e04dbe3d900de740a20056bde"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/PhotoWire.java",
+      "bytes": 4575,
+      "sha256": "405d5bf0b217600827c5aeb5e060399229c0cc9742be66caca1dfeca20f6acf2"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/Protocol.java",
+      "bytes": 12077,
+      "sha256": "8c7533a07f203f2199463c308dd33187a2b29893c925520b2ffe6147a2a9dab3"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/ProtocolException.java",
+      "bytes": 169,
+      "sha256": "0370e7a5968a89481a53254807a4ebb402a0324067fb1e5c814c14bfd8c16af3"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/SessionState.java",
+      "bytes": 4205,
+      "sha256": "7246206c49ab4761d8f34b4bd3388e6f22fbb7fb6d57a12ab5af3e89fecfa56b"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/TalkWire.java",
+      "bytes": 4003,
+      "sha256": "22597c5ebbe7bc3c08c83529da3d0876721be50579de94e392ce72b9a649359c"
+    },
+    {
+      "path": "assistant/glass-source/protocol/src/lab/franziska/protocol/Tls.java",
+      "bytes": 26917,
+      "sha256": "3bc5de76763925d5f50a4e2443ff69e0d6da10048749b35ebcd623b31f26f97c"
+    },
+    {
+      "path": "assistant/licenses/asm-9.10.1-BSD-3-Clause.txt",
+      "bytes": 1557,
+      "sha256": "12e1d8732d96b8cf05834c6758d389780caa463338d036dfe8c731a10f5eefdd"
+    },
+    {
+      "path": "assistant/licenses/bouncycastle-1.86-LICENSE.html",
+      "bytes": 1259,
+      "sha256": "afaf5bd0b0d869dc86b71711e1b775b204948634c9710a35a9a70d1613a2ab14"
+    },
+    {
+      "path": "assistant/licenses/jarjar-1.18.1-APACHE-2.0.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/AndroidManifest.xml",
+      "bytes": 3744,
+      "sha256": "ae5e79ed4a10becda90b8ebfaaf7e14ed942abf912245ed3a2b66d0a8e5acd28"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/res/values/styles.xml",
+      "bytes": 930,
+      "sha256": "a25048110a14849a04507ff3034870af46eaf070f593c02098ffe7c056773cab"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AgentAuthority.java",
+      "bytes": 3686,
+      "sha256": "6821eacd38f206249a18a5d51092a5e1f4c3cb5491ae78d8e0b9b339c5aa98b5"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AgentEndpoint.java",
+      "bytes": 9302,
+      "sha256": "a4bdfcfcbdacddc055cdca578b27ef5dc888e6361d872ecab520302d878e36a9"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AgentProvisioning.java",
+      "bytes": 1835,
+      "sha256": "03ff79f4faec813c7fd1cd1694cd9c717204ba40a1d07b918b8f506c5c83c469"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AgentResourceLoader.java",
+      "bytes": 1343,
+      "sha256": "19654b92d3958a722ded02cbe9b35b5be184205f013ed96efa2792104ba2abc3"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistAuthority.java",
+      "bytes": 2510,
+      "sha256": "29d8ffe3e400740b4d232de3fa4e9d97268e6500fc775ac3c6c0574bb98e8aed"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistGatewayUpstream.java",
+      "bytes": 1725,
+      "sha256": "3a923c2000e6810dd4c8f60669584bdb2258f5a682e8482bfdca15504b7a8129"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistHttp.java",
+      "bytes": 5614,
+      "sha256": "b385b18adcccc5ff73f9891073afe798745e1a5894b2e9025995f715974398eb"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistPairing.java",
+      "bytes": 1426,
+      "sha256": "191f86c5423e6d9253a9b569a8709aa7115a7657467f718c58bb0a065d8d73fa"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistSetupActivity.java",
+      "bytes": 19429,
+      "sha256": "2e3b8d9fb0633609918660a01cb673f31f663091e21943e042cf66a3a4625a13"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistUpstream.java",
+      "bytes": 294,
+      "sha256": "718354fc2a21363a198f62c5f07407217490626cead6cab4827ad59e565f54c5"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistantProduct.java",
+      "bytes": 7929,
+      "sha256": "01964fa3244b37592a8dd10e98e3b0f409a886bef4b6f31054cfa382e6988655"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/AssistantStart.java",
+      "bytes": 1440,
+      "sha256": "b0988e08cea3da962bc1dd6b86ff2e6f28e981a9fa2a61bddb7a0e336072cc2f"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/BridgeActivity.java",
+      "bytes": 33977,
+      "sha256": "01f3dd12d384333ea21f20107d90ffc64d37b20952f2dc50d9f477bc1f224b5d"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/Checklist.java",
+      "bytes": 5951,
+      "sha256": "881033b21188bfe08e2cb08500481d31ebe3da6b411cb3d4d20b0cb53689b10b"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CircleDraftActivity.java",
+      "bytes": 20533,
+      "sha256": "35585982d748903194823a27b24617097742efbead57252885db06f148af0ca4"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CircleDraftPolicy.java",
+      "bytes": 3664,
+      "sha256": "515bee20098f21fb64cb5ef1bf50407d21b42c621ca29895c37628242c2e03ef"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CircleDraftStore.java",
+      "bytes": 3732,
+      "sha256": "ca494b8cfdd34862d8cb5a1c15f76ff1abdaddd4c25585545da8bc7c23937f35"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CirclePreviewGeometry.java",
+      "bytes": 1875,
+      "sha256": "f599ea72c8bf4362e0c73ce5090a49aaf134488952fbcccef0dec7b9f7916394"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CircleRecorder.java",
+      "bytes": 15876,
+      "sha256": "67fa1c6a8968e5e6414984c57e076cbc901ff3c5b581a205354a411344948181"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CompanionBack.java",
+      "bytes": 2317,
+      "sha256": "22b7a8209ad2156ecf819398c49fadfd4155219f3293ac1ac25a89defbecbffd"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CompanionDestination.java",
+      "bytes": 1795,
+      "sha256": "6f65bdeb02ff6d4e54b2f3aa0d5bde2607171d307fc0bc9c06ee9deb3cddcf95"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/CompanionUi.java",
+      "bytes": 29792,
+      "sha256": "ee9d65812f89f294274eb1712f4537f132821bf834201ab0749a561533b2f6f6"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/DisplayCalibrationPanel.java",
+      "bytes": 10142,
+      "sha256": "059891db9bf5b81a26af8eab9db3870c705514efcd35d9368c5111e0e0e82d80"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GalleryDeleteRequest.java",
+      "bytes": 2175,
+      "sha256": "b246c7e2c20eb4c2369a9fdbbe5abff01654601cb7d3434af9f15028b74bb821"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GalleryIcon.java",
+      "bytes": 2172,
+      "sha256": "29e9c2f5eab2b01a07cd225e0fc1cd2b1bda351e3da2bef5b8a9bb982af8d1ea"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GalleryLocalStore.java",
+      "bytes": 2033,
+      "sha256": "5bb656608facd9b2bfc33a52aa7c8a27fef1b9a782e8a9eb7edb29854daa211d"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GalleryMediaTypes.java",
+      "bytes": 1188,
+      "sha256": "119ccbe77edf9dcc7bdd13dae8de51021805bc4b2241b1e2db21ebcd38f55312"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GalleryPhotoView.java",
+      "bytes": 2488,
+      "sha256": "d10e6ff7352b7cb5bc07d47cc9b66773be29de120aee4b2f6ff4585ec5881b42"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayAndroidCredentials.java",
+      "bytes": 3053,
+      "sha256": "84705b91960159f5ee7c10ce8b4665ec2267ea81725d94c768272b92afa0b5ab"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayAssistClient.java",
+      "bytes": 25741,
+      "sha256": "e68de34406546280e63a800a54aa02448f18c71ea62d519641977a0ccc64187b"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayCredentials.java",
+      "bytes": 12109,
+      "sha256": "3f039de7effcb173b683e14da99555192089dd5079b72f5a04e08cefef94c9cb"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayException.java",
+      "bytes": 1262,
+      "sha256": "262c57f6b233f913d4e7db46d072e8a2d4e54fdae8e37c6258721de54fd9eb90"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayJson.java",
+      "bytes": 5111,
+      "sha256": "a7eeb817af74e9d06caaf34fedb958aa2d739dfba49931f27a9c4d67c0c1ac5b"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayTalkClient.java",
+      "bytes": 41280,
+      "sha256": "a6e899d77c1299cd2494bd4747b98372e3b5433966f71d2e4bc3d940095d729a"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayTalkText.java",
+      "bytes": 2253,
+      "sha256": "46e1e2fb322558dce3eafb05f33a20ead0c6e9a6b232854574cc56d20db29fb1"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayTalkTranscript.java",
+      "bytes": 3289,
+      "sha256": "16ad6ad69b1cbe1a3364394ec18cc09f3f8bb28b76f3fcd83d66e2390296443f"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayTransportTrace.java",
+      "bytes": 5998,
+      "sha256": "416094bd3dc6a34a0f71a941619727e8357e8f02ea5b4ae0e01a267c620d822a"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GatewayWebSocket.java",
+      "bytes": 20592,
+      "sha256": "89d95ba91a5062fed381f6cc05b6f53b1143030f15cf0a03a63a7ee72ecb0d9e"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/GlassMediaCatalog.java",
+      "bytes": 3841,
+      "sha256": "2b6067a000ce9555f4f41e9349dcf5868f93bde713e883d7fb540599867b2d41"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/LinkService.java",
+      "bytes": 100531,
+      "sha256": "213921781ab1ceb813d4ff3927afd561417e17338b99a066ac9471590b2cfddc"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/LocalMirrorActivity.java",
+      "bytes": 12116,
+      "sha256": "7ce17382fc327b21aefc4b2a58c613a5213131c9d049b1e38601e1137316676d"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/LocalMirrorCatalog.java",
+      "bytes": 3906,
+      "sha256": "48af6654d2fd2b7c189acce146e33626aeb88ae2e1935d86b7712234443ef8a8"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MediaAlbum.java",
+      "bytes": 5768,
+      "sha256": "a846ac2123bb0378d9b4aa67410788f4d316b1ad0e2ed8bc392424cd2de017e6"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MediaReceiver.java",
+      "bytes": 16028,
+      "sha256": "3ee1dd7ee5b6f177120d708737cf43a8b1ac054df444824ac48826c04d4fb355"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassApi.java",
+      "bytes": 983,
+      "sha256": "b009fed2322d15d0a7594f04904ba6ecc334fb60bd4da60800c0a5e8e8db8ed2"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassCredentials.java",
+      "bytes": 857,
+      "sha256": "70c8169d47a053b92c298cd62271008d3567399a8cba387a28dd83909c4b742e"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassLedger.java",
+      "bytes": 7426,
+      "sha256": "f6604675b85198305be04e19e20b65e56bf577e1e9ef27d894d86c09fa8fe64b"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassRouteStore.java",
+      "bytes": 2709,
+      "sha256": "0fe3861f081ddae6fb968f7696db1c6eecae6339121f4c7d6029a2111022eed2"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassSetupActivity.java",
+      "bytes": 4135,
+      "sha256": "391db6cbc2c25189fd33581aef9ae59294b070d3b6b5d80fd6800c42af1814b0"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassWire.java",
+      "bytes": 6524,
+      "sha256": "d110f9addfb00aa1c2c8078eeb31f585624586d8d828f8452fa8c74dd8ee7c82"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/MyGlassWorker.java",
+      "bytes": 7267,
+      "sha256": "c5584811ce9fbc1c5c92ff8012311573f0f93a24bd6a4a023adf354a0a13e5f0"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/NativeCompanionActivity.java",
+      "bytes": 19411,
+      "sha256": "396adec5f967fd1da794391635db75ed4baba00e964592bb3c0b3dd7cf55d7e2"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/NativeCompanionClient.java",
+      "bytes": 5555,
+      "sha256": "9351b623a8005b0e8f4e9c7b18f59c55ce064c4321ab9688297e604a72e5fb1d"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/NativeCompanionService.java",
+      "bytes": 10507,
+      "sha256": "457a81154f615e7d796f7b68e28eb0d521c012d1fc2778a57d1fc410303569a9"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/OriginalShareActivity.java",
+      "bytes": 5169,
+      "sha256": "52f26fd9bb79584cfa03c2e6996ef913273b39f7c72580481d5c161cc3924432"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/OriginalShareFiles.java",
+      "bytes": 16329,
+      "sha256": "499f867a5a972421673e5c2bf0f8e918110925e17aae7324b9f70601ef048de7"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/OriginalShareProvider.java",
+      "bytes": 3607,
+      "sha256": "299cc28d9f77bd517a72f3e264a40a56b4d47beb902cf106fcfc8a206085c17a"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/OriginalShareStore.java",
+      "bytes": 3712,
+      "sha256": "b6b87de1be210ffe737c020027688a9384376d3159a7be3b7876a106e7113148"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhoneCallGate.java",
+      "bytes": 4224,
+      "sha256": "13f418f486d2bccee5c5f10784c5b5d7a35195f5504b077145fb9cf28168a1e3"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhoneCallLauncher.java",
+      "bytes": 1911,
+      "sha256": "7f0effbf29e8ec283fa57a25880aeb583c844460d54c6801041d793c35348836"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhoneContactChoices.java",
+      "bytes": 3226,
+      "sha256": "535e03676bee0ca004ce2cf9551ca780470006a0c3e7094ca7a29ed934524d1d"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhoneContactLookup.java",
+      "bytes": 2048,
+      "sha256": "50042b97d4ea67119fb8f1692bf185f1816bd69bcf775e2b4364b99a6c47507a"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhotoAlbum.java",
+      "bytes": 5302,
+      "sha256": "fedcdf958611d4b584e8578b6b860bb3a29e02cf141935b3333e3e5fad02cac3"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhotoSyncActivity.java",
+      "bytes": 31258,
+      "sha256": "e4091c1433aa5bc9895e1d6a7cb0cc509ddda1104ae3200532461edaf87ec348"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhotoSyncBootReceiver.java",
+      "bytes": 1370,
+      "sha256": "764ba3b6c205a46e7beaaac9e47d2dce13eb984e7f7cff27f9bb1cb402fbb251"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PhotoSyncService.java",
+      "bytes": 18328,
+      "sha256": "112d024ffa3cb10285364c37e9ecd16c7c9df16201aa37ca9f8e197351908a57"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/PixelCapabilitiesActivity.java",
+      "bytes": 25991,
+      "sha256": "1fecad2dd162f4696750cca176016e3f411e35d0c7b53ae4e26ac8393c435c0b"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/Provisioning.java",
+      "bytes": 1051,
+      "sha256": "8738312a83ec5f29371f94de407f3e735771f11ba22188757700faa47a16dec6"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/RoutePreparation.java",
+      "bytes": 2150,
+      "sha256": "6b5105564e750524e3cc75ad4b03640fdab28f763d096566c5a34285cfd680e0"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/TalkCameraIntent.java",
+      "bytes": 885,
+      "sha256": "f6704fbf457fb41053b22916625465588ab2e7f89a8848f9d7a6a9355447e803"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/TalkOutputBatcher.java",
+      "bytes": 5598,
+      "sha256": "361e88dc52f835848d238ae765a92bfc966dfb694c36350fa4160a08a86e55f4"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/TalkSilenceGate.java",
+      "bytes": 852,
+      "sha256": "ef97e2b07418dd235e24046811582cc16fc51579840f0a2214909c037cde5d70"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/Xe24Wire.java",
+      "bytes": 11620,
+      "sha256": "8ad3e4db4d100106440cfa06d82d877f0c30b226dc5ba027d1e449f59c71d904"
+    },
+    {
+      "path": "assistant/pixel-source/android/pixel-bridge/src/lab/franziska/pixelbridge/YandexNavigatorRoute.java",
+      "bytes": 860,
+      "sha256": "d8ed272bab9a5ca68f09d66afe961e333dbd094e8130f6eb880c0e17d512b0df"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/android-probe/assets/THIRD_PARTY_NOTICES.txt",
+      "bytes": 1486,
+      "sha256": "175003285bd49eae9d0930b969c78410284d0db573ae19b07cb4684991e329a9"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/android-probe/build-tools/RelocateBcStrings.java",
+      "bytes": 3497,
+      "sha256": "788d88259cd80efe94bd93bffcdd39a44efc4ebe218cb45e8f732f2ea2cf11cc"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/integration/r8-rules.pro",
+      "bytes": 512,
+      "sha256": "b86e8e9aed1116af429036e9e375ee66b50c3f2c2aec5ae42b58038963da67c1"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/integration/relocation.rules",
+      "bytes": 68,
+      "sha256": "7286b2b1f70955445365e458b7d97b1589a7de9202f8017f795d221554ffe7bf"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/integration/src/lab/franziska/protocol/AppIdentityStore.java",
+      "bytes": 21271,
+      "sha256": "f1cfb157ab75f428de89087c9519f6b8b39b89dc5b18a6e73c3c39a62d6c2975"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/integration/src/lab/franziska/protocol/SecureTransport.java",
+      "bytes": 3300,
+      "sha256": "13cc09730792d74ac59e751114db2b26935a0622cce2c9933ba090540b0ab8af"
+    },
+    {
+      "path": "assistant/pixel-source/compatibility/tls15/src/main/java/com/franziska/glass/compat/tls15/PinnedTlsTransport.java",
+      "bytes": 7107,
+      "sha256": "83a0298ab332ccf2e2e5a7ae1fb249218c83a8368ecee42ea3283b6dde182895"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/AssistPump.java",
+      "bytes": 2707,
+      "sha256": "39a98c5462e6481a561e7a10c05c0cd9df222809e57d86b2684d43df7400964b"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/AssistRequestIds.java",
+      "bytes": 3228,
+      "sha256": "8472ce2a62640aae8019b1bd02c1fd902aa07a9eed01b88d557baae26bec5513"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/AssistTransfer.java",
+      "bytes": 4741,
+      "sha256": "b418b9bb3c848bae7fd16fafc0dee05a99ea1f80908f2b97d17e189fc2a0caf4"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/AssistWire.java",
+      "bytes": 13662,
+      "sha256": "46c011d2c83e1a566f26631c474a0a66d827f62bcc5808ba50dab93bf2ce2d92"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/CallWire.java",
+      "bytes": 3060,
+      "sha256": "9d196fcd1b41d5f15616f1fe8ffae1f04e07f2617edacb04dd0288a9466f0c04"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/DisplayCalibration.java",
+      "bytes": 8639,
+      "sha256": "9b1aecb9e89561a22306ae8a1e8e375bc03d3e3abe48606e9c2568ad67aecded"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/DisplayProfileStore.java",
+      "bytes": 2838,
+      "sha256": "8bda59681d287e7eedde4db4c4709d89a5c88f146d60195a0fcda1014ad7acdc"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/DisplaySender.java",
+      "bytes": 2939,
+      "sha256": "170b1faaf67b87e12a6ff161e5363f93e1e1896d8a7de1313aa8f165d9a7546d"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/Json.java",
+      "bytes": 15842,
+      "sha256": "83fb7f7331b1d148ca704964f7e24afc05f8aa0fad46892179080ed31af833c3"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/MediaDeleteGuard.java",
+      "bytes": 4027,
+      "sha256": "ac01bd4716b9eccac189c645202a6c966d904cf51b3b86290986124ca14941db"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/MediaSelectionPolicy.java",
+      "bytes": 1691,
+      "sha256": "a3e1b1f2bf37c3b60bac3c9f64d775c599cd486fae9ca1c7aa84b32e6f214fe1"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/MediaWire.java",
+      "bytes": 10378,
+      "sha256": "01341ae53bba54e4f59f7f79a9d6be9f54e518d082f9c75b32db6e8a8d51aed0"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/ModuleContract.java",
+      "bytes": 4241,
+      "sha256": "3f06a8157347ae1654251833b78b7cf4d233646e04dbe3d900de740a20056bde"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/PhotoWire.java",
+      "bytes": 4575,
+      "sha256": "405d5bf0b217600827c5aeb5e060399229c0cc9742be66caca1dfeca20f6acf2"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/Protocol.java",
+      "bytes": 12077,
+      "sha256": "8c7533a07f203f2199463c308dd33187a2b29893c925520b2ffe6147a2a9dab3"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/ProtocolException.java",
+      "bytes": 169,
+      "sha256": "0370e7a5968a89481a53254807a4ebb402a0324067fb1e5c814c14bfd8c16af3"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/SessionState.java",
+      "bytes": 4205,
+      "sha256": "7246206c49ab4761d8f34b4bd3388e6f22fbb7fb6d57a12ab5af3e89fecfa56b"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/TalkWire.java",
+      "bytes": 4003,
+      "sha256": "22597c5ebbe7bc3c08c83529da3d0876721be50579de94e392ce72b9a649359c"
+    },
+    {
+      "path": "assistant/pixel-source/protocol/src/lab/franziska/protocol/Tls.java",
+      "bytes": 16182,
+      "sha256": "9e6923ad786d565cd2d727b57991f78c86e95c30be3322b04bae61f4cf974b92"
+    },
+    {
+      "path": "assistant/scripts/build-frozen.sh",
+      "bytes": 5602,
+      "sha256": "4a79d736b97cdc7498c33adce0f2682e9e0eb75fc3b3ae9e73192e619a88b8eb"
+    },
+    {
+      "path": "assistant/scripts/check-artifact.py",
+      "bytes": 6653,
+      "sha256": "b476c1a666f5f51bd51ad203918ea48369c864db2f88284cf42d83bff24842dc"
+    },
+    {
+      "path": "assistant/scripts/fetch-deps.sh",
+      "bytes": 2627,
+      "sha256": "d90d037d72b745c840d637b37db73ede08fb345ee147860e977c31d3b476e3ab"
+    },
+    {
+      "path": "assistant/scripts/public_bootstrap.py",
+      "bytes": 10834,
+      "sha256": "0896e700983f8eb316bec2f4237e1b49674db4eff2e7cd9f6e7aae331996b653"
+    },
+    {
+      "path": "assistant/scripts/public_bootstrap.sh",
+      "bytes": 213,
+      "sha256": "310b0287f15222737162ef5ee4c8877606e0daa994a7b4fbafa996060686fee1"
+    },
+    {
+      "path": "assistant/scripts/validate_public_identity.py",
+      "bytes": 2030,
+      "sha256": "9f4f13ed5167fb8f4246d590cc4f7a6892b46221b347ff5f551b4b34cc20e17c"
+    },
+    {
+      "path": "assistant/tests/RelocationCheck.java",
+      "bytes": 2377,
+      "sha256": "fa9962e275ef86aae6a317098c4a6c563e0fdfca248b7acfbc35142aa4534334"
+    },
+    {
+      "path": "assistant/tests/test_dependencies.py",
+      "bytes": 2121,
+      "sha256": "fe67733b4aac5046e6180a16d0ed6e5f704f64372887fa551ba63807e08e7f2a"
+    },
+    {
+      "path": "assistant/tests/test_public_bootstrap.py",
+      "bytes": 9081,
+      "sha256": "01ebd486faaf7870cda80a1a35094cfd13ebe32f39d48f012460d22718796fe6"
+    },
+    {
+      "path": "assistant/tests/test_relocation_helper.py",
+      "bytes": 2567,
+      "sha256": "ff751ea7e1e7a49782384dadf911c4550fb0d61be4cd75cce008be7afc2f24c0"
+    },
+    {
+      "path": "assistant/tests/test_sanitization.py",
+      "bytes": 5165,
+      "sha256": "bbfad8d2d2e58c736466ff7c6ec192178478147b3430ce818e03b6f289023327"
+    },
+    {
+      "path": "assistant/toolchain-lock.json",
+      "bytes": 506,
+      "sha256": "4b3df104e9d85bc286a3adc23d0e343f6efe90ad959dade562d8839bffa30500"
+    },
+    {
+      "path": "build-verification.json",
+      "bytes": 4367,
+      "sha256": "bcb6c6359cde77ede680145c8a251fd4954f68b14b6728a3bcdd44306453ac61"
+    },
+    {
+      "path": "ci/README.md",
+      "bytes": 582,
+      "sha256": "c00fe172736a0536596d54f87d44578895b4bbc6dd9370235f07f8f0bec137df"
+    },
+    {
+      "path": "ci/continuity.github-actions.yml",
+      "bytes": 957,
+      "sha256": "77410f275d010af0e8b3440bffefcddc618ce415344313bacbd8879823e6c086"
+    },
+    {
+      "path": "components/continuity/README.md",
+      "bytes": 4906,
+      "sha256": "c5ee8fd0a3cb3ff837f29d8499fee4451126393277ac2f69ba379cb37e4df2bc"
+    },
+    {
+      "path": "components/continuity/paths.py",
+      "bytes": 522,
+      "sha256": "98ddbc62b388e4414ce0dc69d9d04bf86efd6f3917eedc3e7f10f808b28ed6e0"
+    },
+    {
+      "path": "components/continuity/plugin/index.js",
+      "bytes": 4428,
+      "sha256": "b6668c84ab4381ee656f032fb43ce536934a80d8a6060f76547a501bbe34cab0"
+    },
+    {
+      "path": "components/continuity/plugin/openclaw.plugin.json",
+      "bytes": 768,
+      "sha256": "524e147991575049ed3e065d5644e83ec9c2849b72f3d46eda65d951df02ebcb"
+    },
+    {
+      "path": "components/continuity/plugin/package.json",
+      "bytes": 282,
+      "sha256": "4835e405711ee6bf4f288da612d7858c5856bfb7c4a3882dfd4b809a738232dc"
+    },
+    {
+      "path": "components/continuity/recall.py",
+      "bytes": 8904,
+      "sha256": "00e7aac9ee742e78d2876d17a800bd027cb01ba84a2c23374f7b1b5abfc7f05c"
+    },
+    {
+      "path": "components/continuity/search.py",
+      "bytes": 7187,
+      "sha256": "20db8e8dd179a756f0cccdafd67636c0c189ebad9bc0ad81cde2e5dd468faafe"
+    },
+    {
+      "path": "components/continuity/semantic_index.py",
+      "bytes": 6345,
+      "sha256": "a37092dde0c58e01a0221dfabcd262e7281d9ecc9ec6d34f02e093ec3f7cc4c4"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 9788,
+      "sha256": "f5a43339694ae306e3d3a3480d09e91f3368e597199b7c73cb86ff971eec1d8d"
+    },
+    {
+      "path": "docs/CREDITS.md",
+      "bytes": 3382,
+      "sha256": "ef3808e5e810c99e02b0ae58af46309b057c2fab39b13d91958f38fdf2389ee8"
+    },
+    {
+      "path": "docs/FRANZISKA.md",
+      "bytes": 8747,
+      "sha256": "3e5ac9cd6ab6bbe0242a44b349ff4fb350e41ae20054965754209394bd7a9fcf"
+    },
+    {
+      "path": "docs/GATEWAY_SETUP.md",
+      "bytes": 5010,
+      "sha256": "02df1998e463efc769dd045a5efc2088ad3f536150ff248e0dc6606aeff23319"
+    },
+    {
+      "path": "docs/GETTING_STARTED.md",
+      "bytes": 5339,
+      "sha256": "ba5e99b5fe4b58a7a4413173c220a5cda5eed6fb38fe8f920e3e1f82539ab66f"
+    },
+    {
+      "path": "docs/OPENCLAW.md",
+      "bytes": 16955,
+      "sha256": "f67b505dda907eb45c1373a11868f049c9e94542b4dcb102e03941e96c05d965"
+    },
+    {
+      "path": "docs/REVIEW.md",
+      "bytes": 3394,
+      "sha256": "2aee0e86df8fd5d07c8842d469139a4fd134625e9c856b0e29b41afa46573eb2"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "bytes": 3094,
+      "sha256": "2fa9d879a1cd630fb8ee20d558f8d24db293f7e0f5663e9b32495017e4211073"
+    },
+    {
+      "path": "docs/UPSTREAM_BUILD.md",
+      "bytes": 20448,
+      "sha256": "3bf63284324178dab3ac5e1518543a6f3cbe6f097f680346533876815f31954d"
+    },
+    {
+      "path": "docs/WEARABLE.md",
+      "bytes": 11312,
+      "sha256": "d74f7b9a8cbe0e0ec3c9c97a0454c75f1ecd8f3656c34c5ce1f3b4d48f21a9a8"
+    },
+    {
+      "path": "patches/CHANGES.md",
+      "bytes": 2738,
+      "sha256": "9c328246d14c04c8c7a584a1dd57d9f58200eaa6fabde6d32b9b640fa7eaddab"
+    },
+    {
+      "path": "patches/core-legacy-franziska.patch",
+      "bytes": 6460,
+      "sha256": "07086da3a2664a0e1fecccfb985769a8c1eceb9cb3bf5edf6ab6312ba3337966"
+    },
+    {
+      "path": "patches/manifests/SOURCE_RECONSTRUCTION.json",
+      "bytes": 10218,
+      "sha256": "c830110e2946da87511c6bd200868e56691807e8196eb8282100339111e4fcc8"
+    },
+    {
+      "path": "patches/manifests/native-source-files.json",
+      "bytes": 2034170,
+      "sha256": "37637b39465efeafb42517aac6b5baf51b32a5cb67b56fd7de603fc926b19f1c"
+    },
+    {
+      "path": "patches/manifests/snapshots/core-legacy-files.json",
+      "bytes": 2953558,
+      "sha256": "f2e0c19862ec9936b058f4d220e4976b87bdda0ac3334a5d15f52fc8fd25baba"
+    },
+    {
+      "path": "patches/manifests/snapshots/openclaw-files.json",
+      "bytes": 12867735,
+      "sha256": "153d0e1abb7c7004a7fc9e3d446d4d427e2090336492865ec819866edab709a4"
+    },
+    {
+      "path": "patches/manifests/snapshots/osmand-files.json",
+      "bytes": 1662118,
+      "sha256": "2c2116947a7c0ab6bac512d79a3b51755d5325b265d8b8eb34a0987e1a0e1baf"
+    },
+    {
+      "path": "patches/manifests/snapshots/osmglass-files.json",
+      "bytes": 11328,
+      "sha256": "80be1fe8a504aad3ea4b00bc6aac28f5cd63055fdfb31bdcbe812fdb11fe6d9e"
+    },
+    {
+      "path": "patches/manifests/snapshots/resources-files.json",
+      "bytes": 7765491,
+      "sha256": "e7bebbc14be72e8b40f1d376a651842d6c1adb0d7b1065861ef46a0d7b8fde87"
+    },
+    {
+      "path": "patches/openclaw-franziska.patch",
+      "bytes": 1086729,
+      "sha256": "2ee5f8edfa89aa162aeda0e9cd0954e146233f9d0035dd8e901a0a9e3bb0d674"
+    },
+    {
+      "path": "patches/osmand-franziska.patch",
+      "bytes": 589725,
+      "sha256": "c6be0bf70961745c49b124db1e2a4470ff5a748e905df9c479d2829601f0aac3"
+    },
+    {
+      "path": "patches/osmand-public-debug-signing.patch",
+      "bytes": 652,
+      "sha256": "19f4717aaa8698fd31a7cc6084f805d593586e403ce918918dfa5a1f1413d8f8"
+    },
+    {
+      "path": "patches/osmglass-franziska.patch",
+      "bytes": 161709,
+      "sha256": "72d1c7f6efe61f5b73c6ca06525ec7eb86600a6c154b291551d0327e1aaf4ecc"
+    },
+    {
+      "path": "patches/resources-franziska.patch",
+      "bytes": 224926,
+      "sha256": "f18082c934cd5495b0ed1a6dc87e72272a952d0eee57c9c17abaa7c503110629"
+    },
+    {
+      "path": "scripts/checkout-source.py",
+      "bytes": 19548,
+      "sha256": "3d7dcde7fe6d6b1c65f9cf03c82e0d297ca8fcd64b67f9506806e9be3d861ea3"
+    },
+    {
+      "path": "scripts/init-workspace.py",
+      "bytes": 1137,
+      "sha256": "80a9635f98ba525f1041072ba152b2367abaec02328e082aa6516a5f095a6b55"
+    },
+    {
+      "path": "source-components.json",
+      "bytes": 55113,
+      "sha256": "e58a8745e0d0f6341e5a763b8c174a34e75324774aec64899faf2d5d70ed2820"
+    },
+    {
+      "path": "templates/workspace/AGENTS.md",
+      "bytes": 757,
+      "sha256": "d0304fb4ad7f75554697d4208aa9300d0ee6f0b061a1231196bccca6131e0ba6"
+    },
+    {
+      "path": "templates/workspace/IDENTITY.md",
+      "bytes": 90,
+      "sha256": "814bd92d7d719a7ceab53bb87c3b8a8433b2183a8825720e0a41b4dca4736090"
+    },
+    {
+      "path": "templates/workspace/MEMORY.md",
+      "bytes": 147,
+      "sha256": "1e2072c0f873b8007c523108419e940a0bb5975323f25aec1812db5a710b19ed"
+    },
+    {
+      "path": "templates/workspace/SOUL.md",
+      "bytes": 435,
+      "sha256": "acffb50c130b37acc6b26268808c6efcc332fb037f67a66e58f0431e8b488236"
+    },
+    {
+      "path": "templates/workspace/USER.md",
+      "bytes": 146,
+      "sha256": "17d2ad9d711e2b987f587039af44bfd4644d5ea1527d5f22a3d4a36c798403ad"
+    },
+    {
+      "path": "templates/workspace/continuity/BOOTSTRAP.md",
+      "bytes": 293,
+      "sha256": "4cdd427fd6a503bee1fe7bd261d38fcc812cd31de5c53fa1039c611bd6e8b1af"
+    },
+    {
+      "path": "templates/workspace/continuity/COLLISIONS.md",
+      "bytes": 150,
+      "sha256": "bcd776caf66b2207c120e1f9d3570e94d8d1cd6e31292609731044b393854827"
+    },
+    {
+      "path": "templates/workspace/continuity/HANDOFF.md",
+      "bytes": 69,
+      "sha256": "1230dfe4191a33b3459052b1924ac067e3f9f5b080a11cd5a7d716b13d00dfbe"
+    },
+    {
+      "path": "templates/workspace/continuity/PINNED.md",
+      "bytes": 99,
+      "sha256": "56829e6c2bd1d123e678a737767342f19b82f872d564603cb20c3e0a27c8586b"
+    },
+    {
+      "path": "templates/workspace/continuity/PROJECTS.md",
+      "bytes": 109,
+      "sha256": "99ec0e5a108cc7fa414dc58a4f8eec777a8e2e6a74f6207c7fac5f12b6480277"
+    },
+    {
+      "path": "templates/workspace/continuity/RECALL_PROTOCOL.md",
+      "bytes": 691,
+      "sha256": "d9ce16ec42dc55979af150e2f469489abb333fcb413a07f2b05d74acdc3d81ec"
+    },
+    {
+      "path": "templates/workspace/continuity/projects/example-project.md",
+      "bytes": 286,
+      "sha256": "83135e0f9989af9606599ee19972a56136bccf7cd2399a5a006aa7f130e8daab"
+    },
+    {
+      "path": "tests/continuity-plugin.test.mjs",
+      "bytes": 2129,
+      "sha256": "2b0156e40e64bef45943c2d31d1f1efa2a84bba1cdb50517acc98196ddc6f0dc"
+    },
+    {
+      "path": "tests/test_continuity.py",
+      "bytes": 3514,
+      "sha256": "2144a9fa9655c4092a3b172d43d49ddadd32fa0756ca47701192134b266c56bd"
+    }
+  ]
+}

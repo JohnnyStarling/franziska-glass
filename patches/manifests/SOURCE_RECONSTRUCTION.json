@@ -1,0 +1,200 @@
+{
+  "build_verified": false,
+  "components": {
+    "core-legacy": {
+      "acquisition": "public-object-cache",
+      "changed_files_sha256": "f22004b6284e56c6cb5a57c7bbaf59795ed2e4badc4d9040718ac734b3a21566",
+      "checked_files": 5,
+      "commit": "18c1d826178e5334f623095787ef2b268eb22b13",
+      "patch_sha256": "07086da3a2664a0e1fecccfb985769a8c1eceb9cb3bf5edf6ab6312ba3337966",
+      "public_proof": {
+        "commit": "18c1d826178e5334f623095787ef2b268eb22b13",
+        "public_api": "https://api.github.com/repos/osmandapp/OsmAnd-core-legacy/git/commits/18c1d826178e5334f623095787ef2b268eb22b13",
+        "tree": "74f6e2ab85ce9fc7e75713b6a3cebaeaf4646160"
+      },
+      "status": "source-reconstructed",
+      "tree": "74f6e2ab85ce9fc7e75713b6a3cebaeaf4646160"
+    },
+    "openclaw": {
+      "acquisition": "public-object-cache",
+      "changed_files_sha256": "2fdc9e50c0fad1b88ea015196fb3aca31434f9f4d24364b6a7dd16625d6ef392",
+      "checked_files": 33,
+      "commit": "1306cc5e4be6a1e4153870759505ea8c26bbacfc",
+      "patch_sha256": "2ee5f8edfa89aa162aeda0e9cd0954e146233f9d0035dd8e901a0a9e3bb0d674",
+      "public_proof": {
+        "commit": "1306cc5e4be6a1e4153870759505ea8c26bbacfc",
+        "public_api": "https://api.github.com/repos/openclaw/openclaw/git/commits/1306cc5e4be6a1e4153870759505ea8c26bbacfc",
+        "tree": "ade54514a04a469ff7d7e620a9affa16051cc7c5"
+      },
+      "status": "source-reconstructed",
+      "tree": "ade54514a04a469ff7d7e620a9affa16051cc7c5"
+    },
+    "osmand": {
+      "acquisition": "public-object-cache",
+      "changed_files_sha256": "95798f0e6509424fcb954bd3d851fa074ea701728aba0d10c857a147e5d812de",
+      "checked_files": 39,
+      "commit": "fd9b8e0b8ecbe0167b233dc472bca8976aee66bd",
+      "patch_sha256": "c6be0bf70961745c49b124db1e2a4470ff5a748e905df9c479d2829601f0aac3",
+      "public_proof": {
+        "commit": "fd9b8e0b8ecbe0167b233dc472bca8976aee66bd",
+        "public_api": "https://api.github.com/repos/zakwilson/OsmAnd/git/commits/fd9b8e0b8ecbe0167b233dc472bca8976aee66bd",
+        "tree": "a125836c6753e0ae6f91f38d999fe6a19c3fd440"
+      },
+      "status": "source-reconstructed",
+      "tree": "a125836c6753e0ae6f91f38d999fe6a19c3fd440"
+    },
+    "osmglass": {
+      "acquisition": "public-object-cache",
+      "changed_files_sha256": "1c98e394452dd3b6ee45b0ebb020e5c614068dfa3a0eae8becebc2781a50cd5a",
+      "checked_files": 26,
+      "commit": "13626781089e6f22862395483430a89db98b6ae4",
+      "patch_sha256": "72d1c7f6efe61f5b73c6ca06525ec7eb86600a6c154b291551d0327e1aaf4ecc",
+      "public_proof": {
+        "commit": "13626781089e6f22862395483430a89db98b6ae4",
+        "public_api": "https://api.github.com/repos/zakwilson/OsmGlass/git/commits/13626781089e6f22862395483430a89db98b6ae4",
+        "tree": "1ca047ebdec30368b33210f86a01dded6a2e7f9a"
+      },
+      "status": "source-reconstructed",
+      "tree": "1ca047ebdec30368b33210f86a01dded6a2e7f9a"
+    },
+    "resources": {
+      "acquisition": "public-object-cache",
+      "changed_files_sha256": "01f9caa7f60674e07988ac0a11eacebaff88d54fbc3587e2caa14834f54bfb4c",
+      "checked_files": 5,
+      "commit": "0b2fbe17bf6b62688e96128cd9e1c5dce4eaeaf3",
+      "patch_sha256": "f18082c934cd5495b0ed1a6dc87e72272a952d0eee57c9c17abaa7c503110629",
+      "public_proof": {
+        "commit": "0b2fbe17bf6b62688e96128cd9e1c5dce4eaeaf3",
+        "public_api": "https://api.github.com/repos/osmandapp/OsmAnd-resources/git/commits/0b2fbe17bf6b62688e96128cd9e1c5dce4eaeaf3",
+        "tree": "ec95158f57114e934d4ec2c10077d89f1c3a06e8"
+      },
+      "status": "source-reconstructed",
+      "tree": "ec95158f57114e934d4ec2c10077d89f1c3a06e8"
+    }
+  },
+  "format_version": 1,
+  "limitations": [
+    "No navigation APK distributed. Installed/tested navigation is not characterized as broken.",
+    "OpenGL/Qt AAR corresponding source identities and build recipe remain unresolved; legacy core is separate.",
+    "Exact custom chart, patched Trove/ICU source mappings, artwork/data rights, Google dependency compatibility and portable JDK/SDK archive pins remain incomplete.",
+    "Public-only reconstruction verifies app/code and selected test fixture bytes, not a clean full navigation binary rebuild.",
+    "Routing .obf/.osm.gz additions are upstream regression fixtures, not personal/regional map downloads."
+  ],
+  "native": {
+    "build_verified": false,
+    "checked_files": 12848,
+    "repositories": [
+      {
+        "commit": "2432e5a4c45e724b96f1d32d9ac6973c84cc67d5",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://github.com/google/skia.git",
+        "tree": "505f2c8b50c591d54c5350ff68c969890bb7a209"
+      },
+      {
+        "commit": "e5aa0a2cb0a5f759ef31c0819dc67d9b14246a4a",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://android.googlesource.com/platform/external/expat.git",
+        "tree": "6aefa944e2f31bbf675d4d98fdf12ec84261c4df"
+      },
+      {
+        "commit": "0a3d2bb99b45b72e1d45185ab054efa993d97210",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://skia.googlesource.com/third_party/freetype2.git",
+        "tree": "ff1c58a4590ba1ac0c533a36e9d544336e3ba710"
+      },
+      {
+        "commit": "b37f03f16b39d397a626f097858e9ae550234ca0",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
+        "tree": "c96de1dec1e5363f0d06b45f732d675d24e9bebc"
+      },
+      {
+        "commit": "574f3a772c96dc9db2c98ef24706feb3f6dbda9a",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://skia.googlesource.com/external/github.com/libjpeg-turbo/libjpeg-turbo.git",
+        "tree": "23756f4b3498678dc33b68ca29962d3a2baf063c"
+      },
+      {
+        "commit": "386707c6d19b974ca2e3db7f5c61873813c6fe44",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://skia.googlesource.com/third_party/libpng.git",
+        "tree": "3ca0f4f7fe439287e4526708c610ea1365010d87"
+      },
+      {
+        "commit": "e354c6355e7f48e087678ec49e340ca0696725b1",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://skia.googlesource.com/external/github.com/lua/lua.git",
+        "tree": "928db6aeeb4ef7ea3aac864d6e3b06f8ff9ae879"
+      },
+      {
+        "commit": "47af7c547f8551bd25424e56354a2ae1e9062859",
+        "note": "Exact public commit/tree checked online during source reconstruction; preferred source bytes verified against native manifest after patches.",
+        "repository": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+        "tree": "b98364b626a45c818135155136953b8866bc9fd8"
+      }
+    ],
+    "scope": "legacy JNI sources only; NOT frozen OpenGL/Qt AAR sources",
+    "status": "source-reconstructed"
+  },
+  "negative_checks": [
+    "Patch tamper refused before destination creation/network",
+    "Existing destination refused",
+    "Absolute/traversing manifest paths refused"
+  ],
+  "public_https_smoke": {
+    "archive_sha256": "37bf2197fda53835d853beca38ec1f5a9332d86d8144b47a38e001f0f9e1a3c9",
+    "commit": "13626781089e6f22862395483430a89db98b6ae4",
+    "component": "osmglass",
+    "matches_full_run": true,
+    "status": "source-reconstructed"
+  },
+  "snapshot_policy": "Source-only: no Git/Beads metadata, keys, native/executable prebuilts or navigation artwork/fonts/media. Four changed routing fixture inputs retained. Licensed OpenClaw fonts and public upstream source-test fixtures retained, not owner state.",
+  "snapshots": {
+    "core-legacy": {
+      "archive": "core-legacy-source.tar.gz",
+      "bytes": 19078099,
+      "file_manifest": "core-legacy-files.json",
+      "file_manifest_sha256": "f2e0c19862ec9936b058f4d220e4976b87bdda0ac3334a5d15f52fc8fd25baba",
+      "files": 10586,
+      "omitted": 2580,
+      "sha256": "de39bf11138c0c4a85ecedd98dbbf644aac5c9c2e312801a13c012202f4bbbb0"
+    },
+    "openclaw": {
+      "archive": "openclaw-source.tar.gz",
+      "bytes": 195786514,
+      "file_manifest": "openclaw-files.json",
+      "file_manifest_sha256": "153d0e1abb7c7004a7fc9e3d446d4d427e2090336492865ec819866edab709a4",
+      "files": 62726,
+      "omitted": 1,
+      "sha256": "caa1dade5640c92c4187f44b33bfa1635896f2e67cb996bb18d4f09c0b00405f"
+    },
+    "osmand": {
+      "archive": "osmand-source.tar.gz",
+      "bytes": 16168458,
+      "file_manifest": "osmand-files.json",
+      "file_manifest_sha256": "2c2116947a7c0ab6bac512d79a3b51755d5325b265d8b8eb34a0987e1a0e1baf",
+      "files": 5792,
+      "omitted": 2955,
+      "sha256": "f57509b35980348bbfacc42986a2b84ba5dc4bb389fe9e3d100503c0caf0a629"
+    },
+    "osmglass": {
+      "archive": "osmglass-source.tar.gz",
+      "bytes": 75853,
+      "file_manifest": "osmglass-files.json",
+      "file_manifest_sha256": "80be1fe8a504aad3ea4b00bc6aac28f5cd63055fdfb31bdcbe812fdb11fe6d9e",
+      "files": 48,
+      "omitted": 13,
+      "sha256": "37bf2197fda53835d853beca38ec1f5a9332d86d8144b47a38e001f0f9e1a3c9"
+    },
+    "resources": {
+      "archive": "resources-source.tar.gz",
+      "bytes": 5703727,
+      "file_manifest": "resources-files.json",
+      "file_manifest_sha256": "e7bebbc14be72e8b40f1d376a651842d6c1adb0d7b1065861ef46a0d7b8fde87",
+      "files": 377,
+      "omitted": 47230,
+      "sha256": "2307c08ffad8deb97a3d9a086f9713f371047d6c8faa3fdc22ea01067ae9ec1b"
+    }
+  },
+  "status": "source-reconstructed"
+}

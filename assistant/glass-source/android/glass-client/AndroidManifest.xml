@@ -1,0 +1,38 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="lab.franziska.glass" android:versionCode="56" android:versionName="0.6.19-route">
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="36" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <application android:allowBackup="false" android:debuggable="true" android:label="@string/app_name" android:icon="@drawable/checklist_icon" android:theme="@style/AppTheme" android:usesCleartextTraffic="false">
+        <activity android:name=".GlassActivity" android:label="@string/app_name" android:icon="@drawable/checklist_icon" android:screenOrientation="landscape" android:exported="true">
+        </activity>
+        <activity android:name=".AssistActivity" android:label="@string/assist_name" android:icon="@drawable/checklist_icon" android:screenOrientation="landscape" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+            <intent-filter><action android:name="com.google.android.glass.action.VOICE_TRIGGER" /></intent-filter>
+            <meta-data android:name="com.google.android.glass.VoiceTrigger" android:resource="@xml/assist_voice_trigger" />
+        </activity>
+        <activity android:name=".LookActivity" android:label="@string/look_name" android:icon="@drawable/checklist_icon" android:screenOrientation="landscape" android:exported="false" />
+        <activity android:name=".PhotoSyncActivity" android:label="Фото на Pixel" android:icon="@drawable/checklist_icon" android:screenOrientation="landscape" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+        </activity>
+        <activity android:name=".GalleryActivity" android:label="Галерея" android:icon="@drawable/checklist_icon" android:screenOrientation="landscape" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+            <intent-filter><action android:name="com.google.android.glass.action.VOICE_TRIGGER" /></intent-filter>
+            <meta-data android:name="com.google.android.glass.VoiceTrigger" android:resource="@xml/gallery_voice_trigger" />
+        </activity>
+        <service android:name=".GalleryShareService" android:exported="false" />
+        <service android:name=".PhotoSyncService" android:exported="false" />
+        <receiver android:name=".PhotoSyncBootReceiver" android:exported="false">
+            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
+        </receiver>
+    </application>
+</manifest>

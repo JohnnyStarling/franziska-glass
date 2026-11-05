@@ -1,0 +1,37 @@
+name: Continuity source tests
+
+on:
+  push:
+    paths:
+      - 'components/continuity/**'
+      - 'templates/workspace/**'
+      - 'scripts/init-workspace.py'
+      - 'tests/**'
+      - '.github/workflows/continuity.yml'
+  pull_request:
+    paths:
+      - 'components/continuity/**'
+      - 'templates/workspace/**'
+      - 'scripts/init-workspace.py'
+      - 'tests/**'
+      - '.github/workflows/continuity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-recall:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fresh workspace and retrieval tests
+        run: python3 -m unittest discover -s tests -p 'test_continuity.py' -v
+      - name: OpenClaw plugin adapter tests
+        run: node --test tests/continuity-plugin.test.mjs

@@ -94,7 +94,7 @@ Our patch connects to and hardens those mechanisms at the points described above
 
 A separate maintenance project preserves the source delta and qualifies new candidates. It pins the exact official source, carries the complete customization range into an independent candidate and checks data-schema compatibility before proceeding.
 
-The pipeline fingerprints source, policy, tools and artifacts; runs isolated gates; retains conflicts for review; and separates source qualification, copied-state rehearsal and actual activation. The deployment guard compares the serving installation and the full committed, dirty and untracked customization set. A release number alone does not establish compatibility.
+The pipeline fingerprints source, policy, tools and artifacts; runs isolated gates; retains conflicts for review; and separates source qualification, copied-state rehearsal and actual activation. The deployment guard compares the serving installation and the full committed, dirty and untracked customization set. A release number alone does not establish compatibility. Runtime activation/core reconciliation, maintenance-policy promotion and a new recovery baseline are recorded as separate operations; one does not stand in for the others. The community release does not copy the private deployment policy or machine-specific recovery inputs.
 
 Activation uses the supported external-owner lifecycle route. The maintenance code orchestrates native update, snapshot and migration owners rather than inventing an alternative database migration engine. This maintenance work is a separate local engineering artifact, outside the 33-path runtime delta.
 
@@ -111,7 +111,7 @@ The runtime-build profile covers runtime, plugin assets and Control UI. The coun
 
 ## Complete source inventory
 
-Module paths below refer to the maintained OpenClaw source. They are not a claim that the runtime source is included in this presentation repository.
+Module paths below refer to the pinned OpenClaw source. The complete local delta is distributed as a patch; [the upstream build guide](UPSTREAM_BUILD.md) explains source reconstruction and preserves the upstream license.
 
 <details>
 <summary>All 33 changed paths and their roles</summary>
@@ -123,7 +123,7 @@ Module paths below refer to the maintained OpenClaw source. They are not a claim
 | 3 | `extensions/google/realtime-voice-provider.test.ts` | Adds ASR-hint request assertions for relay and browser and normalization; updates the selected consult contract assertions. Existing provider recovery/transcript bounds remain. |
 | 4 | `extensions/google/realtime-voice-provider.ts` | Normalizes ASR hints; applies them to relay/browser setup; selects declaration behavior; batches paired cancel terminals in the existing bounded response/reconnect buffer. |
 | 5 | `packages/gateway-protocol/src/compiled/protocol.generated/predicates.d.ts` | Generated declaration for `isTalkSessionSendTextParams`. |
-| 6 | `packages/gateway-protocol/src/compiled/protocol.generated/predicates.js` | Canonical generated predicate implementation; large renumbering/layout diff must not be advertised as authored feature volume. |
+| 6 | `packages/gateway-protocol/src/compiled/protocol.generated/predicates.js` | Canonical generated protocol predicate output, including generator renumbering/layout changes. |
 | 7 | `packages/gateway-protocol/src/compiled/protocol.generated/validators-integrations.d.ts` | Generated integration export for new predicate. |
 | 8 | `packages/gateway-protocol/src/compiled/protocol.generated/validators-integrations.js` | Generated integration export for new predicate. |
 | 9 | `packages/gateway-protocol/src/public-schema.ts` | Public export of `TalkSessionSendTextParamsSchema`. |

@@ -1,0 +1,1 @@
+rule org.bouncycastle.** com.franziska.glass.compat.tls15.shaded.@1

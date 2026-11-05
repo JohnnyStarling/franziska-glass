@@ -1,0 +1,41 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="lab.franziska.pixelbridge" android:versionCode="50" android:versionName="0.6.12-route">
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="36" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <queries>
+        <package android:name="org.telegram.messenger" />
+        <package android:name="ru.yandex.yandexnavi" />
+    </queries>
+    <application android:allowBackup="false" android:debuggable="true" android:label="Франциска · Glass" android:theme="@style/AppTheme" android:usesCleartextTraffic="false">
+        <activity android:name=".BridgeActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+        <activity android:name=".AssistSetupActivity" android:exported="false" android:excludeFromRecents="true" android:taskAffinity="lab.franziska.pixelbridge.assistsetup" />
+        <activity android:name=".NativeCompanionActivity" android:exported="false" />
+        <activity android:name=".PixelCapabilitiesActivity" android:exported="false" />
+        <activity android:name=".CircleDraftActivity" android:exported="false" />
+        <activity android:name=".MyGlassSetupActivity" android:exported="false" />
+        <activity android:name=".PhotoSyncActivity" android:exported="false" />
+        <activity android:name=".OriginalShareActivity" android:exported="false" />
+        <provider android:name=".OriginalShareProvider" android:authorities="lab.franziska.pixelbridge.originals" android:exported="false" android:grantUriPermissions="true" />
+        <activity android:name=".LocalMirrorActivity" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.SEND"/><category android:name="android.intent.category.DEFAULT"/><data android:mimeType="text/plain"/></intent-filter>
+        </activity>
+        <service android:name=".LinkService" android:exported="false" android:foregroundServiceType="connectedDevice" android:stopWithTask="false" />
+        <service android:name=".NativeCompanionService" android:exported="false" android:foregroundServiceType="connectedDevice|location" android:stopWithTask="false" />
+        <service android:name=".PhotoSyncService" android:exported="false" android:foregroundServiceType="connectedDevice" android:stopWithTask="false" />
+        <receiver android:name=".PhotoSyncBootReceiver" android:exported="false">
+            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
+        </receiver>
+    </application>
+</manifest>

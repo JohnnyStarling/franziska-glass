@@ -2,15 +2,15 @@
 
 [Overview](../README.md) · [The assistant](FRANZISKA.md) · [OpenClaw engineering](OPENCLAW.md) · [Glass & Pixel](WEARABLE.md)
 
-<img src="../assets/system-architecture.svg" alt="Franziska system architecture and ownership boundaries" width="100%">
+<img src="../assets/system-architecture.svg" alt="Franziska system architecture and ownership boundaries" width="720">
 
 ## 1. Ownership before transport
 
 The system separates three concerns: durable agent work, live media and device interaction.
 
-**The Mac is the agent host.** OpenClaw runs the main agent and its configured reasoning model, maintains conversations and coordinates tool execution. Franziska's continuity records and retrieval are available to that agent.
+**The Mac is the agent host.** OpenClaw hosts the main-agent runtime, maintains conversations and coordinates tool execution. Inference is supplied by the selected model backend, which can be a provider API or a separately configured local service. The diagram separates that backend from the Mac runtime. Franziska's continuity records and retrieval are available to that agent.
 
-**Pixel is the companion.** It provides the network path and mediates between the Glass application and the Gateway. Its responsibilities include connection preparation, media transport, companion UI and service lifecycle.
+**Pixel is the companion.** It provides the network path and mediates between the Glass application and the Gateway. Its responsibilities include connection preparation, media transport, companion UI and service lifecycle. Tool adapters execute on the agent host or dispatch to separately connected services; those external APIs are not physically inside the Mac.
 
 **Glass is the wearable endpoint.** It captures input, displays the conversation and status, plays audio and exposes wearable controls. Its limited CPU, memory, display and Android environment make the distribution of responsibilities important.
 
@@ -49,6 +49,25 @@ This distinction also keeps the architecture legible: a direct conversational vo
 
 Starting an agent run does not finish the task. Receiving the result does not prove playback has drained. Ending a media connection does not, by itself, erase the underlying work. The custom runtime and Android work address these distinct lifecycles.
 
+## A visual question during Talk
+
+This path uses the agent and returns to the existing voice interaction:
+
+1. Pixel checks the backing conversation and its history.
+2. The owned image request enters `chat.send` as an `image/jpeg` attachment with its request identity.
+3. The client waits for that request's actual final agent result, rather than treating a yielded acknowledgement as the answer.
+4. It verifies the result receipt through `chat.history`.
+5. It submits the actual answer through `talk.session.sendText` on the current relay, with an instruction to convey it briefly.
+6. Session/request guards reject a late result after cancellation; image buffers are cleared on settlement.
+
+This photo caller is distinct from background original-file synchronization and from direct live audio. Its speech instruction is not a universal exact-verbatim contract. Accepted text submission, queued speech and completed playback remain separate events.
+
+## Authority and result delivery
+
+The latest direct user request and correction govern the task. A consultation paraphrase must not silently change that request. The main agent owns evidence and tool-backed results; the realtime layer delivers those results rather than inventing a speculative replacement.
+
+The state sequence is **accepted work → final agent result → speech submission → playback completion**. A yielded acknowledgement is not a final result. An ordinary conversational greeting need not consult the main agent; a substantive tool or memory request does.
+
 ## 5. Memory is a separate subsystem
 
 OpenClaw's session state and transcripts preserve conversation execution. Franziska's continuity layer organizes the longer-lived working context: stable preferences, project records, decisions, handoffs and indexes that lead back to sources.
@@ -71,6 +90,18 @@ The system has several independent notions of being active:
 | Media synchronization | Dedicated sync components | File transfer has its own ownership and must not depend on a running conversation. |
 
 Coordination uses explicit task/session ownership and cancellation rules. The implementation details belong to the [OpenClaw](OPENCLAW.md) and [wearable](WEARABLE.md) chapters.
+
+## Recovery at each layer
+
+| Layer | Actual behavior |
+| --- | --- |
+| Idle Glass–Pixel link | Endpoint discovery and saved-network recovery can restore the outer local link. |
+| Pixel–Gateway active voice client | One owned foreground voice session; link loss cancels it rather than transparently recreating the same session. A deliberate interaction starts another session. |
+| Gateway–provider | The upstream provider bridge implements bounded reconnect/resumption and generation checks. |
+| Accepted main-agent task | Durable work has its own custody; losing audio and explicitly cancelling the task are different operations. |
+| Playback | Queued frames, clear, Stop and normal tail drain have their own owner and revision. |
+
+Talk is a foreground interaction. Loss of focus or connection stops capture. The configured 60-minute Talk ceiling is a software session limit, not a measured battery duration.
 
 ## 7. Navigation is independent
 

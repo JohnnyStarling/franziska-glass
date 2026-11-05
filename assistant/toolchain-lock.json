@@ -1,0 +1,16 @@
+{
+  "java": "21.0.11",
+  "java_source_target": "8",
+  "android_compile_api": 36,
+  "android_build_tools": "36.0.0",
+  "android_command_line_tools": "20.0",
+  "android_jar_sha256": "d9eb9da824d9e247a352f570f01e1169e725b2954bca9e283a71786c59b59f9a",
+  "r8_version": "9.0.32",
+  "r8_sha256": "a561da8b3d2419f3c0b1936546f6a756790112653f834563f65cebc4fce0bddd",
+  "dex_min_api": {
+    "glass": 15,
+    "pixel": 23
+  },
+  "qualification_host": "macOS x86_64",
+  "byte_for_byte_reproduction": "not established"
+}

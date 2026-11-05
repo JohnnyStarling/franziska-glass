@@ -32,3 +32,9 @@ The Android system hotspot control, explicit Glass Stop and the companion's enab
 ## Presentation record
 
 The project documentation was rebuilt on 6 November 2026 from the maintained source, frozen installed application sources, technical reports and current operating feedback. The GitHub work changes documentation and presentation; it does not deploy new applications or alter the running Gateway.
+
+## Community source edition
+
+The community edition separates reusable source from the original private deployment. It includes a portable continuity package, fresh workspace templates, sanitized assistant source and source reconstruction for upstream components. The existing owner's applications and Gateway are not modified by this release.
+
+Community portability changes, build results and component limitations belong to the release notes. The working reference navigation status and the build/distribution status of a new source package are separate facts.

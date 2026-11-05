@@ -100,12 +100,32 @@ The project retains the upstream engine and adds specific integration work:
 
 Compatible official OsmAnd improvements were selectively integrated while preserving these repairs. Their upstream algorithmic authorship remains with OsmAnd; selecting, adapting and retaining the Glass integration is our contribution.
 
+## Selected upstream integrations
+
+The navigation branch also carries compatible official OsmAnd improvements, adapted without replacing the repaired Glass projection:
+
+- Location foreground-service start/restart and notification-order handling.
+- Native-memory checks and the distinction between a memory-limit stop and an explicit user Stop.
+- Elevation and traffic-light delay handling with Java/native ETA parity.
+- Deep-chain native cleanup and routing-rule initialization synchronization.
+- Reroute voice backoff and direction checks. Optional adaptive ETA remains default-disabled.
+
+These algorithms and upstream fixes retain OsmAnd authorship. Our integration work selected coherent changes for the pinned fork, adapted its native dependencies and preserved the Glass Stop, freshness, transport and JNI behavior.
+
+## Assistant status on the real display
+
+<img src="../assets/glass-status.png" alt="Actual Glass idle status display: readiness, audio level, connection and battery indicators" width="640">
+
+Original Glass framebuffer capture, 26 October 2026, idle state. It shows the assistant's own status strip; it is not a rendered conversation mockup. Personal conversations are not included in the public examples.
+
 ## Recorded interface captures
 
 The following original captures are retained as dated interface examples:
 
 - [Navigation frame: left turn](../assets/navigation-left.png)
 - [Navigation frame: subsequent right turn](../assets/navigation-right.png)
+
+The authored presentation is monochrome; recorded device evidence retains its original UI colors.
 
 They are real Glass framebuffer captures from a native route simulation on 30 October 2026. The route changes were delivered to the device over Bluetooth, including while Pixel was locked. That describes these particular images; it does not replace the subsequent real-use acceptance of navigation.
 

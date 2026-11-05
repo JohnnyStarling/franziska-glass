@@ -1,0 +1,8 @@
+-keep class lab.franziska.** { *; }
+-keep class com.franziska.glass.compat.tls15.PinnedTlsTransport { *; }
+-keep class com.franziska.glass.compat.tls15.shaded.cert.X509v3CertificateBuilder
+-keep class com.franziska.glass.compat.tls15.shaded.operator.bc.BcRSAContentSignerBuilder
+-keep class com.franziska.glass.compat.tls15.shaded.crypto.util.PrivateKeyFactory
+-keep class com.franziska.glass.compat.tls15.shaded.crypto.util.PublicKeyFactory
+-keepattributes InnerClasses,EnclosingMethod,Signature
+-dontobfuscate

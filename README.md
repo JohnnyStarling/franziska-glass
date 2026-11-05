@@ -4,13 +4,30 @@
 
 # Franziska Glass
 
-**A personal AI assistant, one glance away.**
+**Franziska — a personal AI assistant, brought to Google Glass.**
 
 Google Glass XE24 · Pixel 7 · OpenClaw · Research prototype · November 2026
 
-[Project status](docs/STATUS.md) · [Credits](docs/CREDITS.md) · [Russian translation](README.ru.md)
+[About Franziska](docs/FRANZISKA.md) · [Project status](docs/STATUS.md) · [Credits](docs/CREDITS.md) · [Russian translation](README.ru.md)
 
-## The idea
+## Meet Franziska
+
+**Franziska is Ivan Shpak's ongoing personal AI assistant project. Glass is her wearable interface, not the whole project.** The aim is a lasting working relationship with an assistant that can recover previous decisions, help carry projects forward and use connected tools to get practical work done.
+
+Built on OpenClaw and existing AI models, Franziska brings together:
+
+- **A consistent personal identity:** an assistant shaped around one person's working style, preferences and ongoing context.
+- **Continuity and memory:** saved notes, project records, conversation archives and retrieval procedures for finding relevant earlier information across sessions and restarts. This is an actively developed system, not a claim of perfect recall.
+- **Reasoning and tools:** research, writing, coding, work with local files and authorized actions in connected software, according to the available tools and access.
+- **Several ways to interact:** Telegram and the OpenClaw Control UI, with voice and glanceable text on Glass extending the same broader assistant system.
+
+Franziska is not a newly trained foundation model. Her identity, accumulated working context, memory procedures and tool integrations form the personal assistant layer; OpenClaw provides the agent infrastructure and configured models provide language and reasoning capabilities.
+
+**The Glass project asks: how can that existing assistant become useful while your hands and attention are elsewhere?** Voice, short text and camera-related workflows are the wearable direction. Navigation is a separate companion feature, not the definition of Franziska.
+
+[Read the assistant project overview →](docs/FRANZISKA.md)
+
+## Why Google Glass?
 
 Google Glass offered a compelling interaction: useful information alongside the world, rather than another screen replacing it. Ivan Shpak's Franziska Glass project explores that idea with a modern personal assistant, custom Glass and Pixel companion apps, and a separate OsmAnd/OsmGlass navigation integration.
 
